@@ -1,0 +1,12 @@
+cmake_minimum_required(VERSION 3.8)
+project(e4)
+
+set(CMAKE_CXX_STANDARD 17)
+set(SDL2_FLAGS "-lmingw32 -lSDL2main -lSDL2 -mwindows -lm -ldinput8 -ldxguid -ldxerr8 -luser32 -lgdi32 -lwinmm -limm32 -lole32 -loleaut32 -lshell32 -lversion -luuid -static-libgcc")
+SET(CMAKE_CXX_FLAGS " ${CMAKE_CXX_FLAGS} ${SDL2_FLAGS}")
+set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
+find_package(SDL2 REQUIRED)
+
+add_executable(app main.cpp)
+include_directories(${SDL2_INCLUDE_DIR})
+target_link_libraries(app ${SDL2_LIBRARY} opengl32 glu32)
