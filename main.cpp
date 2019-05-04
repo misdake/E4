@@ -1,13 +1,26 @@
-/**
- * Simple SDL2 program using OpenGL as rendering pipeline.
- */
-
 #include <iostream>
 #include <SDL.h>
 #include <SDL_opengl.h>
 #include <GL/glu.h>
 #include <sstream>
 #include <iostream>
+
+#include <CNtity/CNtity.hpp>
+#include <iostream>
+
+struct Position {
+    float x;
+    float y;
+};
+struct Velocity {
+    float x;
+    float y;
+};
+struct Health {
+    int max;
+    int current;
+};
+
 
 #define SCREEN_WIDTH 640
 #define SCREEN_HEIGHT 480
@@ -28,6 +41,13 @@ void Display_InitGL() {
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LEQUAL);
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+
+    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+    SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
+    SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
+    SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
+    SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
+    SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
 }
 
 int Display_SetViewport(int width, int height) {
@@ -80,6 +100,47 @@ void close() {
 }
 
 int main(int argc, char* argv[]) {
+
+
+    //CNtity
+    CNtity::CNtity<Position, Velocity, Health, std::string> cntity;
+
+    //Creating entities
+    auto chat = cntity.create<std::string>({"chat"});
+    cntity.create<std::string>({"chien"});
+    cntity.create<std::string, Position>({"velociraptor"}, {25, 70});
+
+    //Adding component, changing values
+    auto position = cntity.add<Position>(chat, {50, 50});
+    position->x += 50;
+
+    //System 1
+    cntity.for_each<std::string, Position>([&cntity](auto entity, auto identity) {
+        if (*identity == "chat") {
+            auto position = cntity.get<Position>(entity);
+            position->x = 200;
+            position->y = 70;
+
+            return;
+        }
+    });
+
+    //System 2
+    for (const auto& it: cntity.acquire<std::string, Position>()) {
+        if (*cntity.get<std::string>(it) == "chat") {
+            auto position = cntity.get<Position>(it);
+            std::cout << "position: (" << position->x << ", " << position->y << ")" << std::endl;
+        }
+    }
+
+    //Removing a component, erasing an entity
+    cntity.remove<Position>(chat);
+    cntity.erase(chat);
+
+
+
+
+
     // initialize sdl
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         std::cout << "SDL cannot init with error " << SDL_GetError() << std::endl;
