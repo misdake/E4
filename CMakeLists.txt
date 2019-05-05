@@ -10,7 +10,7 @@ set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 find_package(SDL2 REQUIRED)
 include_directories(${SDL2_INCLUDE_DIR})
 
-#CNtity
+#Lua,CNtity
 include_directories(include)
 link_directories(library)
 
@@ -19,15 +19,14 @@ find_package(glbinding REQUIRED)
 include_directories(${GLBINDING_INCLUDE_DIRS})
 
 add_executable(app
-        src/main.cpp
         src/components/Position.h
         src/components/Drawable.h
-        src/systems/render/Renderer.cpp
-        src/systems/render/Renderer.h
-        src/systems/render/Texture.cpp
-        src/systems/render/Texture.h
-        )
-target_link_libraries(app ${SDL2_LIBRARY} lua53 ${GLBINDING_LIBRARIES})
+        src/systems/render/Renderer.cpp src/systems/render/Renderer.h
+        src/systems/render/Texture.cpp src/systems/render/Texture.h
+        src/util/Window.cpp src/util/Window.h
+        src/util/InputState.cpp src/util/InputState.h
+        src/main.cpp)
+target_link_libraries(app lua53 ${SDL2_LIBRARY} ${GLBINDING_LIBRARIES})
 
 #output executable
 set(EXECUTABLE_OUTPUT_PATH "${PROJECT_SOURCE_DIR}/env")
