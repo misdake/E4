@@ -14,9 +14,20 @@ include_directories(${SDL2_INCLUDE_DIR})
 include_directories(include)
 link_directories(library)
 
-add_executable(app src/main.cpp)
-target_link_directories(app PRIVATE library)
-target_link_libraries(app ${SDL2_LIBRARY} lua53 opengl32 glu32)
+#glbinding
+find_package(glbinding REQUIRED)
+include_directories(${GLBINDING_INCLUDE_DIRS})
+
+add_executable(app
+        src/main.cpp
+        src/components/Position.h
+        src/components/Drawable.h
+        src/systems/render/Renderer.cpp
+        src/systems/render/Renderer.h
+        src/systems/render/Texture.cpp
+        src/systems/render/Texture.h
+        )
+target_link_libraries(app ${SDL2_LIBRARY} lua53 ${GLBINDING_LIBRARIES})
 
 #output executable
 set(EXECUTABLE_OUTPUT_PATH "${PROJECT_SOURCE_DIR}/env")

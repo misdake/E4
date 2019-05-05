@@ -1,7 +1,5 @@
 #include <iostream>
 #include <SDL.h>
-#include <SDL_opengl.h>
-#include <GL/glu.h>
 #include <sstream>
 #include <iostream>
 
@@ -9,6 +7,13 @@
 #include <iostream>
 
 #include <sol/sol.hpp>
+
+#include <glbinding/glbinding.h>
+#include <glbinding/gl/gl.h>
+
+#include "systems/render/Texture.h"
+
+using namespace gl;
 
 struct Position {
     float x;
@@ -29,6 +34,7 @@ struct Health {
 
 SDL_Window* gWindow = nullptr;
 SDL_GLContext gGlContext;
+E4::Texture texture;
 
 void SetOpenGLVersion() {
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
@@ -36,9 +42,38 @@ void SetOpenGLVersion() {
     //SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_COMPATIBILITY);
 }
 
+void gldPerspective(GLdouble fovy, GLdouble aspect, GLdouble zNear, GLdouble zFar) {
+    // This code is based off the MESA source for gluPerspective
+    // *NOTE* This assumes GL_PROJECTION is the current matrix
+
+
+    GLdouble xmin, xmax, ymin, ymax;
+    GLdouble m[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+    ymax = zNear * tan(fovy * M_PI / 360.0);
+    ymin = -ymax;
+
+    xmin = ymin * aspect;
+    xmax = ymax * aspect;
+
+    // Set up the projection matrix
+    m[0 + 0 * 4] = (2.0 * zNear) / (xmax - xmin);
+    m[1 + 1 * 4] = (2.0 * zNear) / (ymax - ymin);
+    m[2 + 2 * 4] = -(zFar + zNear) / (zFar - zNear);
+
+    m[0 + 2 * 4] = (xmax + xmin) / (xmax - xmin);
+    m[1 + 2 * 4] = (ymax + ymin) / (ymax - ymin);
+    m[3 + 2 * 4] = -1.0;
+
+    m[2 + 3 * 4] = -(2.0 * zFar * zNear) / (zFar - zNear);
+
+    // Add to current matrix
+    glMultMatrixd(m);
+}
+
 void Display_InitGL() {
     glShadeModel(GL_SMOOTH);
-    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+    glClearColor(0.8f, 0.8f, 0.8f, 1.0f);
     glClearDepth(1.0f);
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LEQUAL);
@@ -50,6 +85,14 @@ void Display_InitGL() {
     SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
     SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
     SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
+
+//    texture.name = "street.jpg";
+//    texture.name = "favicon.png";
+    texture.name = "footprint.png";
+    texture.load();
+
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 int Display_SetViewport(int width, int height) {
@@ -64,7 +107,7 @@ int Display_SetViewport(int width, int height) {
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
 
-    gluPerspective(45.0f, ratio, 0.1f, 100.0f);
+    gldPerspective(45.0f, ratio, 0.1f, 100.0f);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
@@ -78,31 +121,46 @@ void Display_Render() {
     glLoadIdentity();
     glTranslatef(basex - 1.5f, basey + 0.0f, -6.0f);
 
+    glDisable(GL_TEXTURE_2D);
     glBegin(GL_TRIANGLES);
     glVertex3f(0.0f, 1.0f, 0.0f);
+//    glColor3i(255, 0, 0);
     glVertex3f(-1.0f, -1.0f, 0.0f);
+//    glColor3i(255, 0, 0);
     glVertex3f(1.0f, -1.0f, 0.0f);
+//    glColor3i(255, 0, 0);
     glEnd();
 
     glTranslatef(3.0f, 0.0f, 0.0f);
 
+    glEnable(GL_TEXTURE_2D);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, texture.textureId);
     glBegin(GL_QUADS);
     glVertex3f(-1.0f, 1.0f, 0.0f);
+    glTexCoord2f(1.0f, 0.0f);
+//    glColor3i(255, 0, 0);
     glVertex3f(1.0f, 1.0f, 0.0f);
+    glTexCoord2f(1.0f, 1.0f);
+//    glColor3i(255, 0, 0);
     glVertex3f(1.0f, -1.0f, 0.0f);
+    glTexCoord2f(0.0f, 1.0f);
+//    glColor3i(255, 0, 0);
     glVertex3f(-1.0f, -1.0f, 0.0f);
+    glTexCoord2f(0.0f, 0.0f);
+//    glColor3i(255, 0, 0);
     glEnd();
 }
 
 void close() {
     SDL_DestroyWindow(gWindow);
     gWindow = nullptr;
+    SDL_GL_DeleteContext(gGlContext);
 
     SDL_Quit();
 }
 
 int main(int argc, char* argv[]) {
-
     sol::state lua;
     int x = 0;
     lua.set_function("beep", [&x]{ ++x; });
@@ -171,6 +229,9 @@ int main(int argc, char* argv[]) {
         std::cout << "Cannot create OpenGL context with error " << SDL_GetError() << std::endl;
         return -1;
     }
+
+
+    glbinding::initialize([](const char* name) -> void (*)() { return (void (*)()) SDL_GL_GetProcAddress(name); }, true);
 
     // initialize opengl
     Display_InitGL();
@@ -243,7 +304,6 @@ int main(int argc, char* argv[]) {
         if (keystates[SDL_SCANCODE_D]) basex += 0.01;
 
         // clear bg color and depth buffer
-        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // render stuff here
