@@ -11,7 +11,14 @@ find_package(SDL2 REQUIRED)
 include_directories(${SDL2_INCLUDE_DIR})
 
 #CNtity
-include_directories(lib)
+include_directories(include)
+link_directories(library)
 
 add_executable(app src/main.cpp)
-target_link_libraries(app ${SDL2_LIBRARY} opengl32 glu32)
+target_link_directories(app PRIVATE library)
+target_link_libraries(app ${SDL2_LIBRARY} lua53 opengl32 glu32)
+
+#output executable
+set(EXECUTABLE_OUTPUT_PATH "${PROJECT_SOURCE_DIR}/env")
+set(outputname "app${CMAKE_BUILD_TYPE}")
+set_target_properties(app PROPERTIES OUTPUT_NAME ${outputname})

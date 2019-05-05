@@ -8,6 +8,8 @@
 #include <CNtity/CNtity.hpp>
 #include <iostream>
 
+#include <sol/sol.hpp>
+
 struct Position {
     float x;
     float y;
@@ -100,6 +102,12 @@ void close() {
 }
 
 int main(int argc, char* argv[]) {
+
+    sol::state lua;
+    int x = 0;
+    lua.set_function("beep", [&x]{ ++x; });
+    lua.script("beep()");
+    std::cout << x << std::endl;
 
 
     //CNtity

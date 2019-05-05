@@ -1,3 +1,7 @@
 /.idea
 /cmake-build-debug
 /cmake-build-release
+/env/appDebug.exe
+/env/libappDebug.dll.a
+/env/appRelease.exe
+/env/libappRelease.dll.a
