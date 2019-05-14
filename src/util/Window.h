@@ -7,7 +7,7 @@
 #include "InputState.h"
 
 struct SDL_Window;
-typedef void *SDL_GLContext;
+typedef void* SDL_GLContext;
 
 namespace E4 {
 
@@ -19,6 +19,13 @@ namespace E4 {
         bool mouseTrap;
     };
 
+    struct FrameState {
+        FrameState(uint16_t deltatime, InputState& inputStateCurr, InputState& inputStatePrev);
+        uint16_t deltatime;
+        InputState& inputStateCurr;
+        InputState& inputStatePrev;
+    };
+
     class Window {
     private:
         SDL_Window* gWindow;
@@ -26,6 +33,7 @@ namespace E4 {
 
         WindowConfig config;
 
+        long prevTime;
         InputState inputStateCurr;
         InputState inputStatePrev;
 
@@ -50,10 +58,9 @@ namespace E4 {
         std::string getTitle();
         void setTitle(const std::string& title);
 
-        void enterEventLoop(void (*onFrame)());
+        void enterEventLoop(void (* onFrame)(const FrameState& frameState));
 
         static std::tuple<int, int> getScreenSize();
-
 
         ~Window();
 

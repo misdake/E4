@@ -98,7 +98,12 @@ int Display_SetViewport(int width, int height) {
 float basex = 0;
 float basey = 0;
 
-void Display_Render() {
+void Display_Render(const E4::FrameState& frameState) {
+//    std::cout << frameState.deltatime << std::endl;
+    if (!frameState.inputStatePrev.mouseButton1 && frameState.inputStateCurr.mouseButton1) {
+        std::cout << "button1 down" << std::endl;
+    }
+
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glLoadIdentity();
@@ -139,7 +144,7 @@ void Display_Render() {
 int main(int argc, char* argv[]) {
     sol::state lua;
     int x = 0;
-    lua.set_function("beep", [&x]{ ++x; });
+    lua.set_function("beep", [&x] { ++x; });
     lua.script("beep()");
     std::cout << x << std::endl;
 
@@ -184,7 +189,7 @@ int main(int argc, char* argv[]) {
 
     int width = 640;
     int height = 480;
-    window.create({std::string("abc"), width, height, false});
+    window.create({std::string("abc"), width, height, false, false});
 
     // initialize opengl
     Display_InitGL();
@@ -192,98 +197,6 @@ int main(int argc, char* argv[]) {
     Display_SetViewport(window.getWidth(), window.getHeight());
 
     window.enterEventLoop(Display_Render);
-
-//    bool quit = false;
-//    SDL_Event event{};
-//    while (!quit) {
-//        while (SDL_PollEvent(&event) != 0) {
-//            switch (event.type) {
-//                case SDL_QUIT:
-//                    quit = true;
-//                    break;
-//                case SDL_KEYDOWN:
-////                    switch (event.key.keysym.scancode) {
-////                        case SDL_SCANCODE_LEFT:
-////                            basex -= 0.1;
-////                            break;
-////                        case SDL_SCANCODE_RIGHT:
-////                            basex += 0.1;
-////                            break;
-////                        case SDL_SCANCODE_UP:
-////                            basey += 0.1;
-////                            break;
-////                        case SDL_SCANCODE_DOWN:
-////                            basey -= 0.1;
-////                            break;
-////                        default:
-////                            break;
-////                    }
-//                    break;
-//                case SDL_MOUSEWHEEL:
-//                {
-//                    int wheelx=event.wheel.x;
-//                    int wheely=event.wheel.y;
-//                    std::cout << "wheelx: " << wheelx << " wheely: " << wheely << std::endl;
-//                    window.setMouseTrap(!window.isMouseTrap());
-//                    break;
-//                }
-//                case SDL_MOUSEBUTTONDOWN:
-//                    switch (event.button.button) {
-////                        case SDL_BUTTON_LEFT:
-////                            SDL_ShowSimpleMessageBox(0, "Mouse", "Left button was pressed!", gWindow);
-////                            break;
-////                        case SDL_BUTTON_RIGHT:
-////                            SDL_ShowSimpleMessageBox(0, "Mouse", "Right button was pressed!", gWindow);
-////                            break;
-////                        case SDL_BUTTON_MIDDLE:
-////                            SDL_ShowSimpleMessageBox(0, "Mouse", "Middle button was pressed!", gWindow);
-////                            break;
-////                        default:
-////                            SDL_ShowSimpleMessageBox(0, "Mouse", "Some other button was pressed!", gWindow);
-////                            break;
-//                    }
-//                    break;
-//                case SDL_MOUSEMOTION:
-////                    int mouseX = event.motion.x;
-////                    int mouseY = event.motion.y;
-////
-////                    std::stringstream ss;
-////                    ss << "X: " << mouseX << " Y: " << mouseY;
-////
-////                    window.setTitle(ss.str());
-//                    break;
-//            }
-//        }
-//
-//        int mouseX = -1;
-//        int mouseY = -1;
-//        Uint32 buttons = SDL_GetMouseState(&mouseX, &mouseY);
-//
-//        std::stringstream ss;
-//        ss << "X: " << mouseX << " Y: " << mouseY << " buttons: " << buttons;
-//
-//        window.setTitle(ss.str());
-//
-//        //Get the keystates
-//        const Uint8* keystates = SDL_GetKeyboardState(nullptr);
-//        if (keystates[SDL_SCANCODE_UP]) basey += 0.01;
-//        if (keystates[SDL_SCANCODE_DOWN]) basey -= 0.01;
-//        if (keystates[SDL_SCANCODE_LEFT]) basex -= 0.01;
-//        if (keystates[SDL_SCANCODE_RIGHT]) basex += 0.01;
-//        if (keystates[SDL_SCANCODE_W]) basey += 0.01;
-//        if (keystates[SDL_SCANCODE_S]) basey -= 0.01;
-//        if (keystates[SDL_SCANCODE_A]) basex -= 0.01;
-//        if (keystates[SDL_SCANCODE_D]) basex += 0.01;
-//
-//        // clear bg color and depth buffer
-//        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-//
-//        // render stuff here
-//        Display_Render();
-//
-//        // swap window inorder to update opengl
-//        window.swapBuffer();
-//    }
 
     return 0;
 }

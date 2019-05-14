@@ -5,7 +5,18 @@
 #include <sstream>
 #include <stdio.h>
 
-E4::Window::Window() {
+E4::FrameState::FrameState(uint16_t deltatime, E4::InputState& inputStateCurr, E4::InputState& inputStatePrev) :
+    deltatime(deltatime),
+    inputStateCurr(inputStateCurr),
+    inputStatePrev(inputStatePrev) {
+
+}
+
+E4::Window::Window() :
+    inputStateCurr(),
+    inputStatePrev() {
+    prevTime = -1;
+
     gWindow = nullptr;
     gGlContext = nullptr;
 
@@ -65,8 +76,6 @@ void E4::Window::setMouseTrap(bool mouseTrap) {
     if (mouseTrap) {
         SDL_ShowCursor(0);
         SDL_SetWindowGrab(gWindow, SDL_TRUE);
-//        TODO every frame
-//        SDL_WarpMouseInWindow(gWindow, getWidth() / 2, getHeight() / 2);
     } else {
         SDL_ShowCursor(1);
         SDL_SetWindowGrab(gWindow, SDL_FALSE);
@@ -103,6 +112,8 @@ std::tuple<int, int> E4::Window::getScreenSize() {
 }
 
 void E4::Window::getInputState() {
+    memcpy(&inputStatePrev, &inputStateCurr, sizeof(InputState));
+
     int mouseX = -1;
     int mouseY = -1;
     Uint32 buttons = SDL_GetMouseState(&mouseX, &mouseY);
@@ -117,6 +128,13 @@ void E4::Window::getInputState() {
 
     memcpy(inputStateCurr.keys, keystates, SDL_NUM_SCANCODES * sizeof(Uint8));
 
+    Uint32 flags = SDL_GetWindowFlags(gWindow);
+    if (config.mouseTrap && (flags & SDL_WINDOW_MOUSE_FOCUS)) {
+        inputStateCurr.mouseX = mouseX - getWidth() / 2;
+        inputStateCurr.mouseY = mouseY - getHeight() / 2;
+        SDL_WarpMouseInWindow(gWindow, getWidth() / 2, getHeight() / 2);
+    }
+
     std::stringstream ss;
     ss << "X: " << mouseX << " Y: " << mouseY << " buttons: " << buttons << " keys:";
 
@@ -129,7 +147,7 @@ void E4::Window::getInputState() {
     setTitle(ss.str());
 }
 
-void E4::Window::enterEventLoop(void (* onFrame)()) {
+void E4::Window::enterEventLoop(void (* onFrame)(const FrameState& frameState)) {
     bool quit = false;
     SDL_Event event{};
     while (!quit) {
@@ -138,6 +156,14 @@ void E4::Window::enterEventLoop(void (* onFrame)()) {
                 case SDL_QUIT:
                     quit = true;
                     break;
+//                case SDL_MOUSEWHEEL:
+//                {
+//                    int wheelx=event.wheel.x;
+//                    int wheely=event.wheel.y;
+//                    std::cout << "wheelx: " << wheelx << " wheely: " << wheely << std::endl;
+//                    window.setMouseTrap(!window.isMouseTrap());
+//                    break;
+//                }
                 default:
                     break;
             }
@@ -145,7 +171,14 @@ void E4::Window::enterEventLoop(void (* onFrame)()) {
 
         getInputState();
 
-        onFrame();
+        long currTime = SDL_GetTicks();
+        if (prevTime < 0) prevTime = currTime;
+        long d = currTime - prevTime;
+        prevTime = currTime;
+        uint16_t deltatime = d > 0 && d < 1000 ? (uint16_t) d : 1000;
+        FrameState frameState(deltatime, inputStateCurr, inputStatePrev);
+
+        onFrame(frameState);
 
         SDL_GL_SwapWindow(gWindow);
     }
