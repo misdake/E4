@@ -4,6 +4,8 @@
 #include <tuple>
 #include <iostream>
 
+#include "InputState.h"
+
 struct SDL_Window;
 typedef void *SDL_GLContext;
 
@@ -23,6 +25,12 @@ namespace E4 {
         SDL_GLContext gGlContext;
 
         WindowConfig config;
+
+        InputState inputStateCurr;
+        InputState inputStatePrev;
+
+    private:
+        void getInputState();
 
     public:
         Window();

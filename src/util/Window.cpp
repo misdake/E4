@@ -2,6 +2,8 @@
 
 #include <SDL.h>
 #include <glbinding/glbinding.h>
+#include <sstream>
+#include <stdio.h>
 
 E4::Window::Window() {
     gWindow = nullptr;
@@ -100,7 +102,34 @@ std::tuple<int, int> E4::Window::getScreenSize() {
     return {DM.w, DM.h};
 }
 
-void E4::Window::enterEventLoop(void (*onFrame)()) {
+void E4::Window::getInputState() {
+    int mouseX = -1;
+    int mouseY = -1;
+    Uint32 buttons = SDL_GetMouseState(&mouseX, &mouseY);
+
+    inputStateCurr.mouseX = mouseX;
+    inputStateCurr.mouseY = mouseY;
+    inputStateCurr.mouseButton1 = buttons & 0x1u;
+    inputStateCurr.mouseButton2 = buttons & 0x2u;
+    inputStateCurr.mouseButton3 = buttons & 0x4u;
+
+    const Uint8* keystates = SDL_GetKeyboardState(nullptr);
+
+    memcpy(inputStateCurr.keys, keystates, SDL_NUM_SCANCODES * sizeof(Uint8));
+
+    std::stringstream ss;
+    ss << "X: " << mouseX << " Y: " << mouseY << " buttons: " << buttons << " keys:";
+
+    for (int i = 0; i < SDL_NUM_SCANCODES; i++) {
+        if (inputStateCurr.keys[i]) {
+            ss << i << ' ';
+        }
+    }
+
+    setTitle(ss.str());
+}
+
+void E4::Window::enterEventLoop(void (* onFrame)()) {
     bool quit = false;
     SDL_Event event{};
     while (!quit) {
@@ -114,7 +143,7 @@ void E4::Window::enterEventLoop(void (*onFrame)()) {
             }
         }
 
-        //TODO inputstate
+        getInputState();
 
         onFrame();
 
