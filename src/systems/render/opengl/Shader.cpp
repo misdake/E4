@@ -87,6 +87,10 @@ void E4::Program::compile() {
     glDetachShader(programId, pixelShader.shaderId);
     glDeleteShader(vertexShader.shaderId);
     glDeleteShader(pixelShader.shaderId);
+
+    for (auto& attribute : vertexShader.attributes) {
+        attribute.location = glGetAttribLocation(programId, attribute.name.c_str());
+    }
 }
 
 void E4::Program::use() {

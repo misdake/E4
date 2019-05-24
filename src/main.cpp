@@ -29,15 +29,19 @@ using namespace gl;
 //    int current;
 //};
 
-E4::Texture texture;
-static std::vector<float> array = {
-    -1.0f, -1.0f, 0.0f, 1.0f, 1.0f, 1.0f,
-    -1.0f, -1.0f, 0.0f, 1.0f, 1.0f, 1.0f,
-    1.0f, -1.0f, 0.0f, 1.0f, 1.0f, 1.0f,
-    0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 1.0f,
+//E4::Texture texture;
+static std::vector<float> position = {
+    -1.0f, -1.0f, 0.0f,
+    1.0f, -1.0f, 0.0f,
+    0.0f, 1.0f, 0.0f,
 };
-static E4::FloatBuffer floatBuffer(array, 1, 6, 3);
-static E4::Attribute attribute(E4::DataType::FLOAT, std::string("position"));
+static std::vector<float> color = {
+    1.0f, 0.0f, 0.0f,
+    0.0f, 1.0f, 0.0f,
+    0.0f, 0.0f, 1.0f,
+};
+static E4::FloatBuffer positionBuffer(position, 0, 3, 3);
+static E4::FloatBuffer colorBuffer(color, 0, 3, 3);
 
 static E4::Program* program;
 
@@ -84,12 +88,14 @@ void Display_InitGL() {
 //    texture.name = "footprint.png";
 //    texture.load();
 
-    floatBuffer.upload();
-    attribute.attributeIndex = 0;
+    positionBuffer.upload();
+    colorBuffer.upload();
 
     std::string vsContent = E4::readFile("shader_basic_vs.txt");
     std::string psContent = E4::readFile("shader_basic_ps.txt");
     program = new E4::Program(vsContent, psContent);
+    program->vertexShader.attributes.emplace_back(E4::DataType::VEC3, "aPosition");
+    program->vertexShader.attributes.emplace_back(E4::DataType::VEC3, "aColor");
     program->compile();
 
     glEnable(GL_BLEND);
@@ -117,7 +123,8 @@ void Display_Render(const E4::FrameState& frameState) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     program->use();
-    attribute.bind(floatBuffer);
+    program->vertexShader.attributes[0].bind(positionBuffer);
+    program->vertexShader.attributes[1].bind(colorBuffer);
     glDrawArrays(GL_TRIANGLES, 0, 3);
 
     GLenum error = glGetError();

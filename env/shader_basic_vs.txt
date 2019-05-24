@@ -1,6 +1,9 @@
 #version 330
 
-layout(location = 0) in vec4 position;
+in vec4 aPosition;
+in vec3 aColor;
+out vec3 vColor;
 void main() {
-    gl_Position = position;
+    gl_Position = aPosition;
+    vColor = aColor;
 }

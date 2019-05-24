@@ -34,11 +34,11 @@ namespace E4 {
     };
 
     class Program {
+    public:
         uint32_t programId = 0;
         VertexShader vertexShader;
         PixelShader pixelShader;
 
-    public:
         Program(const std::string& vs, const std::string& ps);
         void compile();
         void use();

@@ -11,10 +11,10 @@ E4::Attribute::Attribute(E4::DataType dataType, std::string name) :
 }
 
 void E4::Attribute::bind(E4::FloatBuffer& buffer) {
-    glEnableVertexAttribArray(attributeIndex);
-    buffer.bind(attributeIndex);
+    glEnableVertexAttribArray(location);
+    buffer.bind(location);
 }
 
 void E4::Attribute::unbind() {
-    glDisableVertexAttribArray(attributeIndex);
+    glDisableVertexAttribArray(location);
 }

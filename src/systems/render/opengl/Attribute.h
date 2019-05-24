@@ -8,6 +8,9 @@ namespace E4 {
 
     enum class DataType {
         FLOAT,
+        VEC2,
+        VEC3,
+        VEC4,
         SHORT,
         TEXTURE,
         MATRIX,
@@ -15,7 +18,7 @@ namespace E4 {
 
     class Attribute {
     public:
-        uint32_t attributeIndex;
+        uint32_t location;
         DataType dataType;
         std::string name;
 
