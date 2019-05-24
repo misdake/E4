@@ -7,16 +7,15 @@
 
 namespace E4 {
 
-    class Attribute {
+    class Uniform {
     public:
         uint32_t location;
         DataType dataType;
         std::string name;
 
-        Attribute(DataType dataType, std::string name);
+        Uniform(DataType dataType, std::string name);
 
-        void bind(FloatBuffer& buffer);
-        void unbind();
+        void bind(float x, float y, float z);
     };
 
 }

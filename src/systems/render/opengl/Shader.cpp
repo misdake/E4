@@ -91,6 +91,12 @@ void E4::Program::compile() {
     for (auto& attribute : vertexShader.attributes) {
         attribute.location = glGetAttribLocation(programId, attribute.name.c_str());
     }
+    for (auto& uniform : vertexShader.uniforms) {
+        uniform.location = glGetUniformLocation(programId, uniform.name.c_str());
+    }
+    for (auto& uniform : pixelShader.uniforms) {
+        uniform.location = glGetUniformLocation(programId, uniform.name.c_str());
+    }
 }
 
 void E4::Program::use() {

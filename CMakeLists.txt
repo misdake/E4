@@ -26,6 +26,8 @@ add_executable(app
         src/systems/render/opengl/Shader.cpp src/systems/render/opengl/Shader.h
         src/systems/render/opengl/FloatBuffer.cpp src/systems/render/opengl/FloatBuffer.h
         src/systems/render/opengl/Attribute.cpp src/systems/render/opengl/Attribute.h
+        src/systems/render/opengl/Uniform.cpp src/systems/render/opengl/Uniform.h
+        src/systems/render/opengl/DataType.h
         src/util/File.cpp src/util/File.h
         src/util/Window.cpp src/util/Window.h
         src/util/InputState.cpp src/util/InputState.h

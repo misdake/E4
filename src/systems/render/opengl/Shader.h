@@ -5,6 +5,7 @@
 
 #include "FloatBuffer.h"
 #include "Attribute.h"
+#include "Uniform.h"
 
 #include <glbinding/gl/gl.h>
 
@@ -25,11 +26,13 @@ namespace E4 {
     class VertexShader : public Shader {
     public:
         std::vector<Attribute> attributes;
+        std::vector<Uniform> uniforms;
         explicit VertexShader(const std::string& content);
     };
 
     class PixelShader : public Shader {
     public:
+        std::vector<Uniform> uniforms;
         explicit PixelShader(const std::string& content);
     };
 

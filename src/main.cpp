@@ -96,6 +96,7 @@ void Display_InitGL() {
     program = new E4::Program(vsContent, psContent);
     program->vertexShader.attributes.emplace_back(E4::DataType::VEC3, "aPosition");
     program->vertexShader.attributes.emplace_back(E4::DataType::VEC3, "aColor");
+    program->vertexShader.uniforms.emplace_back(E4::DataType::VEC3, "uOffset");
     program->compile();
 
     glEnable(GL_BLEND);
@@ -125,6 +126,7 @@ void Display_Render(const E4::FrameState& frameState) {
     program->use();
     program->vertexShader.attributes[0].bind(positionBuffer);
     program->vertexShader.attributes[1].bind(colorBuffer);
+    program->vertexShader.uniforms[0].bind(0.2, 0, 0);
     glDrawArrays(GL_TRIANGLES, 0, 3);
 
     GLenum error = glGetError();
