@@ -1,7 +1,5 @@
 #include <utility>
 
-#include <utility>
-
 #include "Shader.h"
 
 E4::Shader::Shader(std::string content, GLenum shaderType) :
@@ -88,8 +86,10 @@ void E4::Program::compile() {
     glDeleteShader(vertexShader.shaderId);
     glDeleteShader(pixelShader.shaderId);
 
-    for (auto& attribute : vertexShader.attributes) {
-        attribute.location = glGetAttribLocation(programId, attribute.name.c_str());
+    for (auto& attributePair : vertexShader.attributes) {
+        AttributeSlot* slot = attributePair.first;
+        uint32_t& location = attributePair.second;
+        location = glGetAttribLocation(programId, slot->name);
     }
     for (auto& uniform : vertexShader.uniforms) {
         uniform.location = glGetUniformLocation(programId, uniform.name.c_str());
@@ -101,4 +101,9 @@ void E4::Program::compile() {
 
 void E4::Program::use() {
     glUseProgram(programId);
+    for (auto& attributePair : vertexShader.attributes) {
+        AttributeSlot* slot = attributePair.first;
+        uint32_t& location = attributePair.second;
+        slot->location = location;
+    }
 }

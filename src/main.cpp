@@ -45,6 +45,8 @@ static E4::FloatBuffer colorBuffer(color, 3, 3);
 
 static E4::Program* program;
 
+static E4::AttributeSlots attributeSlots;
+
 //void gldPerspective(GLdouble fovy, GLdouble aspect, GLdouble zNear, GLdouble zFar) {
 //    // This code is based off the MESA source for gluPerspective
 //    // *NOTE* This assumes GL_PROJECTION is the current matrix
@@ -94,8 +96,8 @@ void Display_InitGL() {
     std::string vsContent = E4::readFile("shader_basic_vs.txt");
     std::string psContent = E4::readFile("shader_basic_ps.txt");
     program = new E4::Program(vsContent, psContent);
-    program->vertexShader.attributes.emplace_back(E4::ShaderDataType::VEC3, "aPosition");
-    program->vertexShader.attributes.emplace_back(E4::ShaderDataType::VEC3, "aColor");
+    program->vertexShader.addAttribute(attributeSlots.POSITION);
+    program->vertexShader.addAttribute(attributeSlots.COLOR);
     program->vertexShader.uniforms.emplace_back(E4::ShaderDataType::VEC3, "uOffset");
     program->compile();
 
@@ -124,9 +126,12 @@ void Display_Render(const E4::FrameState& frameState) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     program->use();
-    program->vertexShader.attributes[0].bind(positionBuffer);
-    program->vertexShader.attributes[1].bind(colorBuffer);
+
+    attributeSlots.POSITION.bind(positionBuffer);
+    attributeSlots.COLOR.bind(colorBuffer);
+
     program->vertexShader.uniforms[0].bind(E4::ShaderData(0.2, 0, 0));
+
     glDrawArrays(GL_TRIANGLES, 0, 3);
 
     GLenum error = glGetError();
