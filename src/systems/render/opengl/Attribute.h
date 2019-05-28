@@ -10,10 +10,10 @@ namespace E4 {
     class Attribute {
     public:
         uint32_t location;
-        DataType dataType;
+        ShaderDataType dataType;
         std::string name;
 
-        Attribute(DataType dataType, std::string name);
+        Attribute(ShaderDataType dataType, std::string name);
 
         void bind(FloatBuffer& buffer);
         void unbind();

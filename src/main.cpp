@@ -40,8 +40,8 @@ static std::vector<float> color = {
     0.0f, 1.0f, 0.0f,
     0.0f, 0.0f, 1.0f,
 };
-static E4::FloatBuffer positionBuffer(position, 0, 3, 3);
-static E4::FloatBuffer colorBuffer(color, 0, 3, 3);
+static E4::FloatBuffer positionBuffer(position, 3, 3);
+static E4::FloatBuffer colorBuffer(color, 3, 3);
 
 static E4::Program* program;
 
@@ -94,9 +94,9 @@ void Display_InitGL() {
     std::string vsContent = E4::readFile("shader_basic_vs.txt");
     std::string psContent = E4::readFile("shader_basic_ps.txt");
     program = new E4::Program(vsContent, psContent);
-    program->vertexShader.attributes.emplace_back(E4::DataType::VEC3, "aPosition");
-    program->vertexShader.attributes.emplace_back(E4::DataType::VEC3, "aColor");
-    program->vertexShader.uniforms.emplace_back(E4::DataType::VEC3, "uOffset");
+    program->vertexShader.attributes.emplace_back(E4::ShaderDataType::VEC3, "aPosition");
+    program->vertexShader.attributes.emplace_back(E4::ShaderDataType::VEC3, "aColor");
+    program->vertexShader.uniforms.emplace_back(E4::ShaderDataType::VEC3, "uOffset");
     program->compile();
 
     glEnable(GL_BLEND);
@@ -126,7 +126,7 @@ void Display_Render(const E4::FrameState& frameState) {
     program->use();
     program->vertexShader.attributes[0].bind(positionBuffer);
     program->vertexShader.attributes[1].bind(colorBuffer);
-    program->vertexShader.uniforms[0].bind(0.2, 0, 0);
+    program->vertexShader.uniforms[0].bind(E4::ShaderData(0.2, 0, 0));
     glDrawArrays(GL_TRIANGLES, 0, 3);
 
     GLenum error = glGetError();
@@ -184,7 +184,15 @@ int main(int argc, char* argv[]) {
 
     int width = 640;
     int height = 480;
-    window.create({std::string("abc"), width, height, false, false});
+    window.create(
+        {
+            .title = std::string("abc"),
+            .width = width,
+            .height = height,
+            .borderless = false,
+            .mouseTrap = false,
+        }
+    );
 
     // initialize opengl
     Display_InitGL();

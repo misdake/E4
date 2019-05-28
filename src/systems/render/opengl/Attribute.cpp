@@ -4,7 +4,7 @@
 
 using namespace gl;
 
-E4::Attribute::Attribute(E4::DataType dataType, std::string name) :
+E4::Attribute::Attribute(E4::ShaderDataType dataType, std::string name) :
     dataType(dataType),
     name(std::move(name)) {
 

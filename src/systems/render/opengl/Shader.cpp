@@ -59,13 +59,13 @@ E4::PixelShader::PixelShader(const std::string& content) :
 E4::Program::Program(const std::string& vs, const std::string& ps) :
     vertexShader(vs),
     pixelShader(ps) {
-    vertexShader.compile();
-    pixelShader.compile();
 }
 
 void E4::Program::compile() {
     programId = glCreateProgram();
 
+    vertexShader.compile();
+    pixelShader.compile();
     glAttachShader(programId, vertexShader.shaderId);
     glAttachShader(programId, pixelShader.shaderId);
 

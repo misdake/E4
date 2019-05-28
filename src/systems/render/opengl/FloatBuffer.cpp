@@ -4,9 +4,8 @@
 
 using namespace gl;
 
-E4::FloatBuffer::FloatBuffer(std::vector<float> array, uint16_t offsetVertex, uint32_t floatPerVertex, uint32_t countVertex) :
+E4::FloatBuffer::FloatBuffer(std::vector<float> array, uint32_t floatPerVertex, uint32_t countVertex) :
     array(std::move(array)),
-    offsetVertex(offsetVertex),
     floatPerVertex(floatPerVertex),
     countVertex(countVertex) {
 }
@@ -14,7 +13,7 @@ E4::FloatBuffer::FloatBuffer(std::vector<float> array, uint16_t offsetVertex, ui
 void E4::FloatBuffer::upload() {
     glGenVertexArrays(1, &bufferId);
     glBindBuffer(GL_ARRAY_BUFFER, bufferId);
-    glBufferData(GL_ARRAY_BUFFER, countVertex * floatPerVertex * 4, &this->array[offsetVertex * floatPerVertex], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, countVertex * floatPerVertex * 4, &this->array[0], GL_STATIC_DRAW);
 }
 
 void E4::FloatBuffer::bind(uint32_t attributeIndex) {

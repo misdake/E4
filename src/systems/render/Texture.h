@@ -6,7 +6,7 @@ namespace E4 {
 
     struct Texture {
         std::string name;
-        unsigned int textureId;
+        uint32_t textureId;
         int w, h;
         bool loaded;
 

@@ -1,13 +1,54 @@
 #pragma once
 
 namespace E4 {
-    enum class DataType {
+    enum class ShaderDataType {
         FLOAT,
         VEC2,
         VEC3,
         VEC4,
-        SHORT,
         TEXTURE,
         MATRIX,
+    };
+
+    union ShaderData {
+
+        struct Numbers {
+            float x;
+            float y;
+            float z;
+            float w;
+        } numbers;
+
+        struct Colors {
+            float a;
+            float r;
+            float g;
+            float b;
+        } colors;
+
+        struct Texture {
+            uint32_t textureId;
+        } texture;
+
+        explicit ShaderData(uint32_t textureId) :
+            texture{textureId} {
+        }
+
+        explicit ShaderData(float x) :
+            numbers{x, 0, 0, 0} {
+        }
+
+        ShaderData(float x, float y) :
+            numbers{x, y, 0, 0} {
+        }
+
+        ShaderData(float x, float y, float z) :
+            numbers{x, y, z, 0} {
+        }
+
+        ShaderData(float x, float y, float z, float w) :
+            numbers{x, y, z, w} {
+        }
+
     };
 }

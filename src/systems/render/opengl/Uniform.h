@@ -10,12 +10,12 @@ namespace E4 {
     class Uniform {
     public:
         uint32_t location;
-        DataType dataType;
+        ShaderDataType dataType;
         std::string name;
 
-        Uniform(DataType dataType, std::string name);
+        Uniform(ShaderDataType dataType, std::string name);
 
-        void bind(float x, float y, float z);
+        void bind(ShaderData shaderData);
     };
 
 }
