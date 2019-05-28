@@ -4,7 +4,7 @@
 #include <vector>
 
 #include "FloatBuffer.h"
-#include "Uniform.h"
+#include "UniformSlot.h"
 #include "AttributeSlot.h"
 
 #include <glbinding/gl/gl.h>
@@ -26,17 +26,23 @@ namespace E4 {
     class VertexShader : public Shader {
     public:
         std::vector<std::pair<AttributeSlot*, uint32_t>> attributes;
-        std::vector<Uniform> uniforms;
+        std::vector<std::pair<UniformSlot*, uint32_t>> uniforms;
         explicit VertexShader(const std::string& content);
         void addAttribute(AttributeSlot& slot) {
             attributes.emplace_back(&slot, 0);
+        }
+        void addUniform(UniformSlot& slot) {
+            uniforms.emplace_back(&slot, 0);
         }
     };
 
     class PixelShader : public Shader {
     public:
-        std::vector<Uniform> uniforms;
+        std::vector<std::pair<UniformSlot*, uint32_t>> uniforms;
         explicit PixelShader(const std::string& content);
+        void addUniform(UniformSlot& slot) {
+            uniforms.emplace_back(&slot, 0);
+        }
     };
 
     class Program {

@@ -1,16 +1,16 @@
-#include "Uniform.h"
+#include "UniformSlot.h"
 
 #include <glbinding/gl/gl.h>
 
 using namespace gl;
 
-E4::Uniform::Uniform(E4::ShaderDataType dataType, std::string name) :
-    dataType(dataType),
-    name(std::move(name)) {
+E4::UniformSlot::UniformSlot(const char* name, E4::ShaderDataType dataType) :
+    name(name),
+    dataType(dataType) {
 
 }
 
-void E4::Uniform::bind(ShaderData shaderData) {
+void E4::UniformSlot::bind(ShaderData shaderData) {
     switch (dataType) {
         case ShaderDataType::FLOAT:
             glUniform1f(location, shaderData.numbers.x);

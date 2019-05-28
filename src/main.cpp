@@ -46,6 +46,7 @@ static E4::FloatBuffer colorBuffer(color, 3, 3);
 static E4::Program* program;
 
 static E4::AttributeSlots attributeSlots;
+static E4::UniformSlots uniformSlots;
 
 //void gldPerspective(GLdouble fovy, GLdouble aspect, GLdouble zNear, GLdouble zFar) {
 //    // This code is based off the MESA source for gluPerspective
@@ -98,7 +99,7 @@ void Display_InitGL() {
     program = new E4::Program(vsContent, psContent);
     program->vertexShader.addAttribute(attributeSlots.POSITION);
     program->vertexShader.addAttribute(attributeSlots.COLOR);
-    program->vertexShader.uniforms.emplace_back(E4::ShaderDataType::VEC3, "uOffset");
+    program->vertexShader.addUniform(uniformSlots.OFFSET);
     program->compile();
 
     glEnable(GL_BLEND);
@@ -129,8 +130,7 @@ void Display_Render(const E4::FrameState& frameState) {
 
     attributeSlots.POSITION.bind(positionBuffer);
     attributeSlots.COLOR.bind(colorBuffer);
-
-    program->vertexShader.uniforms[0].bind(E4::ShaderData(0.2, 0, 0));
+    uniformSlots.OFFSET.bind(E4::ShaderData(0.2, 0, 0));
 
     glDrawArrays(GL_TRIANGLES, 0, 3);
 

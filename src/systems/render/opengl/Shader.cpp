@@ -91,11 +91,15 @@ void E4::Program::compile() {
         uint32_t& location = attributePair.second;
         location = glGetAttribLocation(programId, slot->name);
     }
-    for (auto& uniform : vertexShader.uniforms) {
-        uniform.location = glGetUniformLocation(programId, uniform.name.c_str());
+    for (auto& uniformPair : vertexShader.uniforms) {
+        UniformSlot* slot = uniformPair.first;
+        uint32_t& location = uniformPair.second;
+        location = glGetUniformLocation(programId, slot->name);
     }
-    for (auto& uniform : pixelShader.uniforms) {
-        uniform.location = glGetUniformLocation(programId, uniform.name.c_str());
+    for (auto& uniformPair : pixelShader.uniforms) {
+        UniformSlot* slot = uniformPair.first;
+        uint32_t& location = uniformPair.second;
+        location = glGetUniformLocation(programId, slot->name);
     }
 }
 
@@ -104,6 +108,16 @@ void E4::Program::use() {
     for (auto& attributePair : vertexShader.attributes) {
         AttributeSlot* slot = attributePair.first;
         uint32_t& location = attributePair.second;
+        slot->location = location;
+    }
+    for (auto& uniformPair : vertexShader.uniforms) {
+        UniformSlot* slot = uniformPair.first;
+        uint32_t& location = uniformPair.second;
+        slot->location = location;
+    }
+    for (auto& uniformPair : pixelShader.uniforms) {
+        UniformSlot* slot = uniformPair.first;
+        uint32_t& location = uniformPair.second;
         slot->location = location;
     }
 }
