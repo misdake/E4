@@ -24,7 +24,11 @@ void E4::GlRenderer::clear() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void E4::GlRenderer::draw(const E4::Mesh& mesh) {
+void E4::GlRenderer::draw(const E4::Drawable& drawable) {
+    Material& material = *(drawable.material);
+    material.program->use();
+
+    Mesh& mesh = *(drawable.mesh);
     for (auto& pair: mesh.attributes) {
         AttributeSlot* slot = pair.first;
         FloatBuffer* buffer = pair.second;
@@ -35,7 +39,6 @@ void E4::GlRenderer::draw(const E4::Mesh& mesh) {
         ShaderData* buffer = pair.second;
         slot->bind(*buffer);
     }
-
     glDrawArrays(GL_TRIANGLES, 0, mesh.vertexCount);
 }
 

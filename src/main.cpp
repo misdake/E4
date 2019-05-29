@@ -49,6 +49,8 @@ static E4::ShaderData offsetData(0.2, 0, 0);
 static E4::Program* program;
 
 E4::Mesh mesh;
+E4::Material material;
+E4::Drawable drawable;
 
 E4::Renderer renderer;
 E4::GlRenderer glRenderer;
@@ -105,6 +107,11 @@ void Display_InitGL() {
     program->vertexShader.addAttribute(renderer.attributeSlots.COLOR);
     program->vertexShader.addUniform(renderer.uniformSlots.OFFSET);
     program->compile();
+
+    material.program = program;
+
+    drawable.mesh = &mesh;
+    drawable.material = &material;
 }
 
 int Display_SetViewport(int width, int height) {
@@ -113,15 +120,9 @@ int Display_SetViewport(int width, int height) {
 }
 
 void Display_Render(const E4::FrameState& frameState) {
-    if (!frameState.inputStatePrev.mouseButton1 && frameState.inputStateCurr.mouseButton1) {
-        std::cout << "button1 down" << std::endl;
-    }
-
     glRenderer.clear();
 
-    program->use();
-
-    glRenderer.draw(mesh);
+    glRenderer.draw(drawable);
 }
 
 

@@ -20,10 +20,10 @@ namespace E4 {
         } numbers;
 
         struct Colors {
-            float a;
             float r;
             float g;
             float b;
+            float a;
         } colors;
 
         struct Texture {

@@ -5,12 +5,13 @@
 #include "../systems/render/opengl/AttributeSlot.h"
 #include "../systems/render/opengl/UniformSlot.h"
 #include "../systems/render/opengl/GlRenderer.h"
+#include "../systems/render/opengl/Shader.h"
 
 namespace E4 {
 
-    struct Drawable {
-        std::string name;
-        Texture* texture;
+    class Material {
+    public:
+        Program* program;
     };
 
     class Mesh {
@@ -26,8 +27,12 @@ namespace E4 {
         void addUniform(UniformSlot& slot, ShaderData& shaderData) {
             uniforms.emplace_back(&slot, &shaderData);
         }
-
     };
 
+    struct Drawable {
+    public:
+        Mesh* mesh;
+        Material* material;
+    };
 
 }

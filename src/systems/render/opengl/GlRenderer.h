@@ -19,7 +19,7 @@ namespace E4 {
 
         void clear();
 
-        void draw(const Mesh& mesh);
+        void draw(const Drawable& drawable);
 
         void checkError();
 
