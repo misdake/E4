@@ -1,16 +1,22 @@
 #pragma once
 
+#include "opengl/UniformSlot.h"
+#include "opengl/AttributeSlot.h"
+
 namespace E4 {
 
     class Renderer {
     public:
-        Renderer(){}
+        Renderer() = default;
 
-        void load(){};
+        void load() {}
 
-        void draw(){};
+        void draw() {}
 
-        void unload(){};
+        void unload() {}
+
+        UniformSlots uniformSlots;
+        AttributeSlots attributeSlots;
 
     };
 

@@ -10,8 +10,10 @@
 
 #include "systems/render/Texture.h"
 #include "util/Window.h"
+#include "systems/render/Renderer.h"
 #include "systems/render/opengl/Shader.h"
 #include "util/File.h"
+#include "systems/render/opengl/GlRenderer.h"
 
 using namespace gl;
 
@@ -45,8 +47,8 @@ static E4::FloatBuffer colorBuffer(color, 3, 3);
 
 static E4::Program* program;
 
-static E4::AttributeSlots attributeSlots;
-static E4::UniformSlots uniformSlots;
+E4::Renderer renderer;
+E4::GlRenderer glRenderer;
 
 //void gldPerspective(GLdouble fovy, GLdouble aspect, GLdouble zNear, GLdouble zFar) {
 //    // This code is based off the MESA source for gluPerspective
@@ -78,13 +80,7 @@ static E4::UniformSlots uniformSlots;
 //}
 
 void Display_InitGL() {
-    glShadeModel(GL_SMOOTH);
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    glClearDepth(1.0f);
-    glEnable(GL_DEPTH_TEST);
-    glDisable(GL_CULL_FACE);
-    glDepthFunc(GL_LEQUAL);
-    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+    glRenderer.init();
 
 //    texture.name = "street.jpg";
 //    texture.name = "favicon.png";
@@ -97,24 +93,14 @@ void Display_InitGL() {
     std::string vsContent = E4::readFile("shader_basic_vs.txt");
     std::string psContent = E4::readFile("shader_basic_ps.txt");
     program = new E4::Program(vsContent, psContent);
-    program->vertexShader.addAttribute(attributeSlots.POSITION);
-    program->vertexShader.addAttribute(attributeSlots.COLOR);
-    program->vertexShader.addUniform(uniformSlots.OFFSET);
+    program->vertexShader.addAttribute(renderer.attributeSlots.POSITION);
+    program->vertexShader.addAttribute(renderer.attributeSlots.COLOR);
+    program->vertexShader.addUniform(renderer.uniformSlots.OFFSET);
     program->compile();
-
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 int Display_SetViewport(int width, int height) {
-//    GLfloat ratio;
-//
-//    if (height == 0) {
-//        height = 1;
-//    }
-
-//    ratio = GLfloat(width) / GLfloat(height);
-    glViewport(0, 0, width, height);
+    glRenderer.resize(width, height);
     return true;
 }
 
@@ -124,20 +110,15 @@ void Display_Render(const E4::FrameState& frameState) {
         std::cout << "button1 down" << std::endl;
     }
 
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glRenderer.clear();
 
     program->use();
 
-    attributeSlots.POSITION.bind(positionBuffer);
-    attributeSlots.COLOR.bind(colorBuffer);
-    uniformSlots.OFFSET.bind(E4::ShaderData(0.2, 0, 0));
+    renderer.attributeSlots.POSITION.bind(positionBuffer);
+    renderer.attributeSlots.COLOR.bind(colorBuffer);
+    renderer.uniformSlots.OFFSET.bind(E4::ShaderData(0.2, 0, 0));
 
     glDrawArrays(GL_TRIANGLES, 0, 3);
-
-    GLenum error = glGetError();
-    if (error != GL_NO_ERROR) {
-        std::cout << "error" << std::endl;
-    }
 }
 
 

@@ -23,6 +23,7 @@ add_executable(app
         src/components/Drawable.h
         src/systems/render/Renderer.cpp src/systems/render/Renderer.h
         src/systems/render/Texture.cpp src/systems/render/Texture.h
+        src/systems/render/opengl/GlRenderer.cpp src/systems/render/opengl/GlRenderer.h
         src/systems/render/opengl/Shader.cpp src/systems/render/opengl/Shader.h
         src/systems/render/opengl/FloatBuffer.cpp src/systems/render/opengl/FloatBuffer.h
         src/systems/render/opengl/AttributeSlot.cpp src/systems/render/opengl/AttributeSlot.h
