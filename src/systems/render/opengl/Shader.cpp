@@ -1,5 +1,3 @@
-#include <utility>
-
 #include "Shader.h"
 
 E4::Shader::Shader(std::string content, GLenum shaderType) :

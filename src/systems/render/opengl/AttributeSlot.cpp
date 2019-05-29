@@ -10,7 +10,7 @@ E4::AttributeSlot::AttributeSlot(const char* name, E4::ShaderDataType dataType) 
 
 }
 
-void E4::AttributeSlot::bind(E4::FloatBuffer& buffer) const {
+void E4::AttributeSlot::bind(const E4::FloatBuffer& buffer) const {
     glEnableVertexAttribArray(location);
     buffer.bind(location);
 }

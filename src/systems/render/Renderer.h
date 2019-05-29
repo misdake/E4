@@ -9,15 +9,8 @@ namespace E4 {
     public:
         Renderer() = default;
 
-        void load() {}
-
-        void draw() {}
-
-        void unload() {}
-
         UniformSlots uniformSlots;
         AttributeSlots attributeSlots;
-
     };
 
 }

@@ -14,7 +14,7 @@ namespace E4 {
 
         FloatBuffer(std::vector<float> array, uint32_t floatPerVertex, uint32_t countVertex);
         void upload();
-        void bind(uint32_t attributeIndex);
+        void bind(uint32_t attributeIndex) const;
     };
 
 }

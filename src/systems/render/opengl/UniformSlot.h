@@ -16,7 +16,7 @@ namespace E4 {
 
         uint32_t location;
 
-        void bind(ShaderData shaderData);
+        void bind(const ShaderData& shaderData);
     };
 
     class UniformSlots {

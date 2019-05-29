@@ -6,14 +6,14 @@
 
 //#include <sol/sol.hpp>
 
-#include <glbinding/gl/gl.h>
-
 #include "systems/render/Texture.h"
-#include "util/Window.h"
 #include "systems/render/Renderer.h"
 #include "systems/render/opengl/Shader.h"
-#include "util/File.h"
 #include "systems/render/opengl/GlRenderer.h"
+#include "util/Window.h"
+#include "util/File.h"
+
+#include <glbinding/gl/gl.h>
 
 using namespace gl;
 
@@ -44,8 +44,11 @@ static std::vector<float> color = {
 };
 static E4::FloatBuffer positionBuffer(position, 3, 3);
 static E4::FloatBuffer colorBuffer(color, 3, 3);
+static E4::ShaderData offsetData(0.2, 0, 0);
 
 static E4::Program* program;
+
+E4::Mesh mesh;
 
 E4::Renderer renderer;
 E4::GlRenderer glRenderer;
@@ -90,6 +93,11 @@ void Display_InitGL() {
     positionBuffer.upload();
     colorBuffer.upload();
 
+    mesh.addAttribute(renderer.attributeSlots.POSITION, positionBuffer);
+    mesh.addAttribute(renderer.attributeSlots.COLOR, colorBuffer);
+    mesh.addUniform(renderer.uniformSlots.OFFSET, offsetData);
+    mesh.vertexCount = 3;
+
     std::string vsContent = E4::readFile("shader_basic_vs.txt");
     std::string psContent = E4::readFile("shader_basic_ps.txt");
     program = new E4::Program(vsContent, psContent);
@@ -105,7 +113,6 @@ int Display_SetViewport(int width, int height) {
 }
 
 void Display_Render(const E4::FrameState& frameState) {
-//    std::cout << frameState.deltatime << std::endl;
     if (!frameState.inputStatePrev.mouseButton1 && frameState.inputStateCurr.mouseButton1) {
         std::cout << "button1 down" << std::endl;
     }
@@ -114,11 +121,7 @@ void Display_Render(const E4::FrameState& frameState) {
 
     program->use();
 
-    renderer.attributeSlots.POSITION.bind(positionBuffer);
-    renderer.attributeSlots.COLOR.bind(colorBuffer);
-    renderer.uniformSlots.OFFSET.bind(E4::ShaderData(0.2, 0, 0));
-
-    glDrawArrays(GL_TRIANGLES, 0, 3);
+    glRenderer.draw(mesh);
 }
 
 

@@ -10,7 +10,7 @@ E4::UniformSlot::UniformSlot(const char* name, E4::ShaderDataType dataType) :
 
 }
 
-void E4::UniformSlot::bind(ShaderData shaderData) {
+void E4::UniformSlot::bind(const ShaderData& shaderData) {
     switch (dataType) {
         case ShaderDataType::FLOAT:
             glUniform1f(location, shaderData.numbers.x);

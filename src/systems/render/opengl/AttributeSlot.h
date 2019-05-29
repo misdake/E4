@@ -15,7 +15,7 @@ namespace E4 {
 
         uint32_t location;
 
-        void bind(FloatBuffer& buffer) const;
+        void bind(const FloatBuffer& buffer) const;
         void unbind() const;
     };
 

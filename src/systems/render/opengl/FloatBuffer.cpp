@@ -16,7 +16,7 @@ void E4::FloatBuffer::upload() {
     glBufferData(GL_ARRAY_BUFFER, countVertex * floatPerVertex * 4, &this->array[0], GL_STATIC_DRAW);
 }
 
-void E4::FloatBuffer::bind(uint32_t attributeIndex) {
+void E4::FloatBuffer::bind(uint32_t attributeIndex) const {
     glBindBuffer(GL_ARRAY_BUFFER, bufferId);
     glVertexAttribPointer(
         attributeIndex,     // attribute
