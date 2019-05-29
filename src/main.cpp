@@ -12,6 +12,7 @@
 #include "systems/render/opengl/GlRenderer.h"
 #include "util/Window.h"
 #include "util/File.h"
+#include "systems/Asset.h"
 
 #include <glbinding/gl/gl.h>
 
@@ -127,6 +128,18 @@ void Display_Render(const E4::FrameState& frameState) {
 
 
 int main(int argc, char* argv[]) {
+    E4::AssetPool<int> assetPool;
+    E4::AssetPointer<int> p1 = assetPool.alloc();
+    p1.get() = 1;
+    E4::AssetPointer<int> p2 = assetPool.alloc();
+    p2.get() = 2;
+    E4::AssetPointer<int> p3 = assetPool.alloc();
+    p3.get() = 3;
+    std::cout << p1.get() << p2.get() << p3.get() << " addr:" << &p1.get() << std::endl;
+    assetPool.tryShrink();
+    std::cout << p1.get() << p2.get() << p3.get() << " addr:" << &p1.get() << std::endl;
+
+
 //    sol::state lua;
 //    int x = 0;
 //    lua.set_function("beep", [&x] { ++x; });
