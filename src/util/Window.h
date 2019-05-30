@@ -3,6 +3,7 @@
 #include <string>
 #include <tuple>
 #include <iostream>
+#include <functional>
 
 #include "InputState.h"
 
@@ -58,7 +59,7 @@ namespace E4 {
         std::string getTitle();
         void setTitle(const std::string& title);
 
-        void enterEventLoop(void (* onFrame)(const FrameState& frameState));
+        void enterEventLoop(const std::function<void(const FrameState&)>& onFrame);
 
         static std::tuple<int, int> getScreenSize();
 

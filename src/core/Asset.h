@@ -57,7 +57,7 @@ namespace E4 {
                 index = empty.back();
                 empty.pop_back();
             }
-            memset(&array[index], 0, sizeof(T));
+//            memset(&array[index], 0, sizeof(T));
             return AssetPointer<T>(*this, index);
         }
 
@@ -98,7 +98,7 @@ namespace E4 {
     template<typename T>
     void AssetPointer<T>::free() {
         if (index < MAX_INDEX && index < pool.array.size()) {
-            memset(&pool.array[index], 0, sizeof(T));
+//            memset(&pool.array[index], 0, sizeof(T));
             pool.empty.push_back(index);
             index = MAX_INDEX;
         } else {

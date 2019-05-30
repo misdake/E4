@@ -19,6 +19,8 @@ find_package(glbinding REQUIRED)
 include_directories(${GLBINDING_INCLUDE_DIRS})
 
 add_executable(app
+        src/core/App.cpp src/core/App.h
+        src/core/Asset.cpp src/core/Asset.h
         src/components/Position.h
         src/components/Drawable.h
         src/systems/render/Renderer.cpp src/systems/render/Renderer.h
@@ -29,7 +31,6 @@ add_executable(app
         src/systems/render/opengl/AttributeSlot.cpp src/systems/render/opengl/AttributeSlot.h
         src/systems/render/opengl/UniformSlot.cpp src/systems/render/opengl/UniformSlot.h
         src/systems/render/opengl/DataType.h
-        src/systems/Asset.cpp src/systems/Asset.h
         src/util/File.cpp src/util/File.h
         src/util/Window.cpp src/util/Window.h
         src/util/InputState.cpp src/util/InputState.h

@@ -12,7 +12,7 @@
 #include "systems/render/opengl/GlRenderer.h"
 #include "util/Window.h"
 #include "util/File.h"
-#include "systems/Asset.h"
+#include "core/App.h"
 
 #include <glbinding/gl/gl.h>
 
@@ -31,30 +31,6 @@ using namespace gl;
 //    int max;
 //    int current;
 //};
-
-//E4::Texture texture;
-static std::vector<float> position = {
-    -1.0f, -1.0f, 0.0f,
-    1.0f, -1.0f, 0.0f,
-    0.0f, 1.0f, 0.0f,
-};
-static std::vector<float> color = {
-    1.0f, 0.0f, 0.0f,
-    0.0f, 1.0f, 0.0f,
-    0.0f, 0.0f, 1.0f,
-};
-static E4::FloatBuffer positionBuffer(position, 3, 3);
-static E4::FloatBuffer colorBuffer(color, 3, 3);
-static E4::ShaderData offsetData(0.2, 0, 0);
-
-static E4::Program* program;
-
-E4::Mesh mesh;
-E4::Material material;
-E4::Drawable drawable;
-
-E4::Renderer renderer;
-E4::GlRenderer glRenderer;
 
 //void gldPerspective(GLdouble fovy, GLdouble aspect, GLdouble zNear, GLdouble zFar) {
 //    // This code is based off the MESA source for gluPerspective
@@ -85,133 +61,56 @@ E4::GlRenderer glRenderer;
 //    glMultMatrixd(m);
 //}
 
-void Display_InitGL() {
-    glRenderer.init();
-
-//    texture.name = "street.jpg";
-//    texture.name = "favicon.png";
-//    texture.name = "footprint.png";
-//    texture.load();
-
-    positionBuffer.upload();
-    colorBuffer.upload();
-
-    mesh.addAttribute(renderer.attributeSlots.POSITION, positionBuffer);
-    mesh.addAttribute(renderer.attributeSlots.COLOR, colorBuffer);
-    mesh.addUniform(renderer.uniformSlots.OFFSET, offsetData);
-    mesh.vertexCount = 3;
-
-    std::string vsContent = E4::readFile("shader_basic_vs.txt");
-    std::string psContent = E4::readFile("shader_basic_ps.txt");
-    program = new E4::Program(vsContent, psContent);
-    program->vertexShader.addAttribute(renderer.attributeSlots.POSITION);
-    program->vertexShader.addAttribute(renderer.attributeSlots.COLOR);
-    program->vertexShader.addUniform(renderer.uniformSlots.OFFSET);
-    program->compile();
-
-    material.program = program;
-
-    drawable.mesh = &mesh;
-    drawable.material = &material;
-}
-
-int Display_SetViewport(int width, int height) {
-    glRenderer.resize(width, height);
-    return true;
-}
-
-void Display_Render(const E4::FrameState& frameState) {
-    glRenderer.clear();
-
-    glRenderer.draw(drawable);
-}
-
-
 int main(int argc, char* argv[]) {
-//    E4::AssetPool<int> assetPool;
-//    E4::AssetPointer<int> p1 = assetPool.alloc();
-//    p1.get() = 1;
-//    E4::AssetPointer<int> p2 = assetPool.alloc();
-//    p2.get() = 2;
-//    E4::AssetPointer<int> p3 = assetPool.alloc();
-//    p3.get() = 3;
-//    std::cout << p1.get() << p2.get() << p3.get() << " addr:" << &p2.get() << std::endl;
-//    assetPool.shrintToFit();
-//    std::cout << p1.get() << p2.get() << p3.get() << " addr:" << &p2.get() << std::endl;
-//
-//    p2.free();
-//    p2.get(); //invalid
-//    assetPool.printEmpty();
-//
-//    E4::AssetPointer<int> p4 = assetPool.alloc();
-//    p4.get() = 4;
-//    E4::AssetPointer<int> p5 = assetPool.alloc();
-//    p5.get() = 5;
-//    std::cout << p1.get() << p4.get() << p5.get() << " addr:" << &p4.get() << std::endl; //145, addr(p4) should be equal to addr(p2)
+    E4::App app;
 
-//    sol::state lua;
-//    int x = 0;
-//    lua.set_function("beep", [&x] { ++x; });
-//    lua.script("beep()");
-//    std::cout << x << std::endl;
-//
-//
-//    //CNtity
-//    CNtity::CNtity<Position, Velocity, Health, std::string> cntity;
-//
-//    //Creating entities
-//    auto chat = cntity.create<std::string>({"chat"});
-//    cntity.create<std::string>({"chien"});
-//    cntity.create<std::string, Position>({"velociraptor"}, {25, 70});
-//
-//    //Adding component, changing values
-//    auto position = cntity.add<Position>(chat, {50, 50});
-//    position->x += 50;
-//
-//    //System 1
-//    cntity.for_each<std::string, Position>([&cntity](auto entity, auto identity) {
-//        if (*identity == "chat") {
-//            auto position = cntity.get<Position>(entity);
-//            position->x = 200;
-//            position->y = 70;
-//
-//            return;
-//        }
-//    });
-//
-//    //System 2
-//    for (const auto& it: cntity.acquire<std::string, Position>()) {
-//        if (*cntity.get<std::string>(it) == "chat") {
-//            auto position = cntity.get<Position>(it);
-//            std::cout << "position: (" << position->x << ", " << position->y << ")" << std::endl;
-//        }
-//    }
-//
-//    //Removing a component, erasing an entity
-//    cntity.remove<Position>(chat);
-//    cntity.erase(chat);
+    std::vector<float> position = {
+        -1.0f, -1.0f, 0.0f,
+        1.0f, -1.0f, 0.0f,
+        0.0f, 1.0f, 0.0f,
+    };
+    std::vector<float> color = {
+        1.0f, 0.0f, 0.0f,
+        0.0f, 1.0f, 0.0f,
+        0.0f, 0.0f, 1.0f,
+    };
+    E4::FloatBuffer positionBuffer(position, 3, 3);
+    E4::FloatBuffer colorBuffer(color, 3, 3);
+    E4::ShaderData offsetData(0.2, 0, 0);
 
+    E4::Program* program;
 
-    E4::Window window;
+    E4::Mesh mesh;
+    E4::Material material;
+    E4::Drawable drawable;
 
-    int width = 640;
-    int height = 480;
-    window.create(
-        {
-            .title = std::string("abc"),
-            .width = width,
-            .height = height,
-            .borderless = false,
-            .mouseTrap = false,
-        }
-    );
+    app.load([&](E4::App& app) {
+        positionBuffer.upload();
+        colorBuffer.upload();
 
-    // initialize opengl
-    Display_InitGL();
-    // set camera
-    Display_SetViewport(window.getWidth(), window.getHeight());
+        mesh.addAttribute(app.renderer.attributeSlots.POSITION, positionBuffer);
+        mesh.addAttribute(app.renderer.attributeSlots.COLOR, colorBuffer);
+        mesh.addUniform(app.renderer.uniformSlots.OFFSET, offsetData);
+        mesh.vertexCount = 3;
 
-    window.enterEventLoop(Display_Render);
+        std::string vsContent = E4::readFile("shader_basic_vs.txt");
+        std::string psContent = E4::readFile("shader_basic_ps.txt");
+        program = new E4::Program(vsContent, psContent);
+        program->vertexShader.addAttribute(app.renderer.attributeSlots.POSITION);
+        program->vertexShader.addAttribute(app.renderer.attributeSlots.COLOR);
+        program->vertexShader.addUniform(app.renderer.uniformSlots.OFFSET);
+        program->compile();
+
+        material.program = program;
+
+        drawable.mesh = &mesh;
+        drawable.material = &material;
+    });
+
+    app.enterLoop([&](E4::App& app, const E4::FrameState& frameState) {
+        app.glRenderer.clear();
+        app.glRenderer.draw(drawable);
+    });
 
     return 0;
 }

@@ -147,7 +147,7 @@ void E4::Window::getInputState() {
     setTitle(ss.str());
 }
 
-void E4::Window::enterEventLoop(void (* onFrame)(const FrameState& frameState)) {
+void E4::Window::enterEventLoop(const std::function<void(const FrameState&)>& onFrame) {
     bool quit = false;
     SDL_Event event{};
     while (!quit) {
