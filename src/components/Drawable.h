@@ -6,6 +6,7 @@
 #include "../systems/render/opengl/UniformSlot.h"
 #include "../systems/render/opengl/GlRenderer.h"
 #include "../systems/render/opengl/Shader.h"
+#include "../core/Asset.h"
 
 namespace E4 {
 
@@ -31,8 +32,8 @@ namespace E4 {
 
     struct Drawable {
     public:
-        Mesh* mesh;
-        Material* material;
+        AssetPointer<Mesh> mesh;
+        AssetPointer<Material> material;
     };
 
 }

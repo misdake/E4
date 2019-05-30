@@ -25,10 +25,10 @@ void E4::GlRenderer::clear() {
 }
 
 void E4::GlRenderer::draw(const E4::Drawable& drawable) {
-    Material& material = *(drawable.material);
+    const Material& material = drawable.material.get();
     material.program->use();
 
-    Mesh& mesh = *(drawable.mesh);
+    const Mesh& mesh = drawable.mesh.get();
     for (auto& pair: mesh.attributes) {
         AttributeSlot* slot = pair.first;
         FloatBuffer* buffer = pair.second;

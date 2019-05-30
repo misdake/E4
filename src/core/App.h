@@ -14,13 +14,13 @@ namespace E4 {
         Renderer renderer;
         GlRenderer glRenderer;
 
-        std::vector<Drawable> scene;
+        std::vector<AssetPointer<Drawable>> scene;
 
         AssetPool<Material> materials;
         AssetPool<Mesh> meshes;
         AssetPool<Drawable> drawables;
 
-        void load(std::function<void(App&)> onLoaded) {
+        void load(const std::function<void(App&)>& onLoaded) {
             int width = 640;
             int height = 480;
             window.create(
@@ -41,6 +41,12 @@ namespace E4 {
         void enterLoop(const std::function<void(App&, const FrameState&)>& onFrame) {
             window.enterEventLoop([&onFrame, this](const FrameState& frameState) -> void {
                 onFrame(*this, frameState);
+
+                glRenderer.clear();
+
+                for(auto& drawable: scene) {
+                    glRenderer.draw(drawable.get());
+                }
             });
         }
 

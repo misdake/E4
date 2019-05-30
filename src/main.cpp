@@ -80,18 +80,9 @@ int main(int argc, char* argv[]) {
 
     E4::Program* program;
 
-    E4::Mesh mesh;
-    E4::Material material;
-    E4::Drawable drawable;
-
     app.load([&](E4::App& app) {
         positionBuffer.upload();
         colorBuffer.upload();
-
-        mesh.addAttribute(app.renderer.attributeSlots.POSITION, positionBuffer);
-        mesh.addAttribute(app.renderer.attributeSlots.COLOR, colorBuffer);
-        mesh.addUniform(app.renderer.uniformSlots.OFFSET, offsetData);
-        mesh.vertexCount = 3;
 
         std::string vsContent = E4::readFile("shader_basic_vs.txt");
         std::string psContent = E4::readFile("shader_basic_ps.txt");
@@ -101,15 +92,24 @@ int main(int argc, char* argv[]) {
         program->vertexShader.addUniform(app.renderer.uniformSlots.OFFSET);
         program->compile();
 
-        material.program = program;
+        E4::AssetPointer<E4::Mesh> mesh = app.meshes.alloc();
+        E4::AssetPointer<E4::Material> material = app.materials.alloc();
+        E4::AssetPointer<E4::Drawable> drawable = app.drawables.alloc();
+        mesh->addAttribute(app.renderer.attributeSlots.POSITION, positionBuffer);
+        mesh->addAttribute(app.renderer.attributeSlots.COLOR, colorBuffer);
+        mesh->addUniform(app.renderer.uniformSlots.OFFSET, offsetData);
+        mesh->vertexCount = 3;
 
-        drawable.mesh = &mesh;
-        drawable.material = &material;
+        material->program = program;
+
+        drawable->mesh = mesh;
+        drawable->material = material;
+
+        app.scene.push_back(drawable);
     });
 
     app.enterLoop([&](E4::App& app, const E4::FrameState& frameState) {
-        app.glRenderer.clear();
-        app.glRenderer.draw(drawable);
+
     });
 
     return 0;
