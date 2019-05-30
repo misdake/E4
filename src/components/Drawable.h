@@ -32,8 +32,8 @@ namespace E4 {
 
     struct Drawable {
     public:
-        AssetPointer<Mesh> mesh;
-        AssetPointer<Material> material;
+        Asset<Mesh> mesh;
+        Asset<Material> material;
     };
 
 }

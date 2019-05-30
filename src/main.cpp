@@ -92,9 +92,9 @@ int main(int argc, char* argv[]) {
         program->vertexShader.addUniform(app.renderer.uniformSlots.OFFSET);
         program->compile();
 
-        E4::AssetPointer<E4::Mesh> mesh = app.meshes.alloc();
-        E4::AssetPointer<E4::Material> material = app.materials.alloc();
-        E4::AssetPointer<E4::Drawable> drawable = app.drawables.alloc();
+        E4::Asset<E4::Mesh> mesh = app.meshes.alloc();
+        E4::Asset<E4::Material> material = app.materials.alloc();
+        E4::Asset<E4::Drawable> drawable = app.drawables.alloc();
         mesh->addAttribute(app.renderer.attributeSlots.POSITION, positionBuffer);
         mesh->addAttribute(app.renderer.attributeSlots.COLOR, colorBuffer);
         mesh->addUniform(app.renderer.uniformSlots.OFFSET, offsetData);

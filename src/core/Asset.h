@@ -9,32 +9,28 @@
 
 namespace E4 {
 
-    class Asset {
-
-    };
-
     template<typename T>
     class AssetPool;
 
     template<typename T>
-    class AssetPointer;
+    class Asset;
 
     template<typename T>
-    class AssetPointer {
+    class Asset {
     private:
         friend class AssetPool<T>;
 
         AssetPool<T>* pool;
         uint32_t index;
 
-        AssetPointer(AssetPool<T>& pool, uint32_t index) : pool(&pool), index(index) {}
+        Asset(AssetPool<T>& pool, uint32_t index) : pool(&pool), index(index) {}
 
     public:
         static const uint32_t MAX_INDEX = std::numeric_limits<uint32_t>::max();
 
-        AssetPointer() : pool(nullptr), index(MAX_INDEX) {}
-        AssetPointer(const AssetPointer& other) : pool(other.pool), index(other.index) {}
-        AssetPointer& operator=(const AssetPointer& other) {
+        Asset() : pool(nullptr), index(MAX_INDEX) {}
+        Asset(const Asset& other) : pool(other.pool), index(other.index) {}
+        Asset& operator=(const Asset& other) {
             pool = other.pool;
             index = other.index;
             return *this;
@@ -52,13 +48,13 @@ namespace E4 {
     template<typename T>
     class AssetPool {
     private:
-        friend class AssetPointer<T>;
+        friend class Asset<T>;
 
         std::vector<T> array;
         std::deque<uint32_t> empty;
 
     public:
-        AssetPointer<T> alloc() {
+        Asset<T> alloc() {
             uint32_t index = 0;
             if (empty.empty()) {
                 array.emplace_back();
@@ -67,7 +63,7 @@ namespace E4 {
                 index = empty.back();
                 empty.pop_back();
             }
-            return AssetPointer<T>(*this, index);
+            return Asset<T>(*this, index);
         }
 
         void shrintToFit() {
@@ -76,7 +72,7 @@ namespace E4 {
     };
 
     template<typename T>
-    T& AssetPointer<T>::get() {
+    T& Asset<T>::get() {
         if (index < MAX_INDEX && index < pool->array.size()) {
             return pool->array[index];
         } else {
@@ -87,7 +83,7 @@ namespace E4 {
     }
 
     template<typename T>
-    const T& AssetPointer<T>::get() const {
+    const T& Asset<T>::get() const {
         if (index < MAX_INDEX && index < pool->array.size()) {
             return pool->array[index];
         } else {
@@ -98,7 +94,7 @@ namespace E4 {
     }
 
     template<typename T>
-    void AssetPointer<T>::free() {
+    void Asset<T>::free() {
         if (index < MAX_INDEX && index < pool->array.size()) {
             pool->empty.push_back(index);
             index = MAX_INDEX;

@@ -14,7 +14,7 @@ namespace E4 {
         Renderer renderer;
         GlRenderer glRenderer;
 
-        std::vector<AssetPointer<Drawable>> scene;
+        std::vector<Asset<Drawable>> scene;
 
         AssetPool<Material> materials;
         AssetPool<Mesh> meshes;
