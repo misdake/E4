@@ -128,17 +128,26 @@ void Display_Render(const E4::FrameState& frameState) {
 
 
 int main(int argc, char* argv[]) {
-    E4::AssetPool<int> assetPool;
-    E4::AssetPointer<int> p1 = assetPool.alloc();
-    p1.get() = 1;
-    E4::AssetPointer<int> p2 = assetPool.alloc();
-    p2.get() = 2;
-    E4::AssetPointer<int> p3 = assetPool.alloc();
-    p3.get() = 3;
-    std::cout << p1.get() << p2.get() << p3.get() << " addr:" << &p1.get() << std::endl;
-    assetPool.tryShrink();
-    std::cout << p1.get() << p2.get() << p3.get() << " addr:" << &p1.get() << std::endl;
-
+//    E4::AssetPool<int> assetPool;
+//    E4::AssetPointer<int> p1 = assetPool.alloc();
+//    p1.get() = 1;
+//    E4::AssetPointer<int> p2 = assetPool.alloc();
+//    p2.get() = 2;
+//    E4::AssetPointer<int> p3 = assetPool.alloc();
+//    p3.get() = 3;
+//    std::cout << p1.get() << p2.get() << p3.get() << " addr:" << &p2.get() << std::endl;
+//    assetPool.shrintToFit();
+//    std::cout << p1.get() << p2.get() << p3.get() << " addr:" << &p2.get() << std::endl;
+//
+//    p2.free();
+//    p2.get(); //invalid
+//    assetPool.printEmpty();
+//
+//    E4::AssetPointer<int> p4 = assetPool.alloc();
+//    p4.get() = 4;
+//    E4::AssetPointer<int> p5 = assetPool.alloc();
+//    p5.get() = 5;
+//    std::cout << p1.get() << p4.get() << p5.get() << " addr:" << &p4.get() << std::endl; //145, addr(p4) should be equal to addr(p2)
 
 //    sol::state lua;
 //    int x = 0;
