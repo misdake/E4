@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstdint>
+
 namespace E4 {
     enum class ShaderDataType {
         FLOAT,
@@ -9,6 +11,8 @@ namespace E4 {
         TEXTURE,
         MATRIX,
     };
+
+    const char* const dataTypeName(ShaderDataType type);
 
     union ShaderData {
 

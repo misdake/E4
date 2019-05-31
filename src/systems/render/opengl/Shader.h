@@ -16,10 +16,12 @@ namespace E4 {
     class Shader {
     public:
         uint32_t shaderId = 0;
-        std::string content;
+        std::string mainMethod;
         GLenum shaderType;
 
-        Shader(std::string content, GLenum shaderType);
+        std::string content;
+
+        Shader(std::string mainMethod, GLenum shaderType);
         void compile();
     };
 
@@ -28,6 +30,9 @@ namespace E4 {
         std::vector<std::pair<AttributeSlot*, uint32_t>> attributes;
         std::vector<std::pair<UniformSlot*, uint32_t>> uniforms;
         explicit VertexShader(const std::string& content);
+
+        void compose();
+
         void addAttribute(AttributeSlot& slot) {
             attributes.emplace_back(&slot, 0);
         }
@@ -40,6 +45,9 @@ namespace E4 {
     public:
         std::vector<std::pair<UniformSlot*, uint32_t>> uniforms;
         explicit PixelShader(const std::string& content);
+
+        void compose();
+
         void addUniform(UniformSlot& slot) {
             uniforms.emplace_back(&slot, 0);
         }

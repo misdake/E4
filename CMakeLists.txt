@@ -30,7 +30,7 @@ add_executable(app
         src/systems/render/opengl/FloatBuffer.cpp src/systems/render/opengl/FloatBuffer.h
         src/systems/render/opengl/AttributeSlot.cpp src/systems/render/opengl/AttributeSlot.h
         src/systems/render/opengl/UniformSlot.cpp src/systems/render/opengl/UniformSlot.h
-        src/systems/render/opengl/DataType.h
+        src/systems/render/opengl/DataType.cpp src/systems/render/opengl/DataType.h
         src/util/File.cpp src/util/File.h
         src/util/Window.cpp src/util/Window.h
         src/util/InputState.cpp src/util/InputState.h

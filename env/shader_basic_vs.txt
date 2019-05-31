@@ -1,10 +1,4 @@
-#version 330
-
-in vec4 aPosition;
-in vec3 aColor;
-out vec3 vColor;
-
-uniform vec3 uOffset;
+out vec4 vColor;
 
 void main() {
     gl_Position = vec4(aPosition.xyz + uOffset, aPosition.w);
