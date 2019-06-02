@@ -3,15 +3,8 @@
 #include <iostream>
 #include <sstream>
 
-E4::Shader::Shader(std::string mainMethod, GLenum shaderType) :
-    mainMethod(std::move(mainMethod)),
-    shaderType(shaderType),
-    content() {
-
-}
-
-void E4::Shader::compile() {
-    shaderId = glCreateShader(shaderType);
+uint32_t compileShader(GLenum shaderType, const std::string& content) {
+    uint32_t shaderId = glCreateShader(shaderType);
     const char* strFileData = content.c_str();
     glShaderSource(shaderId, 1, &strFileData, nullptr);
 
@@ -44,73 +37,65 @@ void E4::Shader::compile() {
         printf("Compile failure in %s shader:\n%s\n", strShaderType, strInfoLog);
         delete[] strInfoLog;
     }
+    return shaderId;
 }
 
-E4::VertexShader::VertexShader(const std::string& content) :
-    Shader(content, GL_VERTEX_SHADER) {
-
-}
-void E4::VertexShader::compose() {
+std::string composeVs(const std::string& vsMain, const std::vector<std::pair<E4::AttributeSlot*, uint32_t>>& attributes, const std::vector<std::pair<E4::UniformSlot*, uint32_t>>& uniforms) {
     std::stringstream stream;
 
     stream << "#version 330\n\n";
 
     for (auto& pair : attributes) {
-        AttributeSlot* attribute = pair.first;
+        E4::AttributeSlot* attribute = pair.first;
         const char* name = attribute->name;
         const char* typeName = dataTypeName(attribute->dataType);
         stream << "in " << typeName << " " << name << ";\n";
     }
     for (auto& pair : uniforms) {
-        UniformSlot* uniform = pair.first;
+        E4::UniformSlot* uniform = pair.first;
         const char* name = uniform->name;
         const char* typeName = dataTypeName(uniform->dataType);
         stream << "uniform " << typeName << " " << name << ";\n";
     }
-    stream << "\n" << mainMethod << "\n";
+    stream << "\n" << vsMain << "\n";
 
-    content = stream.str();
+    return stream.str();
 }
 
-E4::PixelShader::PixelShader(const std::string& content) :
-    Shader(content, GL_FRAGMENT_SHADER) {
-
-}
-
-void E4::PixelShader::compose() {
+std::string composePs(const std::string& psMain, const std::vector<std::pair<E4::UniformSlot*, uint32_t>>& uniforms) {
     std::stringstream stream;
 
     stream << "#version 330\n\n";
 
     for (auto& pair : uniforms) {
-        UniformSlot* uniform = pair.first;
+        E4::UniformSlot* uniform = pair.first;
         const char* name = uniform->name;
         const char* typeName = dataTypeName(uniform->dataType);
         stream << "uniform " << typeName << " " << name << ";\n";
     }
-    stream << "\n" << mainMethod << "\n";
+    stream << "\n" << psMain << "\n";
 
-    content = stream.str();
+    return stream.str();
 }
 
-E4::Program::Program(const std::string& vs, const std::string& ps) :
-    vertexShader(vs),
-    pixelShader(ps) {
+E4::Shader::Shader(const std::string& vsMain, const std::string& psMain) :
+    vsMain(vsMain),
+    psMain(psMain) {
 }
 
-void E4::Program::compile() {
+void E4::Shader::compile() {
     programId = glCreateProgram();
 
-    vertexShader.compose();
-    std::cout << vertexShader.content << std::endl;
-    vertexShader.compile();
+    vsContent = composeVs(vsMain, vertexAttributes, vertexUniforms);
+    std::cout << vsContent << std::endl;
+    vsId = compileShader(GL_VERTEX_SHADER, vsContent);
 
-    pixelShader.compose();
-    std::cout << pixelShader.content << std::endl;
-    pixelShader.compile();
+    psContent = composePs(psMain, pixelUniforms);
+    std::cout << psContent << std::endl;
+    psId = compileShader(GL_FRAGMENT_SHADER, psContent);
 
-    glAttachShader(programId, vertexShader.shaderId);
-    glAttachShader(programId, pixelShader.shaderId);
+    glAttachShader(programId, vsId);
+    glAttachShader(programId, psId);
 
     glLinkProgram(programId);
 
@@ -126,41 +111,41 @@ void E4::Program::compile() {
         delete[] strInfoLog;
     }
 
-    glDetachShader(programId, vertexShader.shaderId);
-    glDetachShader(programId, pixelShader.shaderId);
-    glDeleteShader(vertexShader.shaderId);
-    glDeleteShader(pixelShader.shaderId);
+    glDetachShader(programId, vsId);
+    glDetachShader(programId, psId);
+    glDeleteShader(vsId);
+    glDeleteShader(psId);
 
-    for (auto& attributePair : vertexShader.attributes) {
+    for (auto& attributePair : vertexAttributes) {
         AttributeSlot* slot = attributePair.first;
         uint32_t& location = attributePair.second;
         location = glGetAttribLocation(programId, slot->name);
     }
-    for (auto& uniformPair : vertexShader.uniforms) {
+    for (auto& uniformPair : vertexUniforms) {
         UniformSlot* slot = uniformPair.first;
         uint32_t& location = uniformPair.second;
         location = glGetUniformLocation(programId, slot->name);
     }
-    for (auto& uniformPair : pixelShader.uniforms) {
+    for (auto& uniformPair : pixelUniforms) {
         UniformSlot* slot = uniformPair.first;
         uint32_t& location = uniformPair.second;
         location = glGetUniformLocation(programId, slot->name);
     }
 }
 
-void E4::Program::use() {
+void E4::Shader::use() {
     glUseProgram(programId);
-    for (auto& attributePair : vertexShader.attributes) {
+    for (auto& attributePair : vertexAttributes) {
         AttributeSlot* slot = attributePair.first;
         uint32_t& location = attributePair.second;
         slot->location = location;
     }
-    for (auto& uniformPair : vertexShader.uniforms) {
+    for (auto& uniformPair : vertexUniforms) {
         UniformSlot* slot = uniformPair.first;
         uint32_t& location = uniformPair.second;
         slot->location = location;
     }
-    for (auto& uniformPair : pixelShader.uniforms) {
+    for (auto& uniformPair : pixelUniforms) {
         UniformSlot* slot = uniformPair.first;
         uint32_t& location = uniformPair.second;
         slot->location = location;

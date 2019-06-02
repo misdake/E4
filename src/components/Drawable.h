@@ -12,7 +12,7 @@ namespace E4 {
 
     class Material {
     public:
-        Program* program;
+        Shader* program;
     };
 
     class Mesh {

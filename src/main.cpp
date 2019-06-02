@@ -27,7 +27,7 @@ int main(int argc, char* argv[]) {
     E4::FloatBuffer colorBuffer(color, 3, 3);
     E4::ShaderData offsetData(0.2, 0, 0);
 
-    E4::Program* program;
+    E4::Shader* shader;
     E4::Asset<E4::Mesh> mesh;
 
     app.load([&](E4::App& app) {
@@ -36,11 +36,11 @@ int main(int argc, char* argv[]) {
 
         std::string vsContent = E4::readFile("shader_basic_vs.txt");
         std::string psContent = E4::readFile("shader_basic_ps.txt");
-        program = new E4::Program(vsContent, psContent);
-        program->vertexShader.addAttribute(app.renderer.attributeSlots.POSITION);
-        program->vertexShader.addAttribute(app.renderer.attributeSlots.COLOR);
-        program->vertexShader.addUniform(app.renderer.uniformSlots.OFFSET);
-        program->compile();
+        shader = new E4::Shader(vsContent, psContent);
+        shader->addVertexAttribute(app.renderer.attributeSlots.POSITION);
+        shader->addVertexAttribute(app.renderer.attributeSlots.COLOR);
+        shader->addVertexUniform(app.renderer.uniformSlots.OFFSET);
+        shader->compile();
 
         mesh = app.meshes.alloc();
         E4::Asset<E4::Material> material = app.materials.alloc();
@@ -50,7 +50,7 @@ int main(int argc, char* argv[]) {
         mesh->addUniform(app.renderer.uniformSlots.OFFSET, offsetData);
         mesh->vertexCount = 3;
 
-        material->program = program;
+        material->program = shader;
 
         drawable->mesh = mesh;
         drawable->material = material;
