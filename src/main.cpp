@@ -1,10 +1,6 @@
-#include <iostream>
 #include <SDL.h>
-#include <sstream>
 
-//#include <CNtity/CNtity.hpp>
-
-//#include <sol/sol.hpp>
+#include <cmath>
 
 #include "systems/render/Texture.h"
 #include "systems/render/Renderer.h"
@@ -13,53 +9,6 @@
 #include "util/Window.h"
 #include "util/File.h"
 #include "core/App.h"
-
-#include <glbinding/gl/gl.h>
-
-using namespace gl;
-
-
-//struct Position {
-//    float x;
-//    float y;
-//};
-//struct Velocity {
-//    float x;
-//    float y;
-//};
-//struct Health {
-//    int max;
-//    int current;
-//};
-
-//void gldPerspective(GLdouble fovy, GLdouble aspect, GLdouble zNear, GLdouble zFar) {
-//    // This code is based off the MESA source for gluPerspective
-//    // *NOTE* This assumes GL_PROJECTION is the current matrix
-//
-//
-//    GLdouble xmin, xmax, ymin, ymax;
-//    GLdouble m[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-//
-//    ymax = zNear * tan(fovy * M_PI / 360.0);
-//    ymin = -ymax;
-//
-//    xmin = ymin * aspect;
-//    xmax = ymax * aspect;
-//
-//    // Set up the projection matrix
-//    m[0 + 0 * 4] = (2.0 * zNear) / (xmax - xmin);
-//    m[1 + 1 * 4] = (2.0 * zNear) / (ymax - ymin);
-//    m[2 + 2 * 4] = -(zFar + zNear) / (zFar - zNear);
-//
-//    m[0 + 2 * 4] = (xmax + xmin) / (xmax - xmin);
-//    m[1 + 2 * 4] = (ymax + ymin) / (ymax - ymin);
-//    m[3 + 2 * 4] = -1.0;
-//
-//    m[2 + 3 * 4] = -(2.0 * zFar * zNear) / (zFar - zNear);
-//
-//    // Add to current matrix
-//    glMultMatrixd(m);
-//}
 
 int main(int argc, char* argv[]) {
     E4::App app;
@@ -79,6 +28,7 @@ int main(int argc, char* argv[]) {
     E4::ShaderData offsetData(0.2, 0, 0);
 
     E4::Program* program;
+    E4::Asset<E4::Mesh> mesh;
 
     app.load([&](E4::App& app) {
         positionBuffer.upload();
@@ -92,7 +42,7 @@ int main(int argc, char* argv[]) {
         program->vertexShader.addUniform(app.renderer.uniformSlots.OFFSET);
         program->compile();
 
-        E4::Asset<E4::Mesh> mesh = app.meshes.alloc();
+        mesh = app.meshes.alloc();
         E4::Asset<E4::Material> material = app.materials.alloc();
         E4::Asset<E4::Drawable> drawable = app.drawables.alloc();
         mesh->addAttribute(app.renderer.attributeSlots.POSITION, positionBuffer);
@@ -108,8 +58,12 @@ int main(int argc, char* argv[]) {
         app.scene.push_back(drawable);
     });
 
-    app.enterLoop([&](E4::App& app, const E4::FrameState& frameState) {
+    uint32_t totalTime = 0;
 
+    app.enterLoop([&](E4::App& app, const E4::FrameState& frameState) {
+        E4::ShaderData* data = mesh->uniforms[0].second;
+        totalTime += frameState.deltatime;
+        data->numbers.x = std::sin(totalTime / 1000.0f);
     });
 
     return 0;

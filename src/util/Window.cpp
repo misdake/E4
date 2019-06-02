@@ -175,7 +175,7 @@ void E4::Window::enterEventLoop(const std::function<void(const FrameState&)>& on
         if (prevTime < 0) prevTime = currTime;
         long d = currTime - prevTime;
         prevTime = currTime;
-        uint16_t deltatime = d > 0 && d < 1000 ? (uint16_t) d : 1000;
+        uint16_t deltatime = d >= 0 && d < 1000 ? (uint16_t) d : 1000;
         FrameState frameState(deltatime, inputStateCurr, inputStatePrev);
 
         onFrame(frameState);
