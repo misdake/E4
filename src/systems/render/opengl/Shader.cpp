@@ -40,29 +40,43 @@ uint32_t compileShader(GLenum shaderType, const std::string& content) {
     return shaderId;
 }
 
-std::string composeVs(const std::string& vsMain, const std::vector<std::pair<E4::AttributeSlot*, uint32_t>>& attributes, const std::vector<std::pair<E4::UniformSlot*, uint32_t>>& uniforms) {
+std::string composeVs(
+    const std::string& vsMain,
+    const std::vector<std::pair<E4::AttributeSlot*, uint32_t>>& attributes,
+    const std::vector<std::pair<E4::UniformSlot*, uint32_t>>& uniforms,
+    const std::vector<std::pair<std::string, E4::ShaderDataType>>& varyings
+) {
     std::stringstream stream;
 
     stream << "#version 330\n\n";
 
+    for (auto& pair : uniforms) {
+        E4::UniformSlot* uniform = pair.first;
+        const char* name = uniform->name;
+        const char* typeName = dataTypeName(uniform->dataType);
+        stream << "uniform " << typeName << " " << name << ";\n";
+    }
     for (auto& pair : attributes) {
         E4::AttributeSlot* attribute = pair.first;
         const char* name = attribute->name;
         const char* typeName = dataTypeName(attribute->dataType);
         stream << "in " << typeName << " " << name << ";\n";
     }
-    for (auto& pair : uniforms) {
-        E4::UniformSlot* uniform = pair.first;
-        const char* name = uniform->name;
-        const char* typeName = dataTypeName(uniform->dataType);
-        stream << "uniform " << typeName << " " << name << ";\n";
+    for (auto& pair : varyings) {
+        const std::string& name = pair.first;
+        const char* typeName = dataTypeName(pair.second);
+        stream << "out " << typeName << " " << name << ";\n";
     }
     stream << "\n" << vsMain << "\n";
 
     return stream.str();
 }
 
-std::string composePs(const std::string& psMain, const std::vector<std::pair<E4::UniformSlot*, uint32_t>>& uniforms) {
+std::string composePs(
+    const std::string& psMain,
+    const std::vector<std::pair<std::string, E4::ShaderDataType>>& varyings,
+    const std::vector<std::pair<E4::UniformSlot*, uint32_t>>& uniforms
+) {
     std::stringstream stream;
 
     stream << "#version 330\n\n";
@@ -72,6 +86,11 @@ std::string composePs(const std::string& psMain, const std::vector<std::pair<E4:
         const char* name = uniform->name;
         const char* typeName = dataTypeName(uniform->dataType);
         stream << "uniform " << typeName << " " << name << ";\n";
+    }
+    for (auto& pair : varyings) {
+        const std::string& name = pair.first;
+        const char* typeName = dataTypeName(pair.second);
+        stream << "in " << typeName << " " << name << ";\n";
     }
     stream << "\n" << psMain << "\n";
 
@@ -86,11 +105,11 @@ E4::Shader::Shader(const std::string& vsMain, const std::string& psMain) :
 void E4::Shader::compile() {
     programId = glCreateProgram();
 
-    vsContent = composeVs(vsMain, vertexAttributes, vertexUniforms);
+    vsContent = composeVs(vsMain, vertexAttributes, vertexUniforms, varyings);
     std::cout << vsContent << std::endl;
     vsId = compileShader(GL_VERTEX_SHADER, vsContent);
 
-    psContent = composePs(psMain, pixelUniforms);
+    psContent = composePs(psMain, varyings, pixelUniforms);
     std::cout << psContent << std::endl;
     psId = compileShader(GL_FRAGMENT_SHADER, psContent);
 

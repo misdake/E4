@@ -40,6 +40,7 @@ int main(int argc, char* argv[]) {
         shader->addVertexAttribute(app.renderer.attributeSlots.POSITION);
         shader->addVertexAttribute(app.renderer.attributeSlots.COLOR);
         shader->addVertexUniform(app.renderer.uniformSlots.OFFSET);
+        shader->addVarying("vColor", E4::ShaderDataType::VEC4);
         shader->compile();
 
         mesh = app.meshes.alloc();

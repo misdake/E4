@@ -3,9 +3,10 @@
 #include <string>
 #include <vector>
 
+#include "DataType.h"
 #include "FloatBuffer.h"
-#include "UniformSlot.h"
 #include "AttributeSlot.h"
+#include "UniformSlot.h"
 
 #include <glbinding/gl/gl.h>
 
@@ -17,12 +18,17 @@ namespace E4 {
     public:
         std::vector<std::pair<AttributeSlot*, uint32_t>> vertexAttributes;
         std::vector<std::pair<UniformSlot*, uint32_t>> vertexUniforms;
+        std::vector<std::pair<std::string, ShaderDataType>> varyings;
         std::vector<std::pair<UniformSlot*, uint32_t>> pixelUniforms;
+
         void addVertexAttribute(AttributeSlot& slot) {
             vertexAttributes.emplace_back(&slot, 0);
         }
         void addVertexUniform(UniformSlot& slot) {
             vertexUniforms.emplace_back(&slot, 0);
+        }
+        void addVarying(const std::string& name, ShaderDataType type) {
+            varyings.emplace_back(name, type);
         }
         void addPixelUniform(UniformSlot& slot) {
             pixelUniforms.emplace_back(&slot, 0);
