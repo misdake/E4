@@ -4,15 +4,14 @@
 #include <vector>
 
 #include "DataType.h"
-#include "FloatBuffer.h"
-#include "AttributeSlot.h"
-#include "UniformSlot.h"
 
 #include <glbinding/gl/gl.h>
 
 using namespace gl;
 
 namespace E4 {
+    class AttributeSlot;
+    class UniformSlot;
 
     class Shader {
     public:

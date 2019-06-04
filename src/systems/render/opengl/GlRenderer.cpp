@@ -1,5 +1,7 @@
 #include "GlRenderer.h"
 
+#include "../../../components/Drawable.h"
+
 void E4::GlRenderer::resize(int w, int h) {
     width = w;
     height = h;

@@ -1,5 +1,8 @@
 #include "Shader.h"
 
+#include "AttributeSlot.h"
+#include "UniformSlot.h"
+
 #include <iostream>
 #include <sstream>
 

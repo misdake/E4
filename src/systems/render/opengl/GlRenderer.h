@@ -2,11 +2,12 @@
 
 #include <iostream>
 #include <glbinding/gl/gl.h>
-#include "../../../components/Drawable.h"
 
 using namespace gl;
 
 namespace E4 {
+
+    class Drawable;
 
     class GlRenderer {
     public:
@@ -22,7 +23,6 @@ namespace E4 {
         void draw(const Drawable& drawable);
 
         void checkError();
-
     };
 
 }
