@@ -34,7 +34,7 @@ namespace E4 {
             pixelUniforms.emplace_back(&slot, 0);
         }
 
-        Shader(const std::string& vs, const std::string& ps);
+        Shader(std::string vsMain, std::string psMain);
         void compile();
         void use();
 

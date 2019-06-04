@@ -97,9 +97,9 @@ std::string composePs(
     return stream.str();
 }
 
-E4::Shader::Shader(const std::string& vsMain, const std::string& psMain) :
-    vsMain(vsMain),
-    psMain(psMain) {
+E4::Shader::Shader(std::string vsMain, std::string psMain) :
+    vsMain(std::move(vsMain)),
+    psMain(std::move(psMain)) {
 }
 
 void E4::Shader::compile() {
@@ -153,6 +153,10 @@ void E4::Shader::compile() {
 }
 
 void E4::Shader::use() {
+    if (programId == 0) {
+        compile();
+    }
+
     glUseProgram(programId);
     for (auto& attributePair : vertexAttributes) {
         AttributeSlot* slot = attributePair.first;

@@ -47,6 +47,8 @@ namespace E4 {
                 for(auto& drawable: scene) {
                     glRenderer.draw(drawable.get());
                 }
+
+                glRenderer.checkError();
             });
         }
 

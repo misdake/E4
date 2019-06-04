@@ -27,6 +27,7 @@ add_executable(app
         src/systems/render/Texture.cpp src/systems/render/Texture.h
         src/systems/render/opengl/GlRenderer.cpp src/systems/render/opengl/GlRenderer.h
         src/systems/render/opengl/Shader.cpp src/systems/render/opengl/Shader.h
+        src/systems/render/opengl/Shaders.cpp src/systems/render/opengl/Shaders.h
         src/systems/render/opengl/FloatBuffer.cpp src/systems/render/opengl/FloatBuffer.h
         src/systems/render/opengl/AttributeSlot.cpp src/systems/render/opengl/AttributeSlot.h
         src/systems/render/opengl/UniformSlot.cpp src/systems/render/opengl/UniformSlot.h

@@ -2,6 +2,7 @@
 
 #include "opengl/UniformSlot.h"
 #include "opengl/AttributeSlot.h"
+#include "opengl/Shaders.h"
 
 namespace E4 {
 
@@ -11,6 +12,8 @@ namespace E4 {
 
         UniformSlots uniformSlots;
         AttributeSlots attributeSlots;
+
+        ShaderBasic shaderBasic = ShaderBasic(*this);
     };
 
 }
