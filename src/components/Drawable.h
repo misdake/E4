@@ -1,14 +1,13 @@
 #pragma once
 
 #include <string>
-#include "../systems/render/Texture.h"
 #include "../systems/render/opengl/AttributeSlot.h"
 #include "../systems/render/opengl/UniformSlot.h"
-#include "../systems/render/opengl/GlRenderer.h"
-#include "../systems/render/opengl/Shader.h"
 #include "../core/Asset.h"
 
 namespace E4 {
+
+    class Shader;
 
     class Material {
     public:

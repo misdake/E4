@@ -2,12 +2,11 @@
 
 #include <string>
 #include <vector>
+#include <glbinding/gl/gl.h>
+using namespace gl;
 
 #include "DataType.h"
-
-#include <glbinding/gl/gl.h>
-
-using namespace gl;
+#include "FloatBuffer.h"
 
 namespace E4 {
     class AttributeSlot;
@@ -34,19 +33,16 @@ namespace E4 {
         }
 
         Shader(std::string vsMain, std::string psMain);
-        void compile();
         void use();
 
     private:
+        void compile();
+
+        bool compiled = false;
         uint32_t programId = 0;
-        uint32_t vsId = 0;
-        uint32_t psId = 0;
         std::string vsMain = "";
         std::string psMain = "";
         std::string vsContent = "";
         std::string psContent = "";
-
     };
-
-
 }

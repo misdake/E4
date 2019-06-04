@@ -1,7 +1,6 @@
 #include "FloatBuffer.h"
 
 #include <glbinding/gl/gl.h>
-
 using namespace gl;
 
 E4::FloatBuffer::FloatBuffer(std::vector<float> array, uint32_t floatPerVertex, uint32_t countVertex) :

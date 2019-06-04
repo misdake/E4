@@ -1,5 +1,6 @@
 #include "GlRenderer.h"
 
+#include "Shader.h"
 #include "../../../components/Drawable.h"
 
 void E4::GlRenderer::resize(int w, int h) {

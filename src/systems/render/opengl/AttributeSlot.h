@@ -1,10 +1,10 @@
 #pragma once
 
-#include <string>
 #include "DataType.h"
-#include "FloatBuffer.h"
 
 namespace E4 {
+
+    class FloatBuffer;
 
     class AttributeSlot {
     public:

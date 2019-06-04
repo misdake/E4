@@ -1,8 +1,9 @@
 #include "AttributeSlot.h"
 
 #include <glbinding/gl/gl.h>
-
 using namespace gl;
+
+#include "FloatBuffer.h"
 
 E4::AttributeSlot::AttributeSlot(const char* name, E4::ShaderDataType dataType) :
     name(name),

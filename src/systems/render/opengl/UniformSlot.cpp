@@ -1,7 +1,6 @@
 #include "UniformSlot.h"
 
 #include <glbinding/gl/gl.h>
-
 using namespace gl;
 
 E4::UniformSlot::UniformSlot(const char* name, E4::ShaderDataType dataType) :

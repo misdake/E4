@@ -110,11 +110,11 @@ void E4::Shader::compile() {
 
     vsContent = composeVs(vsMain, vertexAttributes, vertexUniforms, varyings);
     std::cout << vsContent << std::endl;
-    vsId = compileShader(GL_VERTEX_SHADER, vsContent);
+    uint32_t vsId = compileShader(GL_VERTEX_SHADER, vsContent);
 
     psContent = composePs(psMain, varyings, pixelUniforms);
     std::cout << psContent << std::endl;
-    psId = compileShader(GL_FRAGMENT_SHADER, psContent);
+    uint32_t psId = compileShader(GL_FRAGMENT_SHADER, psContent);
 
     glAttachShader(programId, vsId);
     glAttachShader(programId, psId);
@@ -131,6 +131,7 @@ void E4::Shader::compile() {
         glGetProgramInfoLog(programId, infoLogLength, nullptr, strInfoLog);
         printf("Linker failure: %s\n", strInfoLog);
         delete[] strInfoLog;
+        return;
     }
 
     glDetachShader(programId, vsId);
@@ -156,8 +157,9 @@ void E4::Shader::compile() {
 }
 
 void E4::Shader::use() {
-    if (programId == 0) {
+    if (!compiled) {
         compile();
+        compiled = true;
     }
 
     glUseProgram(programId);

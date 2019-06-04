@@ -2,7 +2,6 @@
 
 #include <iostream>
 #include <glbinding/gl/gl.h>
-
 using namespace gl;
 
 namespace E4 {

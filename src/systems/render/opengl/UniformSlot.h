@@ -1,8 +1,5 @@
 #pragma once
 
-#include <cstdint>
-#include <string>
-#include "FloatBuffer.h"
 #include "DataType.h"
 
 namespace E4 {

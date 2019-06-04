@@ -2,7 +2,6 @@
 
 #include "../util/Window.h"
 #include "../systems/render/Renderer.h"
-#include "../systems/render/opengl/GlRenderer.h"
 #include "Asset.h"
 #include "../components/Drawable.h"
 
