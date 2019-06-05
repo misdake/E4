@@ -16,7 +16,7 @@ E4::FloatBuffer::FloatBuffer() :
     floatPerVertex(0),
     countVertex(0) {
 }
-void E4::FloatBuffer::set(std::vector<float> narray, uint32_t nfloatPerVertex, uint32_t ncountVertex) {
+E4::FloatBuffer& E4::FloatBuffer::set(std::vector<float> narray, uint32_t nfloatPerVertex, uint32_t ncountVertex) {
     if (bufferId > 0) { //TODO
         std::cout << "abandoning uploaded buffer" << std::endl;
     }
@@ -24,6 +24,7 @@ void E4::FloatBuffer::set(std::vector<float> narray, uint32_t nfloatPerVertex, u
     bufferId = 0;
     floatPerVertex = nfloatPerVertex;
     countVertex = ncountVertex;
+    return *this;
 }
 
 void E4::FloatBuffer::upload() {

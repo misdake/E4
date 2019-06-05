@@ -24,6 +24,9 @@ void E4::UniformSlot::bind(const ShaderData& shaderData) {
             glUniform4f(location, shaderData.numbers.x, shaderData.numbers.y, shaderData.numbers.z, shaderData.numbers.w);
             break;
         case ShaderDataType::TEXTURE:
+            glActiveTexture(GL_TEXTURE0);
+            glBindTexture(GL_TEXTURE_2D, shaderData.texture.textureId);
+            glUniform1i(location, 0);
             break;
         case ShaderDataType::MATRIX:
             break;

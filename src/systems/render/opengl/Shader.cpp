@@ -109,11 +109,11 @@ void E4::Shader::compile() {
     programId = glCreateProgram();
 
     vsContent = composeVs(vsMain, vertexAttributes, vertexUniforms, varyings);
-    std::cout << vsContent << std::endl;
+//    std::cout << vsContent << std::endl;
     uint32_t vsId = compileShader(GL_VERTEX_SHADER, vsContent);
 
     psContent = composePs(psMain, varyings, pixelUniforms);
-    std::cout << psContent << std::endl;
+//    std::cout << psContent << std::endl;
     uint32_t psId = compileShader(GL_FRAGMENT_SHADER, psContent);
 
     glAttachShader(programId, vsId);

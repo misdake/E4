@@ -12,6 +12,7 @@ namespace E4 {
         Renderer() = default;
 
         ShaderBasic shaderBasic = ShaderBasic(glRenderer);
+        ShaderTexture shaderTexture = ShaderTexture(glRenderer);
 
         GlRenderer glRenderer;
 

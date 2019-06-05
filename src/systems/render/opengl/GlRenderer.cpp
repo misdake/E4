@@ -17,6 +17,7 @@ void E4::GlRenderer::init() {
     glDisable(GL_CULL_FACE);
     glDepthFunc(GL_LEQUAL);
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+    glEnable(GL_TEXTURE_2D);
 
     //TODO move to glstate
     glEnable(GL_BLEND);
@@ -28,14 +29,18 @@ void E4::GlRenderer::clear() {
 }
 
 void E4::GlRenderer::draw(const E4::Drawable& drawable) {
+    checkError();
+
     const Material& material = drawable.material.get();
     material.program->use();
 
     const Mesh& mesh = drawable.mesh.get();
 
     attributeSlots.POSITION.bind(mesh.position);
-    attributeSlots.COLOR.bind(mesh.color);
+    attributeSlots.TEXCOORD.bind(mesh.texcoord);
+//    attributeSlots.COLOR.bind(mesh.color);
     uniformSlots.OFFSET.bind(mesh.offset);
+    uniformSlots.TEXTURE.bind(material.texture.shaderData);
 
 //    for (auto& pair: mesh.attributes) {
 //        AttributeSlot* slot = pair.first;
@@ -47,7 +52,10 @@ void E4::GlRenderer::draw(const E4::Drawable& drawable) {
 //        ShaderData* buffer = pair.second;
 //        slot->bind(*buffer);
 //    }
+    checkError();
     glDrawArrays(GL_TRIANGLES, 0, mesh.vertexCount);
+
+    checkError();
 }
 
 void E4::GlRenderer::checkError() {

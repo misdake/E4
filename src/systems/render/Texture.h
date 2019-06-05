@@ -1,12 +1,14 @@
 #pragma once
 
 #include <string>
+#include "opengl/DataType.h"
 
 namespace E4 {
 
-    struct Texture {
+    class Texture {
+    public:
         std::string name;
-        uint32_t textureId;
+        ShaderData shaderData;
         int w, h;
         bool loaded;
 

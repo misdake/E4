@@ -4,6 +4,7 @@
 #include "../systems/render/opengl/AttributeSlot.h"
 #include "../systems/render/opengl/UniformSlot.h"
 #include "../core/Asset.h"
+#include "../systems/render/Texture.h"
 
 namespace E4 {
 
@@ -12,15 +13,16 @@ namespace E4 {
     class Material {
     public:
         Shader* program;
+        Texture texture;
     };
 
     class Mesh {
     public:
         int vertexCount;
         FloatBuffer position;
+        FloatBuffer texcoord;
         FloatBuffer color;
         ShaderData offset;
-//        FloatBuffer texcoord;
 
 //        std::vector<std::pair<AttributeSlot*, FloatBuffer*>> attributes;
 //        std::vector<std::pair<UniformSlot*, ShaderData*>> uniforms;

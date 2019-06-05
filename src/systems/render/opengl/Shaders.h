@@ -12,4 +12,9 @@ namespace E4 {
         explicit ShaderBasic(GlRenderer& renderer);
     };
 
+    class ShaderTexture : public Shader {
+    public:
+        explicit ShaderTexture(GlRenderer& renderer);
+    };
+
 }

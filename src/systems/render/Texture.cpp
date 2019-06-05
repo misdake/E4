@@ -12,13 +12,15 @@ using namespace gl;
 void E4::Texture::load() {
     if (this->loaded) return;
 
+    stbi_set_flip_vertically_on_load(true);
+    uint32_t& textureId = shaderData.texture.textureId;
     glGenTextures(1, &textureId);
     glBindTexture(GL_TEXTURE_2D, textureId);
     // 为当前绑定的纹理对象设置环绕、过滤方式
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     // 加载并生成纹理
     int nrChannels;
     stbi_uc* data = stbi_load(this->name.c_str(), &this->w, &this->h, &nrChannels, 0);
@@ -34,5 +36,5 @@ void E4::Texture::load() {
 }
 
 void E4::Texture::unload() {
-    glDeleteTextures(1, &this->textureId);
+    glDeleteTextures(1, &shaderData.texture.textureId);
 }
