@@ -39,7 +39,7 @@ void E4::FloatBuffer::bind(uint32_t attributeIndex) const {
     glBindBuffer(GL_ARRAY_BUFFER, bufferId);
     glVertexAttribPointer(
         attributeIndex,     // attribute
-        countVertex,        // size
+        floatPerVertex,     // size
         GL_FLOAT,           // type
         GL_FALSE,           // normalized?
         floatPerVertex * 4, // stride
