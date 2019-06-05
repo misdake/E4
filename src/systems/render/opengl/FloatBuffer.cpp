@@ -44,6 +44,6 @@ void E4::FloatBuffer::bind(uint32_t attributeIndex) const {
         GL_FLOAT,           // type
         GL_FALSE,           // normalized?
         floatPerVertex * 4, // stride
-        reinterpret_cast<void*> (0) // array buffer offset
+        nullptr // array buffer offset
     );
 }

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-#include "opengl/DataType.h"
+#include "DataType.h"
 
 namespace E4 {
 

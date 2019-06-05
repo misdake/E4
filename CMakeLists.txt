@@ -19,23 +19,24 @@ find_package(glbinding REQUIRED)
 include_directories(${GLBINDING_INCLUDE_DIRS})
 
 add_executable(app
+        src/main.cpp
         src/core/App.cpp src/core/App.h
         src/core/Asset.cpp src/core/Asset.h
         src/components/Position.h
         src/components/Drawable.h
         src/systems/render/Renderer.cpp src/systems/render/Renderer.h
-        src/systems/render/Texture.cpp src/systems/render/Texture.h
+        src/systems/render/opengl/Texture.cpp src/systems/render/opengl/Texture.h
         src/systems/render/opengl/GlRenderer.cpp src/systems/render/opengl/GlRenderer.h
         src/systems/render/opengl/Shader.cpp src/systems/render/opengl/Shader.h
         src/systems/render/opengl/Shaders.cpp src/systems/render/opengl/Shaders.h
         src/systems/render/opengl/FloatBuffer.cpp src/systems/render/opengl/FloatBuffer.h
+        src/systems/render/opengl/ShortBuffer.cpp src/systems/render/opengl/ShortBuffer.h
         src/systems/render/opengl/AttributeSlot.cpp src/systems/render/opengl/AttributeSlot.h
         src/systems/render/opengl/UniformSlot.cpp src/systems/render/opengl/UniformSlot.h
         src/systems/render/opengl/DataType.cpp src/systems/render/opengl/DataType.h
         src/util/File.cpp src/util/File.h
         src/util/Window.cpp src/util/Window.h
-        src/util/InputState.cpp src/util/InputState.h
-        src/main.cpp)
+        src/util/InputState.cpp src/util/InputState.h)
 target_link_libraries(app lua53 ${SDL2_LIBRARY} ${GLBINDING_LIBRARIES})
 
 #output executable

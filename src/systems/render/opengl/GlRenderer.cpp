@@ -34,7 +34,14 @@ void E4::GlRenderer::draw(const E4::Drawable& drawable) {
     const Material& material = drawable.material.get();
     material.shader->use();
     material.shader->bind(*this, drawable);
-    glDrawArrays(GL_TRIANGLES, 0, drawable.mesh->vertexCount);
+
+    const ShortBuffer& indexBuffer = drawable.mesh->index;
+    if (indexBuffer.countIndices > 0) {
+        indexBuffer.bind();
+        glDrawElements(GL_TRIANGLES, indexBuffer.countIndices, GL_UNSIGNED_SHORT, nullptr);
+    } else {
+        glDrawArrays(GL_TRIANGLES, 0, drawable.mesh->vertexCount);
+    }
 
     checkError();
 }

@@ -2,7 +2,7 @@
 #include <cmath>
 
 #include "core/App.h"
-#include "systems/render/Texture.h"
+#include "systems/render/opengl/Texture.h"
 
 int main(int argc, char* argv[]) {
     E4::App app;
@@ -14,15 +14,11 @@ int main(int argc, char* argv[]) {
             0.5f, 0.5f, 0.0f,
             0.5f, -0.5f, 0.0f,
             -0.5f, -0.5f, 0.0f,
-            0.5f, 0.5f, 0.0f,
-            -0.5f, -0.5f, 0.0f,
             -0.5f, 0.5f, 0.0f,
         };
         std::vector<float> color = {
             1.0f, 0.0f, 0.0f,
             0.0f, 1.0f, 0.0f,
-            0.0f, 0.0f, 1.0f,
-            1.0f, 0.0f, 0.0f,
             0.0f, 0.0f, 1.0f,
             1.0f, 0.0f, 1.0f,
         };
@@ -30,23 +26,26 @@ int main(int argc, char* argv[]) {
             1.0f, 1.0f,
             1.0f, 0.0f,
             0.0f, 0.0f,
-            1.0f, 1.0f,
-            0.0f, 0.0f,
             0.0f, 1.0f,
+        };
+        std::vector<uint16_t> index = {
+            0, 1, 2,
+            0, 2, 3,
         };
 
         mesh = app.meshes.alloc();
         E4::Asset<E4::Material> material = app.materials.alloc();
         E4::Asset<E4::Drawable> drawable = app.drawables.alloc();
-        mesh->position.set(position, 3, 6).upload();
-        mesh->texcoord.set(texcoord, 2, 6).upload();
-        mesh->color.set(color, 3, 6).upload();
+        mesh->position.set(position, 3, 4).upload();
+        mesh->texcoord.set(texcoord, 2, 4).upload();
+        mesh->color.set(color, 3, 4).upload();
         mesh->offset.set(0, 0, 0);
 
         material->texture.name = "street.jpg";
         material->texture.load();
 
-        mesh->vertexCount = 6;
+//        mesh->vertexCount = 6;
+        mesh->index.set(index, 6).upload();
 
         material->shader = &app.renderer.shaderTexture;
 

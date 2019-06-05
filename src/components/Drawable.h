@@ -4,7 +4,8 @@
 #include "../systems/render/opengl/AttributeSlot.h"
 #include "../systems/render/opengl/UniformSlot.h"
 #include "../core/Asset.h"
-#include "../systems/render/Texture.h"
+#include "../systems/render/opengl/Texture.h"
+#include "../systems/render/opengl/ShortBuffer.h"
 
 namespace E4 {
 
@@ -18,21 +19,13 @@ namespace E4 {
 
     class Mesh {
     public:
-        int vertexCount;
         FloatBuffer position;
         FloatBuffer texcoord;
         FloatBuffer color;
         ShaderData offset;
 
-//        std::vector<std::pair<AttributeSlot*, FloatBuffer*>> attributes;
-//        std::vector<std::pair<UniformSlot*, ShaderData*>> uniforms;
-//
-//        void addAttribute(AttributeSlot& slot, FloatBuffer& floatBuffer) {
-//            attributes.emplace_back(&slot, &floatBuffer);
-//        }
-//        void addUniform(UniformSlot& slot, ShaderData& shaderData) {
-//            uniforms.emplace_back(&slot, &shaderData);
-//        }
+        int vertexCount;
+        ShortBuffer index;
     };
 
     struct Drawable {
