@@ -2,8 +2,7 @@
 
 #include "opengl/Shaders.h"
 #include "opengl/GlRenderer.h"
-#include "../../core/Asset.h"
-#include "../../components/Drawable.h"
+#include "../../core/ECS.h"
 
 namespace E4 {
 
@@ -19,7 +18,7 @@ namespace E4 {
         void init();
         void resize(int w, int h);
 
-        void run(std::vector<Asset<Drawable>>& scene);
+        void run(ECS& ecs);
     };
 
 }

@@ -2,11 +2,8 @@
 
 #include <string>
 #include <vector>
-#include <glbinding/gl/gl.h>
-using namespace gl;
 
 #include "DataType.h"
-#include "FloatBuffer.h"
 
 namespace E4 {
     class AttributeSlot;

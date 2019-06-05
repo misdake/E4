@@ -1,24 +1,20 @@
 #pragma once
 
-#include <string>
-#include "../systems/render/opengl/AttributeSlot.h"
-#include "../systems/render/opengl/UniformSlot.h"
 #include "../core/Asset.h"
 #include "../systems/render/opengl/Texture.h"
+#include "../systems/render/opengl/FloatBuffer.h"
 #include "../systems/render/opengl/ShortBuffer.h"
 
 namespace E4 {
 
     class Shader;
 
-    class Material {
-    public:
+    struct Material {
         Shader* shader;
         Texture texture;
     };
 
-    class Mesh {
-    public:
+    struct Mesh {
         FloatBuffer position;
         FloatBuffer texcoord;
         FloatBuffer color;

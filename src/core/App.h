@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../util/Window.h"
+#include "ECS.h"
 #include "../systems/render/Renderer.h"
 #include "Asset.h"
 #include "../components/Drawable.h"
@@ -11,13 +12,15 @@ namespace E4 {
     public:
         Window window;
 
+        //ecs
+        ECS ecs;
+
+        //systems
         Renderer renderer;
 
-        std::vector<Asset<Drawable>> scene;
-
-        AssetPool<Material> materials;
+        //resources
         AssetPool<Mesh> meshes;
-        AssetPool<Drawable> drawables;
+        AssetPool<Material> materials;
 
         void load(const std::function<void(App&)>& onLoaded);
 

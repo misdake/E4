@@ -1,5 +1,9 @@
 #include "GlRenderer.h"
 
+#include <iostream>
+#include <glbinding/gl/gl.h>
+using namespace gl;
+
 #include "Shader.h"
 #include "../../../components/Drawable.h"
 

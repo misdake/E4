@@ -1,6 +1,6 @@
 #include "Shaders.h"
 
-#include "../Renderer.h"
+#include "GlRenderer.h"
 #include "../../../components/Drawable.h"
 
 const char* ShaderBasic_VS = "void main() {\n"

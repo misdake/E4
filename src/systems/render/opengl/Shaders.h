@@ -1,11 +1,10 @@
 #pragma once
 
 #include "Shader.h"
-#include "GlRenderer.h"
 
 namespace E4 {
 
-    class Renderer;
+    class GlRenderer;
 
     class ShaderBasic : public Shader {
     public:

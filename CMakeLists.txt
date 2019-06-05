@@ -36,7 +36,7 @@ add_executable(app
         src/systems/render/opengl/DataType.cpp src/systems/render/opengl/DataType.h
         src/util/File.cpp src/util/File.h
         src/util/Window.cpp src/util/Window.h
-        src/util/InputState.cpp src/util/InputState.h)
+        src/util/InputState.cpp src/util/InputState.h src/core/ECS.h)
 target_link_libraries(app lua53 ${SDL2_LIBRARY} ${GLBINDING_LIBRARIES})
 
 #output executable

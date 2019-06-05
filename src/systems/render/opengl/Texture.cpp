@@ -1,12 +1,9 @@
 #include "Texture.h"
+
 #include <iostream>
-
 #define STB_IMAGE_IMPLEMENTATION
-
 #include <stb/stb_image.h>
-
 #include <glbinding/gl/gl.h>
-
 using namespace gl;
 
 void E4::Texture::load() {

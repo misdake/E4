@@ -1,10 +1,12 @@
 #include "Shader.h"
 
-#include "AttributeSlot.h"
-#include "UniformSlot.h"
-
 #include <iostream>
 #include <sstream>
+#include <glbinding/gl/gl.h>
+using namespace gl;
+
+#include "AttributeSlot.h"
+#include "UniformSlot.h"
 
 uint32_t compileShader(GLenum shaderType, const std::string& content) {
     uint32_t shaderId = glCreateShader(shaderType);

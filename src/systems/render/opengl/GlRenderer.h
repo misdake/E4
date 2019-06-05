@@ -1,9 +1,5 @@
 #pragma once
 
-#include <iostream>
-#include <glbinding/gl/gl.h>
-using namespace gl;
-
 #include "UniformSlot.h"
 #include "AttributeSlot.h"
 
