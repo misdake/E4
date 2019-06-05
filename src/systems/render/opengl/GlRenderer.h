@@ -4,12 +4,18 @@
 #include <glbinding/gl/gl.h>
 using namespace gl;
 
+#include "UniformSlot.h"
+#include "AttributeSlot.h"
+
 namespace E4 {
 
     class Drawable;
 
     class GlRenderer {
     public:
+        UniformSlots uniformSlots;
+        AttributeSlots attributeSlots;
+
         int width = 0;
         int height = 0;
 

@@ -34,6 +34,10 @@ namespace E4 {
             uint32_t textureId;
         } texture;
 
+        ShaderData() :
+            numbers{0, 0, 0, 0} {
+        }
+
         explicit ShaderData(uint32_t textureId) :
             texture{textureId} {
         }
@@ -52,6 +56,25 @@ namespace E4 {
 
         ShaderData(float x, float y, float z, float w) :
             numbers{x, y, z, w} {
+        }
+
+        void set(float x) {
+            numbers.x = x;
+        }
+        void set(float x, float y) {
+            numbers.x = x;
+            numbers.y = y;
+        }
+        void set(float x, float y, float z) {
+            numbers.x = x;
+            numbers.y = y;
+            numbers.z = z;
+        }
+        void set(float x, float y, float z, float w) {
+            numbers.x = x;
+            numbers.y = y;
+            numbers.z = z;
+            numbers.w = w;
         }
 
     };

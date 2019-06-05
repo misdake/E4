@@ -13,6 +13,8 @@ namespace E4 {
         uint32_t countVertex;
 
         FloatBuffer(std::vector<float> array, uint32_t floatPerVertex, uint32_t countVertex);
+        FloatBuffer();
+        void set(std::vector<float> narray, uint32_t nfloatPerVertex, uint32_t ncountVertex);
         void upload();
         void bind(uint32_t attributeIndex) const;
     };

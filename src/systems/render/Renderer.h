@@ -1,7 +1,5 @@
 #pragma once
 
-#include "opengl/UniformSlot.h"
-#include "opengl/AttributeSlot.h"
 #include "opengl/Shaders.h"
 #include "opengl/GlRenderer.h"
 #include "../../core/Asset.h"
@@ -13,10 +11,7 @@ namespace E4 {
     public:
         Renderer() = default;
 
-        UniformSlots uniformSlots;
-        AttributeSlots attributeSlots;
-
-        ShaderBasic shaderBasic = ShaderBasic(*this);
+        ShaderBasic shaderBasic = ShaderBasic(glRenderer);
 
         GlRenderer glRenderer;
 

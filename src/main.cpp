@@ -6,33 +6,30 @@
 int main(int argc, char* argv[]) {
     E4::App app;
 
-    std::vector<float> position = {
-        -1.0f, -1.0f, 0.0f,
-        1.0f, -1.0f, 0.0f,
-        0.0f, 1.0f, 0.0f,
-    };
-    std::vector<float> color = {
-        1.0f, 0.0f, 0.0f,
-        0.0f, 1.0f, 0.0f,
-        0.0f, 0.0f, 1.0f,
-    };
-    E4::FloatBuffer positionBuffer(position, 3, 3);
-    E4::FloatBuffer colorBuffer(color, 3, 3);
-    E4::ShaderData offsetData(0.2, 0, 0);
-
     E4::Asset<E4::Mesh> mesh;
 
-    app.load([&mesh, &offsetData, &positionBuffer, &colorBuffer](E4::App& app) {
-        positionBuffer.upload();
-        colorBuffer.upload();
+    app.load([&mesh](E4::App& app) {
+
+        std::vector<float> position = {
+            -1.0f, -1.0f, 0.0f,
+            1.0f, -1.0f, 0.0f,
+            0.0f, 1.0f, 0.0f,
+        };
+        std::vector<float> color = {
+            1.0f, 0.0f, 0.0f,
+            0.0f, 1.0f, 0.0f,
+            0.0f, 0.0f, 1.0f,
+        };
 
         mesh = app.meshes.alloc();
         E4::Asset<E4::Material> material = app.materials.alloc();
         E4::Asset<E4::Drawable> drawable = app.drawables.alloc();
-        mesh->addAttribute(app.renderer.attributeSlots.POSITION, positionBuffer);
-        mesh->addAttribute(app.renderer.attributeSlots.COLOR, colorBuffer);
-        mesh->addUniform(app.renderer.uniformSlots.OFFSET, offsetData);
+        mesh->position.set(position, 3, 3);
+        mesh->color.set(color, 3, 3);
+        mesh->offset.set(0.2, 0, 0);
         mesh->vertexCount = 3;
+        mesh->position.upload();
+        mesh->color.upload();
 
         material->program = &app.renderer.shaderBasic;
 
@@ -42,10 +39,10 @@ int main(int argc, char* argv[]) {
         app.scene.push_back(drawable);
     });
 
-    app.enterLoop([&offsetData](E4::App& app, const E4::FrameState& frameState) {
+    app.enterLoop([&mesh](E4::App& app, const E4::FrameState& frameState) {
         static uint32_t totalTime = 0;
         totalTime += frameState.deltatime;
-        offsetData.numbers.x = std::sin(totalTime / 1000.0f);
+        mesh->offset.numbers.x = std::sin(totalTime / 1000.0f);
     });
 
     return 0;

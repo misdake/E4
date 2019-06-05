@@ -1,15 +1,35 @@
 #include "FloatBuffer.h"
 
+#include <iostream> //TODO
 #include <glbinding/gl/gl.h>
 using namespace gl;
 
 E4::FloatBuffer::FloatBuffer(std::vector<float> array, uint32_t floatPerVertex, uint32_t countVertex) :
     array(std::move(array)),
+    bufferId(0),
     floatPerVertex(floatPerVertex),
     countVertex(countVertex) {
 }
+E4::FloatBuffer::FloatBuffer() :
+    array(),
+    bufferId(0),
+    floatPerVertex(0),
+    countVertex(0) {
+}
+void E4::FloatBuffer::set(std::vector<float> narray, uint32_t nfloatPerVertex, uint32_t ncountVertex) {
+    if (bufferId > 0) { //TODO
+        std::cout << "abandoning uploaded buffer" << std::endl;
+    }
+    array = std::move(narray);
+    bufferId = 0;
+    floatPerVertex = nfloatPerVertex;
+    countVertex = ncountVertex;
+}
 
 void E4::FloatBuffer::upload() {
+    if (bufferId > 0) { //TODO
+        std::cout << "abandoning uploaded buffer" << std::endl;
+    }
     glGenVertexArrays(1, &bufferId);
     glBindBuffer(GL_ARRAY_BUFFER, bufferId);
     glBufferData(GL_ARRAY_BUFFER, countVertex * floatPerVertex * 4, &this->array[0], GL_STATIC_DRAW);

@@ -16,17 +16,21 @@ namespace E4 {
 
     class Mesh {
     public:
-        std::vector<std::pair<AttributeSlot*, FloatBuffer*>> attributes;
-        std::vector<std::pair<UniformSlot*, ShaderData*>> uniforms;
-
         int vertexCount;
+        FloatBuffer position;
+        FloatBuffer color;
+        ShaderData offset;
+//        FloatBuffer texcoord;
 
-        void addAttribute(AttributeSlot& slot, FloatBuffer& floatBuffer) {
-            attributes.emplace_back(&slot, &floatBuffer);
-        }
-        void addUniform(UniformSlot& slot, ShaderData& shaderData) {
-            uniforms.emplace_back(&slot, &shaderData);
-        }
+//        std::vector<std::pair<AttributeSlot*, FloatBuffer*>> attributes;
+//        std::vector<std::pair<UniformSlot*, ShaderData*>> uniforms;
+//
+//        void addAttribute(AttributeSlot& slot, FloatBuffer& floatBuffer) {
+//            attributes.emplace_back(&slot, &floatBuffer);
+//        }
+//        void addUniform(UniformSlot& slot, ShaderData& shaderData) {
+//            uniforms.emplace_back(&slot, &shaderData);
+//        }
     };
 
     struct Drawable {

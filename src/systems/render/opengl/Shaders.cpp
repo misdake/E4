@@ -13,7 +13,7 @@ const char* ShaderBasic_PS = "out vec4 outputColor;\n"
                              "   outputColor = vec4(vColor.rgb, 1.0f);\n"
                              "}";
 
-E4::ShaderBasic::ShaderBasic(Renderer& renderer) : Shader(ShaderBasic_VS, ShaderBasic_PS) {
+E4::ShaderBasic::ShaderBasic(GlRenderer& renderer) : Shader(ShaderBasic_VS, ShaderBasic_PS) {
     addVertexAttribute(renderer.attributeSlots.POSITION);
     addVertexAttribute(renderer.attributeSlots.COLOR);
     addVertexUniform(renderer.uniformSlots.OFFSET);
