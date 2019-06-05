@@ -32,28 +32,9 @@ void E4::GlRenderer::draw(const E4::Drawable& drawable) {
     checkError();
 
     const Material& material = drawable.material.get();
-    material.program->use();
-
-    const Mesh& mesh = drawable.mesh.get();
-
-    attributeSlots.POSITION.bind(mesh.position);
-    attributeSlots.TEXCOORD.bind(mesh.texcoord);
-//    attributeSlots.COLOR.bind(mesh.color);
-    uniformSlots.OFFSET.bind(mesh.offset);
-    uniformSlots.TEXTURE.bind(material.texture.shaderData);
-
-//    for (auto& pair: mesh.attributes) {
-//        AttributeSlot* slot = pair.first;
-//        FloatBuffer* buffer = pair.second;
-//        slot->bind(*buffer);
-//    }
-//    for (auto& pair: mesh.uniforms) {
-//        UniformSlot* slot = pair.first;
-//        ShaderData* buffer = pair.second;
-//        slot->bind(*buffer);
-//    }
-    checkError();
-    glDrawArrays(GL_TRIANGLES, 0, mesh.vertexCount);
+    material.shader->use();
+    material.shader->bind(*this, drawable);
+    glDrawArrays(GL_TRIANGLES, 0, drawable.mesh->vertexCount);
 
     checkError();
 }

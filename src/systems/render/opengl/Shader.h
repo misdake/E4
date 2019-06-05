@@ -11,6 +11,8 @@ using namespace gl;
 namespace E4 {
     class AttributeSlot;
     class UniformSlot;
+    class GlRenderer;
+    class Drawable;
 
     class Shader {
     public:
@@ -34,6 +36,7 @@ namespace E4 {
 
         Shader(std::string vsMain, std::string psMain);
         void use();
+        virtual void bind(GlRenderer& renderer, const Drawable& drawable) = 0;
 
     private:
         void compile();

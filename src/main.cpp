@@ -48,7 +48,7 @@ int main(int argc, char* argv[]) {
 
         mesh->vertexCount = 6;
 
-        material->program = &app.renderer.shaderTexture;
+        material->shader = &app.renderer.shaderTexture;
 
         drawable->mesh = mesh;
         drawable->material = material;

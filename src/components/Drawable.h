@@ -12,7 +12,7 @@ namespace E4 {
 
     class Material {
     public:
-        Shader* program;
+        Shader* shader;
         Texture texture;
     };
 
