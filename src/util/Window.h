@@ -6,6 +6,7 @@
 #include <functional>
 
 #include "InputState.h"
+#include "FrameState.h"
 
 struct SDL_Window;
 typedef void* SDL_GLContext;
@@ -18,14 +19,6 @@ namespace E4 {
         int height;
         bool borderless;
         bool mouseTrap;
-    };
-
-    struct FrameState {
-        FrameState(uint64_t frameIndex, uint16_t deltatime, InputState& inputStateCurr, InputState& inputStatePrev);
-        uint64_t frameIndex;
-        uint16_t deltatime;
-        InputState& inputStateCurr;
-        InputState& inputStatePrev;
     };
 
     class Window {

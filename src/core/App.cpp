@@ -16,6 +16,8 @@ void E4::App::load(const std::function<void(App&)>& onLoaded) {
     renderer.init();
     renderer.resize(width, height);
 
+    ecs.create(); //make the '0' object
+
     onLoaded(*this);
 }
 
@@ -23,6 +25,7 @@ void E4::App::enterLoop(const std::function<void(E4::App&, const E4::FrameState&
     window.enterEventLoop([&onFrame, this](const FrameState& frameState) -> void {
         onFrame(*this, frameState);
 
+        transform.run(ecs, frameState);
         renderer.run(ecs);
     });
 }

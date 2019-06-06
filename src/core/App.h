@@ -2,7 +2,10 @@
 
 #include "../util/Window.h"
 #include "ECS.h"
+
 #include "../systems/render/Renderer.h"
+#include "../systems/transform/Transform.h"
+
 #include "Asset.h"
 #include "../components/Drawable.h"
 
@@ -16,6 +19,7 @@ namespace E4 {
         ECS ecs;
 
         //systems
+        Transform transform;
         Renderer renderer;
 
         //resources
