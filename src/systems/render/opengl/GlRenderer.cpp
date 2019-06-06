@@ -32,12 +32,12 @@ void E4::GlRenderer::clear() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void E4::GlRenderer::draw(const E4::Drawable& drawable) {
+void E4::GlRenderer::draw(const E4::Transform& transform, const E4::Drawable& drawable) {
     checkError();
 
     const Material& material = drawable.material.get();
     material.shader->use();
-    material.shader->bind(*this, drawable);
+    material.shader->bind(*this, transform, drawable);
 
     const ShortBuffer& indexBuffer = drawable.mesh->index;
     if (indexBuffer.countIndices > 0) {

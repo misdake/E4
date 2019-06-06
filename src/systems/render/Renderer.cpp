@@ -10,8 +10,8 @@ void E4::Renderer::resize(int w, int h) {
 }
 void E4::Renderer::run(ECS& ecs) {
     glRenderer.clear();
-    ecs.view<E4::Drawable>().each([&](E4::Drawable& drawable) {
-        glRenderer.draw(drawable);
+    ecs.view<E4::Transform, E4::Drawable>().each([&](E4::Transform transform, E4::Drawable& drawable) {
+        glRenderer.draw(transform, drawable);
     });
     glRenderer.checkError();
 }

@@ -25,10 +25,10 @@ add_executable(app
         src/core/App.cpp src/core/App.h
         src/core/Asset.cpp src/core/Asset.h
 
-        src/components/Position.h
+        src/components/Transform.h
         src/components/Drawable.h
 
-        src/systems/transform/Transform.cpp src/systems/transform/Transform.h
+        src/systems/transform/Transformer.cpp src/systems/transform/Transformer.h
         src/systems/render/Renderer.cpp src/systems/render/Renderer.h
         src/systems/render/opengl/Texture.cpp src/systems/render/opengl/Texture.h
         src/systems/render/opengl/GlRenderer.cpp src/systems/render/opengl/GlRenderer.h

@@ -18,7 +18,6 @@ namespace E4 {
         FloatBuffer position;
         FloatBuffer texcoord;
         FloatBuffer color;
-        ShaderData offset;
 
         int vertexCount;
         ShortBuffer index;

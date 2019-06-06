@@ -1,7 +1,7 @@
 #pragma once
 
 #include <entt/entt.hpp>
-#include "../components/Position.h"
+#include "../components/Transform.h"
 #include "../components/Drawable.h"
 
 namespace E4 {

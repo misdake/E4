@@ -9,6 +9,7 @@ namespace E4 {
     class AttributeSlot;
     class UniformSlot;
     class GlRenderer;
+    class Transform;
     class Drawable;
 
     class Shader {
@@ -33,7 +34,7 @@ namespace E4 {
 
         Shader(std::string vsMain, std::string psMain);
         void use();
-        virtual void bind(GlRenderer& renderer, const Drawable& drawable) = 0;
+        virtual void bind(GlRenderer& renderer, const Transform& transform, const Drawable& drawable) = 0;
 
     private:
         void compile();

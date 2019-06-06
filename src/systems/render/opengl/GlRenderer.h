@@ -5,6 +5,7 @@
 
 namespace E4 {
 
+    class Transform;
     class Drawable;
 
     class GlRenderer {
@@ -21,7 +22,7 @@ namespace E4 {
 
         void clear();
 
-        void draw(const Drawable& drawable);
+        void draw(const Transform& transform, const Drawable& drawable);
 
         void checkError();
     };

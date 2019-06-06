@@ -5,7 +5,7 @@
 
 namespace E4 {
 
-    class Transform {
+    class Transformer {
     public:
         void run(ECS& ecs, FrameState frameState);
     };
