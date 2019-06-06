@@ -5,9 +5,13 @@
 #include <stack>
 #include <cstdint>
 #include <limits>
+#include <map>
 #include <iostream> //TODO
 
 namespace E4 {
+
+    template<typename T>
+    class AssetLoader;
 
     template<typename T>
     class AssetPool;
@@ -19,6 +23,8 @@ namespace E4 {
     class Asset {
     private:
         friend class AssetPool<T>;
+
+        friend class AssetLoader<T>;
 
         AssetPool<T>* pool;
         uint32_t index;
@@ -42,12 +48,12 @@ namespace E4 {
         T& get();
         const T& get() const;
 
-        void free();
+        const std::string& name() const;
     };
 
     template<typename T>
     class AssetPool {
-    private:
+    protected:
         friend class Asset<T>;
 
         std::vector<T> array;
@@ -66,8 +72,64 @@ namespace E4 {
             return Asset<T>(*this, index);
         }
 
-        void shrintToFit() {
-            array.shrink_to_fit();
+        void free(const Asset<T>& p) {
+            if (p.index < Asset<T>::MAX_INDEX && p.index < array.size()) {
+                empty.push_back(p.index);
+                p.index = Asset<T>::MAX_INDEX;
+            } else {
+                //TODO error
+                std::cout << "free an invalid pointer" << std::endl;
+            }
+        }
+    };
+
+    template<typename T>
+    class AssetLoader : private AssetPool<T> {
+    protected:
+        friend class Asset<T>;
+
+        std::vector<std::string> names;
+        std::map<std::string, uint32_t> map;
+
+        Asset<T> alloc(const std::string& name) {
+            uint32_t index = 0;
+            if (AssetPool<T>::empty.empty()) {
+                AssetPool<T>::array.emplace_back();
+                names.emplace_back(name);
+                index = AssetPool<T>::array.size() - 1;
+            } else {
+                index = AssetPool<T>::empty.back();
+                AssetPool<T>::empty.pop_back();
+                names[index] = name;
+            }
+            if (!name.empty()) {
+                map.insert(std::pair(name, index));
+            }
+            return Asset<T>(*this, index);
+        }
+    public:
+        Asset<T> get(const std::string& name) {
+            auto iter = map.find(name);
+            if (iter == map.end()) {
+                Asset<T> t = alloc(name);
+                t->load(name);
+                return t;
+            } else {
+                uint32_t index = iter->second;
+                return Asset<T>(*this, index);
+            }
+        }
+        void freeLoaded(Asset<T>& p) {
+            if (p.index < Asset<T>::MAX_INDEX && p.index < AssetPool<T>::array.size()) {
+                p->unload();
+                AssetPool<T>::empty.push_back(p.index);
+                map.erase(names[p.index]);
+                names[p.index] = "";
+                p.index = Asset<T>::MAX_INDEX;
+            } else {
+                //TODO error
+                std::cout << "free an invalid pointer" << std::endl;
+            }
         }
     };
 
@@ -94,13 +156,13 @@ namespace E4 {
     }
 
     template<typename T>
-    void Asset<T>::free() {
+    const std::string& Asset<T>::name() const {
         if (index < MAX_INDEX && index < pool->array.size()) {
-            pool->empty.push_back(index);
-            index = MAX_INDEX;
+            return pool->names[index];
         } else {
             //TODO error
-            std::cout << "free an invalid pointer" << std::endl;
+            std::cout << "access an invalid pointer" << std::endl;
+            return pool->names[index];
         }
     }
 

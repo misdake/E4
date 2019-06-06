@@ -39,5 +39,7 @@ E4::Texture& E4::Texture::load(std::string nname) {
 }
 
 void E4::Texture::unload() {
-    glDeleteTextures(1, &shaderData.texture.textureId);
+    if (this->loading) {
+        glDeleteTextures(1, &shaderData.texture.textureId);
+    }
 }

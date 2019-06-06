@@ -37,11 +37,9 @@ int main(int argc, char* argv[]) {
         mesh->color.set(color, 3, 4).upload();
 
         E4::Asset<E4::Material> material1 = app.materials.alloc();
-        material1->texture = app.textures.alloc();
-        material1->texture->load("street.jpg");
+        material1->texture = app.textures.get("street.jpg");
         E4::Asset<E4::Material> material2 = app.materials.alloc();
-        material2->texture = app.textures.alloc();
-        material2->texture->load("favicon.png");
+        material2->texture = app.textures.get("favicon.png");
 
 //        mesh->vertexCount = 6;
         mesh->index.set(index, 6).upload();
@@ -76,6 +74,9 @@ int main(int argc, char* argv[]) {
                 position.y += distance * dy;
             }
         });
+
+//    E4::Asset<E4::Texture> p = app.textures.get("favicon.png");
+//    app.textures.freeLoaded(p);
     });
 
     return 0;
