@@ -5,7 +5,8 @@
 #include <sstream>
 #include <stdio.h>
 
-E4::FrameState::FrameState(uint16_t deltatime, E4::InputState& inputStateCurr, E4::InputState& inputStatePrev) :
+E4::FrameState::FrameState(uint64_t frameIndex, uint16_t deltatime, E4::InputState& inputStateCurr, E4::InputState& inputStatePrev) :
+    frameIndex(frameIndex),
     deltatime(deltatime),
     inputStateCurr(inputStateCurr),
     inputStatePrev(inputStatePrev) {
@@ -15,13 +16,15 @@ E4::FrameState::FrameState(uint16_t deltatime, E4::InputState& inputStateCurr, E
 E4::Window::Window() :
     inputStateCurr(),
     inputStatePrev() {
+
+    frameIndex = 0;
     prevTime = -1;
 
     gWindow = nullptr;
     gGlContext = nullptr;
 
     // initialize sdl
-    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) < 0) {
         std::cout << "SDL cannot init with error " << SDL_GetError() << std::endl;
     }
 
@@ -171,12 +174,13 @@ void E4::Window::enterEventLoop(const std::function<void(const FrameState&)>& on
 
         getInputState();
 
+        frameIndex++;
         long currTime = SDL_GetTicks();
         if (prevTime < 0) prevTime = currTime;
         long d = currTime - prevTime;
         prevTime = currTime;
         uint16_t deltatime = d >= 0 && d < 1000 ? (uint16_t) d : 1000;
-        FrameState frameState(deltatime, inputStateCurr, inputStatePrev);
+        FrameState frameState(frameIndex, deltatime, inputStateCurr, inputStatePrev);
 
         onFrame(frameState);
 

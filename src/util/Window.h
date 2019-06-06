@@ -21,7 +21,8 @@ namespace E4 {
     };
 
     struct FrameState {
-        FrameState(uint16_t deltatime, InputState& inputStateCurr, InputState& inputStatePrev);
+        FrameState(uint64_t frameIndex, uint16_t deltatime, InputState& inputStateCurr, InputState& inputStatePrev);
+        uint64_t frameIndex;
         uint16_t deltatime;
         InputState& inputStateCurr;
         InputState& inputStatePrev;
@@ -34,6 +35,7 @@ namespace E4 {
 
         WindowConfig config;
 
+        uint64_t frameIndex;
         long prevTime;
         InputState inputStateCurr;
         InputState inputStatePrev;

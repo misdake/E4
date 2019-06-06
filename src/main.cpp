@@ -63,6 +63,7 @@ int main(int argc, char* argv[]) {
         dx -= frameState.inputStateCurr.keys[SDL_SCANCODE_A] ? 1 : 0;
         dy += frameState.inputStateCurr.keys[SDL_SCANCODE_W] ? 1 : 0;
         dy -= frameState.inputStateCurr.keys[SDL_SCANCODE_S] ? 1 : 0;
+//        std::cout << frameState.frameIndex << std::endl;
 
         app.ecs.view<E4::Position>().each([&](E4::Position& position) {
             position.x += distance * dx;
