@@ -1,5 +1,7 @@
 #include "Transformer.h"
 
+#include "../../components/Transform.h"
+
 void update(E4::ECS& ecs, E4::Transform& position, uint64_t frameIndex) {
     if (position.lastFrame == frameIndex) return;
 

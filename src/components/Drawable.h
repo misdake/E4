@@ -11,7 +11,7 @@ namespace E4 {
 
     struct Material {
         Shader* shader;
-        Texture texture;
+        Asset<Texture> texture;
     };
 
     struct Mesh {

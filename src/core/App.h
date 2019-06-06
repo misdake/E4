@@ -25,6 +25,7 @@ namespace E4 {
         //resources
         AssetPool<Mesh> meshes;
         AssetPool<Material> materials;
+        AssetPool<Texture> textures;
 
         void load(const std::function<void(App&)>& onLoaded);
 

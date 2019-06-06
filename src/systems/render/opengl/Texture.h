@@ -10,9 +10,10 @@ namespace E4 {
         std::string name;
         ShaderData shaderData;
         int w, h;
+        bool loading;
         bool loaded;
 
-        void load();
+        Texture& load(std::string name);
         void unload();
     };
 

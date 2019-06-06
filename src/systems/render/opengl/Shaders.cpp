@@ -57,5 +57,5 @@ void E4::ShaderTexture::bind(GlRenderer& renderer, const Transform& transform, c
     renderer.attributeSlots.POSITION.bind(mesh.position);
     renderer.attributeSlots.TEXCOORD.bind(mesh.texcoord);
     renderer.uniformSlots.WORLD.bind(transform.worldTransform);
-    renderer.uniformSlots.TEXTURE.bind(material.texture.shaderData);
+    renderer.uniformSlots.TEXTURE.bind(material.texture->shaderData);
 }

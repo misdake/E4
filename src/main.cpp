@@ -3,7 +3,6 @@
 
 #include "core/App.h"
 #include "components/Transform.h"
-#include "systems/render/opengl/Texture.h"
 
 int main(int argc, char* argv[]) {
     E4::App app;
@@ -38,11 +37,11 @@ int main(int argc, char* argv[]) {
         mesh->color.set(color, 3, 4).upload();
 
         E4::Asset<E4::Material> material1 = app.materials.alloc();
-        material1->texture.name = "street.jpg";
-        material1->texture.load();
+        material1->texture = app.textures.alloc();
+        material1->texture->load("street.jpg");
         E4::Asset<E4::Material> material2 = app.materials.alloc();
-        material2->texture.name = "favicon.png";
-        material2->texture.load();
+        material2->texture = app.textures.alloc();
+        material2->texture->load("favicon.png");
 
 //        mesh->vertexCount = 6;
         mesh->index.set(index, 6).upload();

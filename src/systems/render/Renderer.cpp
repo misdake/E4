@@ -1,5 +1,6 @@
 #include "Renderer.h"
 
+#include "../../components/Transform.h"
 #include "../../components/Drawable.h"
 
 void E4::Renderer::init() {
@@ -10,7 +11,7 @@ void E4::Renderer::resize(int w, int h) {
 }
 void E4::Renderer::run(ECS& ecs) {
     glRenderer.clear();
-    ecs.view<E4::Transform, E4::Drawable>().each([&](E4::Transform transform, E4::Drawable& drawable) {
+    ecs.view<E4::Transform, E4::Drawable>().each([&](E4::Transform& transform, E4::Drawable& drawable) {
         glRenderer.draw(transform, drawable);
     });
     glRenderer.checkError();

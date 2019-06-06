@@ -1,3 +1,5 @@
+#include <utility>
+
 #include "Texture.h"
 
 #include <iostream>
@@ -6,8 +8,10 @@
 #include <glbinding/gl/gl.h>
 using namespace gl;
 
-void E4::Texture::load() {
-    if (this->loaded) return;
+E4::Texture& E4::Texture::load(std::string nname) {
+    if (this->loading) return *this;
+    this->loading = true;
+    this->name = std::move(nname);
 
     stbi_set_flip_vertically_on_load(true);
     uint32_t& textureId = shaderData.texture.textureId;
@@ -30,6 +34,8 @@ void E4::Texture::load() {
         this->loaded = false;
     }
     stbi_image_free(data);
+
+    return *this;
 }
 
 void E4::Texture::unload() {
