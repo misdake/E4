@@ -53,7 +53,7 @@ int main(int argc, char* argv[]) {
         entt::entity entity2 = app.ecs.create();
         app.ecs.assign<E4::Transform>(entity2, 0.1f, 0.1f, -0.1f, 0ul, entity1);
         app.ecs.assign<E4::Drawable>(entity2, mesh, material2);
-        app.ecs.assign<E4::Script>(entity2, "print('bark bark bark!')");
+        app.ecs.assign<E4::Script>(entity2, false, "print('load')", "print('update')");
     });
 
     app.enterLoop([](E4::App& app, const E4::FrameState& frameState) {

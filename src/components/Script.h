@@ -3,12 +3,10 @@
 namespace E4 {
 
     struct Script {
-        std::string content;
-//        sol::state lua;
+        bool loaded;
+        std::string load;
+        std::string update;
 
-        void run() {
-//            lua.script(code.content);
-        }
 //        Script() {
 //            int x = 0;
 //            lua.set_function("beep", [&x] { ++x; });
