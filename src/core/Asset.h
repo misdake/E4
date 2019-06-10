@@ -119,16 +119,18 @@ namespace E4 {
                 return Asset<T>(*this, index);
             }
         }
-        void freeLoaded(Asset<T>& p) {
-            if (p.index < Asset<T>::MAX_INDEX && p.index < AssetPool<T>::array.size()) {
+        void freeLoaded(const std::string& name) {
+            auto iter = map.find(name);
+            if (iter != map.end()) {
+                uint32_t index = iter->second;
+                Asset<T> p(*this, index);
                 p->unload();
                 AssetPool<T>::empty.push_back(p.index);
                 map.erase(names[p.index]);
                 names[p.index] = "";
-                p.index = Asset<T>::MAX_INDEX;
             } else {
                 //TODO error
-                std::cout << "free an invalid pointer" << std::endl;
+                std::cout << "asset not found" << std::endl;
             }
         }
     };

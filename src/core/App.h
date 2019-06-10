@@ -5,6 +5,7 @@
 
 #include "../systems/render/Renderer.h"
 #include "../systems/transform/Transformer.h"
+#include "../systems/script/ScriptRunner.h"
 
 #include "Asset.h"
 #include "../components/Drawable.h"
@@ -21,6 +22,7 @@ namespace E4 {
         //systems
         Transformer transform;
         Renderer renderer;
+        ScriptRunner scriptRunner;
 
         //resources
         AssetPool<Mesh> meshes;

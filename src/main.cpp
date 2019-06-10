@@ -1,8 +1,8 @@
 #include <SDL.h>
-#include <cmath>
 
 #include "core/App.h"
 #include "components/Transform.h"
+#include "components/Script.h"
 
 int main(int argc, char* argv[]) {
     E4::App app;
@@ -53,6 +53,7 @@ int main(int argc, char* argv[]) {
         entt::entity entity2 = app.ecs.create();
         app.ecs.assign<E4::Transform>(entity2, 0.1f, 0.1f, -0.1f, 0ul, entity1);
         app.ecs.assign<E4::Drawable>(entity2, mesh, material2);
+        app.ecs.assign<E4::Script>(entity2, "print('bark bark bark!')");
     });
 
     app.enterLoop([](E4::App& app, const E4::FrameState& frameState) {
@@ -75,8 +76,7 @@ int main(int argc, char* argv[]) {
             }
         });
 
-//    E4::Asset<E4::Texture> p = app.textures.get("favicon.png");
-//    app.textures.freeLoaded(p);
+//    app.textures.freeLoaded("favicon.png"); //how to delete texture
     });
 
     return 0;

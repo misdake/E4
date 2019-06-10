@@ -27,6 +27,7 @@ add_executable(app
 
         src/components/Transform.h
         src/components/Drawable.h
+        src/components/Script.h
 
         src/systems/transform/Transformer.cpp src/systems/transform/Transformer.h
         src/systems/render/Renderer.cpp src/systems/render/Renderer.h
@@ -39,6 +40,7 @@ add_executable(app
         src/systems/render/opengl/AttributeSlot.cpp src/systems/render/opengl/AttributeSlot.h
         src/systems/render/opengl/UniformSlot.cpp src/systems/render/opengl/UniformSlot.h
         src/systems/render/opengl/DataType.cpp src/systems/render/opengl/DataType.h
+        src/systems/script/ScriptRunner.cpp src/systems/script/ScriptRunner.h
 
         src/util/File.cpp src/util/File.h
         src/util/Window.cpp src/util/Window.h
