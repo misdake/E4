@@ -9,6 +9,7 @@
 
 #include "Asset.h"
 #include "../components/Drawable.h"
+#include "../systems/script/ScriptFile.h"
 
 namespace E4 {
 
@@ -28,6 +29,7 @@ namespace E4 {
         AssetPool<Mesh> meshes;
         AssetPool<Material> materials;
         AssetLoader<Texture> textures;
+        AssetLoader<ScriptFile> scripts;
 
         void load(const std::function<void(App&)>& onLoaded);
 
