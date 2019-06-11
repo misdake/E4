@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../../core/ECS.h"
+#include "../../util/FrameState.h"
 
 namespace sol {
     class state;
@@ -14,7 +15,7 @@ namespace E4 {
     public:
         ScriptRunner();
         ~ScriptRunner();
-        void run(ECS& ecs);
+        void run(ECS& ecs, const E4::FrameState& frameState);
     };
 
 }

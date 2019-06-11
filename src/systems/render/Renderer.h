@@ -3,6 +3,7 @@
 #include "opengl/Shaders.h"
 #include "opengl/GlRenderer.h"
 #include "../../core/ECS.h"
+#include "../../util/FrameState.h"
 
 namespace E4 {
 
@@ -18,7 +19,7 @@ namespace E4 {
         void init();
         void resize(int w, int h);
 
-        void run(ECS& ecs);
+        void run(ECS& ecs, const E4::FrameState& state);
     };
 
 }

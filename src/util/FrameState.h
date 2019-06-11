@@ -6,11 +6,11 @@
 namespace E4 {
 
     struct FrameState {
-        FrameState(uint64_t frameIndex, uint16_t deltatime, InputState& inputStateCurr, InputState& inputStatePrev);
+        FrameState() = default;
         uint64_t frameIndex;
         uint16_t deltatime;
-        InputState& inputStateCurr;
-        InputState& inputStatePrev;
+        InputState inputStateCurr;
+        InputState inputStatePrev;
     };
 
 }

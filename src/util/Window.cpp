@@ -5,11 +5,9 @@
 #include <sstream>
 #include <stdio.h>
 
-E4::Window::Window() :
-    inputStateCurr(),
-    inputStatePrev() {
-
-    frameIndex = 0;
+E4::Window::Window() : frameState{} {
+    frameState.frameIndex = 0;
+    memset(&frameState, 0, sizeof(frameState));
     prevTime = -1;
 
     gWindow = nullptr;
@@ -107,6 +105,8 @@ std::tuple<int, int> E4::Window::getScreenSize() {
 }
 
 void E4::Window::getInputState() {
+    InputState& inputStatePrev = frameState.inputStatePrev;
+    InputState& inputStateCurr = frameState.inputStateCurr;
     memcpy(&inputStatePrev, &inputStateCurr, sizeof(InputState));
 
     int mouseX = -1;
@@ -166,13 +166,12 @@ void E4::Window::enterEventLoop(const std::function<void(const FrameState&)>& on
 
         getInputState();
 
-        frameIndex++;
+        frameState.frameIndex++;
         long currTime = SDL_GetTicks();
         if (prevTime < 0) prevTime = currTime;
         long d = currTime - prevTime;
         prevTime = currTime;
-        uint16_t deltatime = d >= 0 && d < 1000 ? (uint16_t) d : 1000;
-        FrameState frameState(frameIndex, deltatime, inputStateCurr, inputStatePrev);
+        frameState.deltatime = d >= 0 && d < 1000 ? (uint16_t) d : 1000;
 
         onFrame(frameState);
 

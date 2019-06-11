@@ -47,7 +47,7 @@ add_executable(app
         src/util/File.cpp src/util/File.h
         src/util/Window.cpp src/util/Window.h
         src/util/InputState.cpp src/util/InputState.h
-        src/util/FrameState.cpp src/util/FrameState.h
+        src/util/FrameState.h
         )
 target_link_libraries(app lua53 ${SDL2_LIBRARY} ${GLBINDING_LIBRARIES})
 

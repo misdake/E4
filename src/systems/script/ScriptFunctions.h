@@ -12,7 +12,7 @@ namespace E4 {
         sol::function load;
         sol::function update;
 
-        explicit ScriptFunctions(sol::state& state);
+        explicit ScriptFunctions(const sol::state& state);
     };
 
 }

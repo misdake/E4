@@ -8,7 +8,7 @@ namespace E4 {
     public:
         InputState() = default;
 
-//        int wheel;
+        int wheel;
         int mouseX;
         int mouseY;
         bool mouseButton1;

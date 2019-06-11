@@ -25,8 +25,8 @@ void E4::App::enterLoop(const std::function<void(E4::App&, const E4::FrameState&
     window.enterEventLoop([&onFrame, this](const FrameState& frameState) -> void {
         onFrame(*this, frameState);
 
-        scriptRunner.run(ecs);
+        scriptRunner.run(ecs, frameState);
         transform.run(ecs, frameState);
-        renderer.run(ecs);
+        renderer.run(ecs, frameState);
     });
 }

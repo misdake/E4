@@ -28,10 +28,8 @@ namespace E4 {
 
         WindowConfig config;
 
-        uint64_t frameIndex;
         long prevTime;
-        InputState inputStateCurr;
-        InputState inputStatePrev;
+        FrameState frameState;
 
     private:
         void getInputState();
