@@ -18,7 +18,7 @@ namespace E4 {
         Window window;
 
         //ecs
-        ECS ecs;
+        EcsCore ecs;
 
         //systems
         Transformer transform;

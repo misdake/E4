@@ -47,22 +47,22 @@ int main(int argc, char* argv[]) {
         material1->shader = &app.renderer.shaderTexture;
         material2->shader = &app.renderer.shaderTexture;
 
-        entt::entity entity1 = app.ecs.create();
-        app.ecs.assign<E4::Transform>(entity1);
-        auto& drawable1 = app.ecs.assign<E4::Drawable>(entity1);
+        entt::entity entity1 = app.ecs.createEntity();
+        app.ecs.createComponent<E4::Transform>(entity1);
+        auto& drawable1 = app.ecs.createComponent<E4::Drawable>(entity1);
         drawable1.mesh = mesh;
         drawable1.material = material1;
 
-        entt::entity entity2 = app.ecs.create();
-        auto& transform2 = app.ecs.assign<E4::Transform>(entity2);
+        entt::entity entity2 = app.ecs.createEntity();
+        auto& transform2 = app.ecs.createComponent<E4::Transform>(entity2);
         transform2.x = 0.1f;
         transform2.y = 0.1f;
         transform2.z = -0.1f;
         transform2.parent = entity1;
-        auto& drawable2 = app.ecs.assign<E4::Drawable>(entity2);
+        auto& drawable2 = app.ecs.createComponent<E4::Drawable>(entity2);
         drawable2.mesh = mesh;
         drawable2.material = material2;
-        auto& script2 = app.ecs.assign<E4::Script>(entity2);
+        auto& script2 = app.ecs.createComponent<E4::Script>(entity2);
         script2.loaded = false;
         script2.file = app.scripts.get("script.lua");
     });

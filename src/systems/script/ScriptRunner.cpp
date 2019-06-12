@@ -22,10 +22,10 @@ void registerTypes(sol::state& lua) {
     );
 }
 
-void requireComponent(int index, uint64_t entity, E4::ECS& ecs, sol::state& lua) {
+void requireComponent(int index, uint32_t entity, E4::EcsCore& ecs, sol::state& lua) {
     switch (index) {
         case 1: //transform
-            lua["transform"] = std::ref(ecs.get<E4::Transform>(entity));
+            lua["transform"] = std::ref(ecs.getComponent<E4::Transform>(entity));
             break;
         default:
             break;
@@ -63,12 +63,12 @@ E4::ScriptRunner::~ScriptRunner() {
     delete state;
 }
 
-void E4::ScriptRunner::run(ECS& ecs, const E4::FrameState& frameState) {
+void E4::ScriptRunner::run(EcsCore& ecs, const E4::FrameState& frameState) {
     sol::state& lua = *state;
 
     writeFrameState(lua, frameState);
 
-    uint64_t entityId = 0;
+    uint32_t entityId = 0;
 
     lua.set_function("requireComponent", [&](int componentIndex) { requireComponent(componentIndex, entityId, ecs, lua); });
 

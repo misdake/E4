@@ -19,7 +19,7 @@ namespace E4 {
         void init();
         void resize(int w, int h);
 
-        void run(ECS& ecs, const E4::FrameState& state);
+        void run(EcsCore& ecs, const E4::FrameState& state);
     };
 
 }

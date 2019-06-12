@@ -16,7 +16,7 @@ void E4::App::load(const std::function<void(App&)>& onLoaded) {
     renderer.init();
     renderer.resize(width, height);
 
-    ecs.create(); //make the '0' object
+    ecs.createEntity(); //make the '0' object
 
     onLoaded(*this);
 }

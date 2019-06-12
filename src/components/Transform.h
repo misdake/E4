@@ -8,7 +8,7 @@ namespace E4 {
         float x, y, z;
 
         uint64_t lastFrame;
-        uint64_t parent;
+        uint32_t parent;
         ShaderData worldTransform;
 
         Transform() :
