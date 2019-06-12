@@ -27,6 +27,11 @@ namespace E4 {
     public:
         Asset<Mesh> mesh;
         Asset<Material> material;
+
+        Drawable() :
+            mesh(),
+            material() {
+        }
     };
 
 }

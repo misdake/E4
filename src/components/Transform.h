@@ -10,6 +10,12 @@ namespace E4 {
         uint64_t lastFrame;
         uint64_t parent;
         ShaderData worldTransform;
+
+        Transform() :
+            x(0), y(0), z(0),
+            lastFrame(0), parent(0),
+            worldTransform() {
+        }
     };
 
 }
