@@ -3,10 +3,11 @@ function load()
 end
 
 function update()
-    if not frameState.inputStatePrev.mouseButton1 and frameState.inputStateCurr.mouseButton1 then
-        print("mouse1 down")
+	requireComponent(ComponentTransform)
+    if not inputStatePrev.mouseButton1 and inputStateCurr.mouseButton1 then
+        transform.y = -transform.y
     end
-    --if not frameState.inputStatePrev.keys[5] and frameState.inputStateCurr.keys[5] then
-    --    print("mouse1 down")
-    --end
+    if (inputStatePrev.keys[6]==0) and (inputStateCurr.keys[6]>0) then
+        transform.x = transform.x + 0.2
+    end
 end
