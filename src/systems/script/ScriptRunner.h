@@ -13,6 +13,7 @@ namespace E4 {
     private:
         friend class App;
         sol::state* state;
+        uint32_t scriptIndex;
     public:
         ScriptRunner();
         ~ScriptRunner();

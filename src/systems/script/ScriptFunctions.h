@@ -6,11 +6,11 @@ namespace E4 {
 
     class ScriptFunctions {
     public:
-        uint32_t prefix;
+        uint32_t index;
         sol::function load;
         sol::function update;
 
-        explicit ScriptFunctions(sol::state& state);
+        explicit ScriptFunctions(sol::state& lua, uint32_t index);
     };
 
 }

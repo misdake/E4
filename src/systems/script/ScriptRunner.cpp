@@ -17,6 +17,7 @@ void registerTypes(sol::state& lua) {
     )");
 
     lua["entities"] = lua.create_table();
+    lua["scripts"] = lua.create_table();
 
     lua.new_usertype<E4::Transform>(
         "Transform",
@@ -84,6 +85,7 @@ void updateFrameState(sol::state& lua, const E4::FrameState& frameState) {
 E4::ScriptRunner::ScriptRunner() {
     state = new sol::state;
     state->open_libraries(sol::lib::base, sol::lib::package);
+    scriptIndex = 0;
     registerTypes(*state);
 }
 
@@ -96,7 +98,7 @@ void E4::ScriptRunner::run(EcsCore& ecs, const E4::FrameState& frameState) {
 
     static bool loaded = false;
     if (!loaded) {
-        firstFrame(*state, frameState, ecs);
+        firstFrame(lua, frameState, ecs);
         loaded = true;
     }
 
@@ -112,7 +114,7 @@ void E4::ScriptRunner::run(EcsCore& ecs, const E4::FrameState& frameState) {
             //if script functions are not loaded => load script and extract functions
             if (!script.file->functions) {
                 state->script(script.file->content);
-                script.file->functions = new ScriptFunctions(*state);
+                script.file->functions = new ScriptFunctions(lua, ++scriptIndex);
             }
 
             //call load

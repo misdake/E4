@@ -70,26 +70,29 @@ int main(int argc, char* argv[]) {
         auto& script1 = app.ecs.createScript(entity1);
         script1.loaded = false;
         script1.file = app.scripts.get("script.lua");
+        auto& script2 = app.ecs.createScript(entity2);
+        script2.loaded = false;
+        script2.file = app.scripts.get("script2.lua");
     });
 
     app.enterLoop([](E4::App& app, const E4::FrameState& frameState) {
-        static uint32_t totalTime = 0;
-        totalTime += frameState.deltatime;
-
-        float distance = frameState.deltatime * 0.001f;
-        float dx = 0;
-        float dy = 0;
-        dx += frameState.inputStateCurr.keys[SDL_SCANCODE_RIGHT] ? 1 : 0;
-        dx -= frameState.inputStateCurr.keys[SDL_SCANCODE_LEFT] ? 1 : 0;
-        dy += frameState.inputStateCurr.keys[SDL_SCANCODE_UP] ? 1 : 0;
-        dy -= frameState.inputStateCurr.keys[SDL_SCANCODE_DOWN] ? 1 : 0;
-
-        app.ecs.view<E4::Transform>().each([&](E4::Transform& position) {
-            if (position.parent > 0) {
-                position.x += distance * dx;
-                position.y += distance * dy;
-            }
-        });
+//        static uint32_t totalTime = 0;
+//        totalTime += frameState.deltatime;
+//
+//        float distance = frameState.deltatime * 0.001f;
+//        float dx = 0;
+//        float dy = 0;
+//        dx += frameState.inputStateCurr.keys[SDL_SCANCODE_RIGHT] ? 1 : 0;
+//        dx -= frameState.inputStateCurr.keys[SDL_SCANCODE_LEFT] ? 1 : 0;
+//        dy += frameState.inputStateCurr.keys[SDL_SCANCODE_UP] ? 1 : 0;
+//        dy -= frameState.inputStateCurr.keys[SDL_SCANCODE_DOWN] ? 1 : 0;
+//
+//        app.ecs.view<E4::Transform>().each([&](E4::Transform& position) {
+//            if (position.parent > 0) {
+//                position.x += distance * dx;
+//                position.y += distance * dy;
+//            }
+//        });
 
 //    app.textures.freeLoaded("favicon.png"); //how to delete texture
     });
