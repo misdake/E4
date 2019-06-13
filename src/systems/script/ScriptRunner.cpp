@@ -38,7 +38,7 @@ void registerTypes(sol::state& lua) {
         "material", &E4::Drawable::material
     );
     lua.new_usertype<E4::Script>(
-        "Script" //TODO more fields
+        "Script"
     );
 }
 
@@ -85,7 +85,7 @@ void updateFrameState(sol::state& lua, const E4::FrameState& frameState) {
 
 E4::ScriptRunner::ScriptRunner() {
     state = new sol::state;
-    state->open_libraries(sol::lib::base, sol::lib::package);
+    state->open_libraries(sol::lib::base, sol::lib::math);
     scriptIndex = 0;
     registerTypes(*state);
 }

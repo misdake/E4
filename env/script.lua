@@ -18,6 +18,10 @@ function update()
         entity.y = inputStateCurr.mouseY
     end
 
+    if not inputStatePrev.mouseButton2 and inputStateCurr.mouseButton2 then
+	    requestDrawable(entity.id)
+	    entity.drawable.material = newMaterial("footprint.png")
+    end
 
     if not inputStatePrev.mouseButton3 and inputStateCurr.mouseButton3 then
         local e = createEntity()
@@ -30,5 +34,6 @@ function update()
         local drawable = createDrawable(e)
         drawable.mesh = newMesh()
         drawable.material = newMaterial("footprint.png")
+        createScript(e, "script1.lua")
     end
 end

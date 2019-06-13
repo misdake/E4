@@ -64,4 +64,11 @@ void E4::ScriptBridge::bind(App& app, sol::state& lua, EcsCore& ecs) {
         Drawable& drawable = ecs.createDrawable(entity);
         return std::ref<Drawable>(drawable);
     };
+
+    lua["createScript"] = [&](Entity entity, std::string scriptName) {
+        Script& script = ecs.createScript(entity);
+        script.loaded = false;
+        script.file = app.scripts.get(scriptName);
+        return std::ref<Script>(script);
+    };
 }
