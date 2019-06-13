@@ -66,14 +66,16 @@ void firstFrame(sol::state& lua, const E4::FrameState& frameState, E4::EcsCore& 
 void updateFrameState(sol::state& lua, const E4::FrameState& frameState) {
     lua["dt"] = frameState.deltatime * 0.001f;
     lua["frameIndex"] = frameState.frameIndex;
-    lua["inputStatePrev"]["wheel"] = frameState.inputStatePrev.wheel;
+    lua["inputStatePrev"]["wheelX"] = frameState.inputStatePrev.wheelX;
+    lua["inputStatePrev"]["wheelY"] = frameState.inputStatePrev.wheelY;
     lua["inputStatePrev"]["mouseX"] = frameState.inputStatePrev.mouseX;
     lua["inputStatePrev"]["mouseY"] = frameState.inputStatePrev.mouseY;
     lua["inputStatePrev"]["mouseButton1"] = frameState.inputStatePrev.mouseButton1;
     lua["inputStatePrev"]["mouseButton2"] = frameState.inputStatePrev.mouseButton2;
     lua["inputStatePrev"]["mouseButton3"] = frameState.inputStatePrev.mouseButton3;
     lua["inputStatePrev"]["keys"] = std::ref(frameState.inputStatePrev.keys);
-    lua["inputStateCurr"]["wheel"] = frameState.inputStateCurr.wheel;
+    lua["inputStateCurr"]["wheelX"] = frameState.inputStateCurr.wheelX;
+    lua["inputStateCurr"]["wheelY"] = frameState.inputStateCurr.wheelY;
     lua["inputStateCurr"]["mouseX"] = frameState.inputStateCurr.mouseX;
     lua["inputStateCurr"]["mouseY"] = frameState.inputStateCurr.mouseY;
     lua["inputStateCurr"]["mouseButton1"] = frameState.inputStateCurr.mouseButton1;

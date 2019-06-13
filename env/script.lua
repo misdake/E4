@@ -8,6 +8,9 @@ function update()
     if not inputStatePrev.mouseButton1 and inputStateCurr.mouseButton1 then
         entity.transform.y = -entity.transform.y
     end
+
+	entity.transform.y = entity.transform.y + (inputStateCurr.wheelY - inputStatePrev.wheelY) * 0.1
+
     if (inputStateCurr.keys[80 + 1]>0) then
         entity.transform.x = entity.transform.x - 0.005
     end

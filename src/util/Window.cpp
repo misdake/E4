@@ -146,25 +146,25 @@ void E4::Window::enterEventLoop(const std::function<void(const FrameState&)>& on
     bool quit = false;
     SDL_Event event{};
     while (!quit) {
+
+        getInputState();
+
         while (SDL_PollEvent(&event) != 0) {
             switch (event.type) {
                 case SDL_QUIT:
                     quit = true;
                     break;
-//                case SDL_MOUSEWHEEL:
-//                {
-//                    int wheelx=event.wheel.x;
-//                    int wheely=event.wheel.y;
-//                    std::cout << "wheelx: " << wheelx << " wheely: " << wheely << std::endl;
-//                    window.setMouseTrap(!window.isMouseTrap());
-//                    break;
-//                }
+                case SDL_MOUSEWHEEL: {
+                    int wheelx = event.wheel.x;
+                    int wheely = event.wheel.y;
+                    frameState.inputStateCurr.wheelX += wheelx;
+                    frameState.inputStateCurr.wheelY += wheely;
+                    break;
+                }
                 default:
                     break;
             }
         }
-
-        getInputState();
 
         frameState.frameIndex++;
         long currTime = SDL_GetTicks();
