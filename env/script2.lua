@@ -3,11 +3,9 @@ function load()
 end
 
 function update()
-	print("update "..entity.id)
+	-- print("update "..entity.id)
 	requestTransform(entity.id)
-    if not inputStatePrev.mouseButton1 and inputStateCurr.mouseButton1 then
-        entity.transform.y = -entity.transform.y
-    end
+
     if (inputStateCurr.keys[4 + 1]>0) then
         entity.transform.rz = entity.transform.rz - 0.01
     end

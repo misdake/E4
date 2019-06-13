@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+#include "ScriptBridge.h"
+
 void E4::App::load(const std::function<void(App&)>& onLoaded) {
     int width = 500;
     int height = 500;
@@ -20,6 +22,8 @@ void E4::App::load(const std::function<void(App&)>& onLoaded) {
 
     ecs.state = scriptRunner.state;
     ecs.createEntity(); //make the '0' object
+
+    ScriptBridge::bind(*this, *ecs.state, ecs);
 
     onLoaded(*this);
 }

@@ -39,6 +39,7 @@ namespace E4 {
         T* operator->() { return &get(); }
         const T* operator->() const { return &get(); }
 
+        bool valid() const;
         T& get();
         const T& get() const;
 
@@ -128,6 +129,11 @@ namespace E4 {
             }
         }
     };
+
+    template<typename T>
+    bool Asset<T>::valid() const {
+        return index < MAX_INDEX && index < pool->array.size();
+    }
 
     template<typename T>
     T& Asset<T>::get() {

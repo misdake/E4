@@ -29,10 +29,13 @@ void registerTypes(sol::state& lua) {
         "rz", &E4::Transform::rz,
         "sx", &E4::Transform::sx,
         "sy", &E4::Transform::sy,
-        "sz", &E4::Transform::sz
+        "sz", &E4::Transform::sz,
+        "parent", &E4::Transform::parent
     );
     lua.new_usertype<E4::Drawable>(
-        "Drawable" //TODO more fields
+        "Drawable",
+        "mesh", &E4::Drawable::mesh,
+        "material", &E4::Drawable::material
     );
     lua.new_usertype<E4::Script>(
         "Script" //TODO more fields
@@ -58,16 +61,6 @@ void firstFrame(sol::state& lua, const E4::FrameState& frameState, E4::EcsCore& 
         "mouseButton3", false,
         "keys", &frameState.inputStateCurr.keys
     );
-
-    lua["requestTransform"] = [&lua, &ecs](E4::Entity entity) {
-        lua["entities"][entity]["transform"] = std::ref(ecs.getComponent<E4::Transform>(entity));
-    };
-    lua["requestDrawable"] = [&lua, &ecs](E4::Entity entity) {
-        lua["entities"][entity]["drawable"] = std::ref(ecs.getComponent<E4::Drawable>(entity));
-    };
-    lua["requestScript"] = [&lua, &ecs](E4::Entity entity) {
-        lua["entities"][entity]["script"] = std::ref(ecs.getComponent<E4::Script>(entity));
-    };
 }
 void updateFrameState(sol::state& lua, const E4::FrameState& frameState) {
     lua["dt"] = frameState.deltatime * 0.001f;

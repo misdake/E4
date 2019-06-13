@@ -35,16 +35,14 @@ int main(int argc, char* argv[]) {
         mesh->position.set(position, 3, 4).upload();
         mesh->texcoord.set(texcoord, 2, 4).upload();
         mesh->color.set(color, 3, 4).upload();
-
-        E4::Asset<E4::Material> material1 = app.materials.alloc();
-        material1->texture = app.textures.get("street.jpg");
-        E4::Asset<E4::Material> material2 = app.materials.alloc();
-        material2->texture = app.textures.get("favicon.png");
-
 //        mesh->vertexCount = 6;
         mesh->index.set(index, 6).upload();
 
+        E4::Asset<E4::Material> material1 = app.materials.alloc();
+        material1->texture = app.textures.get("street.jpg");
         material1->shader = &app.renderer.shaderTexture;
+        E4::Asset<E4::Material> material2 = app.materials.alloc();
+        material2->texture = app.textures.get("favicon.png");
         material2->shader = &app.renderer.shaderTexture;
 
         entt::entity entity1 = app.ecs.createEntity();

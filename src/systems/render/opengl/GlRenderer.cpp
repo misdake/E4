@@ -35,6 +35,8 @@ void E4::GlRenderer::clear() {
 void E4::GlRenderer::draw(const E4::Transform& transform, const E4::Drawable& drawable) {
     checkError();
 
+    if (!drawable.material.valid() || !drawable.mesh.valid()) return;
+
     const Material& material = drawable.material.get();
     material.shader->use();
     material.shader->bind(*this, transform, drawable);
