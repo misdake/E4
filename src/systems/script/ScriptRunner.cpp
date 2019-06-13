@@ -1,18 +1,22 @@
 #include "ScriptRunner.h"
 
-#define SOL_PRINT_ERRORS 1
-#define SOL_CHECK_ARGUMENTS 1
+#include <iostream>
 
-#include <sol/sol.hpp>
-
-#include "../../components/Script.h"
 #include "ScriptFile.h"
 #include "ScriptFunctions.h"
+#include "../../core/Lua.h"
 #include "../../util/FrameState.h"
 #include "../../components/Transform.h"
+#include "../../components/Script.h"
 
 void registerTypes(sol::state& lua) {
-    lua["ComponentTransform"] = 1;
+    lua.script(R"(
+        function prepareEntity(id)
+            entity = entities[id]
+        end
+    )");
+
+    lua["entities"] = lua.create_table();
 
     lua.new_usertype<E4::Transform>(
         "Transform",
@@ -20,37 +24,61 @@ void registerTypes(sol::state& lua) {
         "y", &E4::Transform::y,
         "z", &E4::Transform::z
     );
+    lua.new_usertype<E4::Drawable>(
+        "Drawable" //TODO more fields
+    );
+    lua.new_usertype<E4::Script>(
+        "Script" //TODO more fields
+    );
 }
 
-void requireComponent(int index, uint32_t entity, E4::EcsCore& ecs, sol::state& lua) {
-    switch (index) {
-        case 1: //transform
-            lua["transform"] = std::ref(ecs.getComponent<E4::Transform>(entity));
-            break;
-        default:
-            break;
-    }
-}
-
-void writeFrameState(sol::state& lua, const E4::FrameState& frameState) {
+void firstFrame(sol::state& lua, const E4::FrameState& frameState, E4::EcsCore& ecs) {
     lua["inputStatePrev"] = lua.create_table_with(
-        "wheel", frameState.inputStatePrev.wheel,
-        "mouseX", frameState.inputStatePrev.mouseX,
-        "mouseY", frameState.inputStatePrev.mouseY,
-        "mouseButton1", frameState.inputStatePrev.mouseButton1,
-        "mouseButton2", frameState.inputStatePrev.mouseButton2,
-        "mouseButton3", frameState.inputStatePrev.mouseButton3,
+        "wheel", 0,
+        "mouseX", 0,
+        "mouseY", 0,
+        "mouseButton1", false,
+        "mouseButton2", false,
+        "mouseButton3", false,
         "keys", &frameState.inputStatePrev.keys
     );
     lua["inputStateCurr"] = lua.create_table_with(
-        "wheel", frameState.inputStateCurr.wheel,
-        "mouseX", frameState.inputStateCurr.mouseX,
-        "mouseY", frameState.inputStateCurr.mouseY,
-        "mouseButton1", frameState.inputStateCurr.mouseButton1,
-        "mouseButton2", frameState.inputStateCurr.mouseButton2,
-        "mouseButton3", frameState.inputStateCurr.mouseButton3,
+        "wheel", 0,
+        "mouseX", 0,
+        "mouseY", 0,
+        "mouseButton1", false,
+        "mouseButton2", false,
+        "mouseButton3", false,
         "keys", &frameState.inputStateCurr.keys
     );
+
+    lua["requestTransform"] = [&lua, &ecs](E4::Entity entity) {
+        lua["entities"][entity]["transform"] = std::ref(ecs.getComponent<E4::Transform>(entity));
+    };
+    lua["requestDrawable"] = [&lua, &ecs](E4::Entity entity) {
+        lua["entities"][entity]["drawable"] = std::ref(ecs.getComponent<E4::Drawable>(entity));
+    };
+    lua["requestScript"] = [&lua, &ecs](E4::Entity entity) {
+        lua["entities"][entity]["script"] = std::ref(ecs.getComponent<E4::Script>(entity));
+    };
+}
+void updateFrameState(sol::state& lua, const E4::FrameState& frameState) {
+    lua["dt"] = frameState.deltatime * 0.001f;
+    lua["frameIndex"] = frameState.frameIndex;
+    lua["inputStatePrev"]["wheel"] = frameState.inputStatePrev.wheel;
+    lua["inputStatePrev"]["mouseX"] = frameState.inputStatePrev.mouseX;
+    lua["inputStatePrev"]["mouseY"] = frameState.inputStatePrev.mouseY;
+    lua["inputStatePrev"]["mouseButton1"] = frameState.inputStatePrev.mouseButton1;
+    lua["inputStatePrev"]["mouseButton2"] = frameState.inputStatePrev.mouseButton2;
+    lua["inputStatePrev"]["mouseButton3"] = frameState.inputStatePrev.mouseButton3;
+    lua["inputStatePrev"]["keys"] = std::ref(frameState.inputStatePrev.keys);
+    lua["inputStateCurr"]["wheel"] = frameState.inputStateCurr.wheel;
+    lua["inputStateCurr"]["mouseX"] = frameState.inputStateCurr.mouseX;
+    lua["inputStateCurr"]["mouseY"] = frameState.inputStateCurr.mouseY;
+    lua["inputStateCurr"]["mouseButton1"] = frameState.inputStateCurr.mouseButton1;
+    lua["inputStateCurr"]["mouseButton2"] = frameState.inputStateCurr.mouseButton2;
+    lua["inputStateCurr"]["mouseButton3"] = frameState.inputStateCurr.mouseButton3;
+    lua["inputStateCurr"]["keys"] = std::ref(frameState.inputStateCurr.keys);
 }
 
 E4::ScriptRunner::ScriptRunner() {
@@ -66,16 +94,19 @@ E4::ScriptRunner::~ScriptRunner() {
 void E4::ScriptRunner::run(EcsCore& ecs, const E4::FrameState& frameState) {
     sol::state& lua = *state;
 
-    writeFrameState(lua, frameState);
+    static bool loaded = false;
+    if (!loaded) {
+        firstFrame(*state, frameState, ecs);
+        loaded = true;
+    }
 
-    uint32_t entityId = 0;
-
-    lua.set_function("requireComponent", [&](int componentIndex) { requireComponent(componentIndex, entityId, ecs, lua); });
+    updateFrameState(lua, frameState);
 
     auto view = ecs.view<E4::Script>();
     for (auto entity: view) {
         E4::Script& script = view.get(entity);
-        entityId = entity;
+
+        lua["prepareEntity"](entity);
 
         if (!script.loaded) {
             //if script functions are not loaded => load script and extract functions
@@ -97,5 +128,6 @@ void E4::ScriptRunner::run(EcsCore& ecs, const E4::FrameState& frameState) {
         if (update != sol::nil) {
             update();
         }
+
     }
 }

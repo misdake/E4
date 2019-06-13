@@ -1,5 +1,6 @@
 #include "Transformer.h"
 
+#include "../../core/ECS.h"
 #include "../../components/Transform.h"
 
 void update(E4::EcsCore& ecs, E4::Transform& position, uint64_t frameIndex) {

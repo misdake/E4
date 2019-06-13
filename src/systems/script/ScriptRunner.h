@@ -11,6 +11,7 @@ namespace E4 {
 
     class ScriptRunner {
     private:
+        friend class App;
         sol::state* state;
     public:
         ScriptRunner();

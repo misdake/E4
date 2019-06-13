@@ -21,9 +21,10 @@ include_directories(${GLBINDING_INCLUDE_DIRS})
 add_executable(app
         src/main.cpp
 
-        src/core/ECS.h
         src/core/App.cpp src/core/App.h
         src/core/Asset.cpp src/core/Asset.h
+        src/core/Lua.h
+        src/core/ECS.cpp  src/core/ECS.h
 
         src/components/Transform.h
         src/components/Drawable.h
@@ -48,7 +49,7 @@ add_executable(app
         src/util/Window.cpp src/util/Window.h
         src/util/InputState.cpp src/util/InputState.h
         src/util/FrameState.h
-        )
+        src/components/Components.h)
 target_link_libraries(app lua53 ${SDL2_LIBRARY} ${GLBINDING_LIBRARIES})
 
 #output executable

@@ -2,10 +2,11 @@
 
 #include "opengl/Shaders.h"
 #include "opengl/GlRenderer.h"
-#include "../../core/ECS.h"
 #include "../../util/FrameState.h"
 
 namespace E4 {
+
+    class EcsCore;
 
     class Renderer {
     public:

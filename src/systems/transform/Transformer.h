@@ -1,9 +1,10 @@
 #pragma once
 
-#include "../../core/ECS.h"
 #include "../../util/FrameState.h"
 
 namespace E4 {
+
+    class EcsCore;
 
     class Transformer {
     public:

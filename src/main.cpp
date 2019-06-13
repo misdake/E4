@@ -48,23 +48,28 @@ int main(int argc, char* argv[]) {
         material2->shader = &app.renderer.shaderTexture;
 
         entt::entity entity1 = app.ecs.createEntity();
-        app.ecs.createComponent<E4::Transform>(entity1);
-        auto& drawable1 = app.ecs.createComponent<E4::Drawable>(entity1);
-        drawable1.mesh = mesh;
-        drawable1.material = material1;
-
         entt::entity entity2 = app.ecs.createEntity();
-        auto& transform2 = app.ecs.createComponent<E4::Transform>(entity2);
+
+        auto& transform1 = app.ecs.createTransform(entity1);
+        transform1.x = 0.1f;
+        transform1.y = -0.5f;
+        transform1.z = -0.1f;
+        auto& transform2 = app.ecs.createTransform(entity2);
         transform2.x = 0.1f;
         transform2.y = 0.1f;
         transform2.z = -0.1f;
         transform2.parent = entity1;
-        auto& drawable2 = app.ecs.createComponent<E4::Drawable>(entity2);
+
+        auto& drawable1 = app.ecs.createDrawable(entity1);
+        drawable1.mesh = mesh;
+        drawable1.material = material1;
+        auto& drawable2 = app.ecs.createDrawable(entity2);
         drawable2.mesh = mesh;
         drawable2.material = material2;
-        auto& script2 = app.ecs.createComponent<E4::Script>(entity2);
-        script2.loaded = false;
-        script2.file = app.scripts.get("script.lua");
+
+        auto& script1 = app.ecs.createScript(entity1);
+        script1.loaded = false;
+        script1.file = app.scripts.get("script.lua");
     });
 
     app.enterLoop([](E4::App& app, const E4::FrameState& frameState) {
@@ -74,14 +79,13 @@ int main(int argc, char* argv[]) {
         float distance = frameState.deltatime * 0.001f;
         float dx = 0;
         float dy = 0;
-        dx += frameState.inputStateCurr.keys[SDL_SCANCODE_D] ? 1 : 0;
-        dx -= frameState.inputStateCurr.keys[SDL_SCANCODE_A] ? 1 : 0;
-        dy += frameState.inputStateCurr.keys[SDL_SCANCODE_W] ? 1 : 0;
-        dy -= frameState.inputStateCurr.keys[SDL_SCANCODE_S] ? 1 : 0;
-//        std::cout << frameState.frameIndex << std::endl;
+        dx += frameState.inputStateCurr.keys[SDL_SCANCODE_RIGHT] ? 1 : 0;
+        dx -= frameState.inputStateCurr.keys[SDL_SCANCODE_LEFT] ? 1 : 0;
+        dy += frameState.inputStateCurr.keys[SDL_SCANCODE_UP] ? 1 : 0;
+        dy -= frameState.inputStateCurr.keys[SDL_SCANCODE_DOWN] ? 1 : 0;
 
         app.ecs.view<E4::Transform>().each([&](E4::Transform& position) {
-            if (position.parent == 0) {
+            if (position.parent > 0) {
                 position.x += distance * dx;
                 position.y += distance * dy;
             }

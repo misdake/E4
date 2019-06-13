@@ -1,7 +1,9 @@
 #include "ScriptFunctions.h"
 
-E4::ScriptFunctions::ScriptFunctions(const sol::state& state) :
+E4::ScriptFunctions::ScriptFunctions(sol::state& state) :
     prefix(0),
-    load(std::move(state["load"])),
-    update(std::move(state["update"])) {
+    load(sol::nil),
+    update(sol::nil) {
+    load = state["load"];
+    update = state["update"];
 }

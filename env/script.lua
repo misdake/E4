@@ -1,13 +1,23 @@
 function load()
-    print("load")
+	print("load "..entity.id)
 end
 
 function update()
-	requireComponent(ComponentTransform)
+	print("update "..entity.id)
+	requestTransform(entity.id)
     if not inputStatePrev.mouseButton1 and inputStateCurr.mouseButton1 then
-        transform.y = -transform.y
+        entity.transform.y = -entity.transform.y
     end
-    if (inputStatePrev.keys[6]==0) and (inputStateCurr.keys[6]>0) then
-        transform.x = transform.x + 0.2
+    if (inputStateCurr.keys[4 + 1]>0) then
+        entity.transform.x = entity.transform.x - 0.005
+    end
+    if (inputStateCurr.keys[7 + 1]>0) then
+        entity.transform.x = entity.transform.x + 0.005
+    end
+    if (inputStateCurr.keys[22 + 1]>0) then
+        entity.transform.y = entity.transform.y - 0.005
+    end
+    if (inputStateCurr.keys[26 + 1]>0) then
+        entity.transform.y = entity.transform.y + 0.005
     end
 end
