@@ -26,6 +26,7 @@ add_executable(app
         src/core/Lua.h
         src/core/ECS.cpp  src/core/ECS.h
 
+        src/components/Components.h
         src/components/Transform.h
         src/components/Drawable.h
         src/components/Script.h
@@ -49,7 +50,10 @@ add_executable(app
         src/util/Window.cpp src/util/Window.h
         src/util/InputState.cpp src/util/InputState.h
         src/util/FrameState.h
-        src/components/Components.h)
+
+        src/math/Mat4.cpp src/math/Mat4.h
+        src/math/Vec3.cpp src/math/Vec3.h
+        )
 target_link_libraries(app lua53 ${SDL2_LIBRARY} ${GLBINDING_LIBRARIES})
 
 #output executable

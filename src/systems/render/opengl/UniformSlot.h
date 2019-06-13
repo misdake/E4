@@ -18,7 +18,7 @@ namespace E4 {
 
     class UniformSlots {
     public:
-        UniformSlot WORLD = UniformSlot("uWorld", ShaderDataType::VEC3);
+        UniformSlot WORLD = UniformSlot("uWorld", ShaderDataType::MAT4);
         UniformSlot TEXTURE = UniformSlot("uTexture", ShaderDataType::TEXTURE);
     };
 

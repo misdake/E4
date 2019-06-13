@@ -7,7 +7,7 @@ const char* const E4::dataTypeName(E4::ShaderDataType type) {
         case E4::ShaderDataType::VEC3: return "vec3";
         case E4::ShaderDataType::VEC4: return "vec4";
         case E4::ShaderDataType::TEXTURE: return "sampler2D";
-        case E4::ShaderDataType::MATRIX: return "mat4";
+        case E4::ShaderDataType::MAT4: return "mat4";
         default: return "";
     }
 }

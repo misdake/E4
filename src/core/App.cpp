@@ -3,8 +3,8 @@
 #include <iostream>
 
 void E4::App::load(const std::function<void(App&)>& onLoaded) {
-    int width = 640;
-    int height = 480;
+    int width = 500;
+    int height = 500;
     window.create(
         {
             .title = std::string("abc"),

@@ -14,7 +14,7 @@ E4::Texture& E4::Texture::load(std::string nname) {
     this->name = std::move(nname);
 
     stbi_set_flip_vertically_on_load(true);
-    uint32_t& textureId = shaderData.texture.textureId;
+    uint32_t& textureId = shaderData.textureId;
     glGenTextures(1, &textureId);
     glBindTexture(GL_TEXTURE_2D, textureId);
     // 为当前绑定的纹理对象设置环绕、过滤方式
@@ -40,6 +40,6 @@ E4::Texture& E4::Texture::load(std::string nname) {
 
 void E4::Texture::unload() {
     if (this->loading) {
-        glDeleteTextures(1, &shaderData.texture.textureId);
+        glDeleteTextures(1, &shaderData.textureId);
     }
 }

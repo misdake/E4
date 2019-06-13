@@ -87,10 +87,11 @@ int main(int argc, char* argv[]) {
 //        dy += frameState.inputStateCurr.keys[SDL_SCANCODE_UP] ? 1 : 0;
 //        dy -= frameState.inputStateCurr.keys[SDL_SCANCODE_DOWN] ? 1 : 0;
 //
-//        app.ecs.view<E4::Transform>().each([&](E4::Transform& position) {
-//            if (position.parent > 0) {
-//                position.x += distance * dx;
-//                position.y += distance * dy;
+//        app.ecs.view<E4::Transform>().each([&](E4::Transform& transform) {
+//            if (transform.parent > 0) {
+//                transform.x += distance * dx;
+//                transform.y += distance * dy;
+//                transform.ry = std::fmod(totalTime * 0.001, 2 * M_PI);
 //            }
 //        });
 

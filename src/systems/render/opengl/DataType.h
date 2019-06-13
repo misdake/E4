@@ -1,6 +1,8 @@
 #pragma once
 
 #include <cstdint>
+#include "../../../math/Mat4.h"
+#include "../../../core/Asset.h"
 
 namespace E4 {
     enum class ShaderDataType {
@@ -9,41 +11,45 @@ namespace E4 {
         VEC3,
         VEC4,
         TEXTURE,
-        MATRIX,
+        MAT4,
     };
 
     const char* const dataTypeName(ShaderDataType type);
 
     union ShaderData {
 
-        struct Numbers {
+        struct Numbers { //TODO replace with Vec4
             float x;
             float y;
             float z;
             float w;
         } numbers;
 
-        struct Colors {
+        struct Colors { //TODO replace with Color
             float r;
             float g;
             float b;
             float a;
         } colors;
 
-        struct Texture {
-            uint32_t textureId;
-        } texture;
+        uint32_t textureId;
+
+        Asset<Mat4> mat4;
 
         ShaderData() :
             numbers{0, 0, 0, 0} {
         }
 
         explicit ShaderData(uint32_t textureId) :
-            texture{textureId} {
+            textureId{textureId} {
         }
 
         explicit ShaderData(float x) :
             numbers{x, 0, 0, 0} {
+        }
+
+        explicit ShaderData(const Asset<Mat4>& mat4) :
+            mat4{mat4} {
         }
 
         ShaderData(float x, float y) :

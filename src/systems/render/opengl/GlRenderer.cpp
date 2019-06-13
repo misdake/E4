@@ -15,7 +15,7 @@ void E4::GlRenderer::resize(int w, int h) {
 
 void E4::GlRenderer::init() {
     glShadeModel(GL_SMOOTH);
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glClearColor(0.4f, 0.4f, 0.4f, 1.0f);
     glClearDepth(1.0f);
     glEnable(GL_DEPTH_TEST);
     glDisable(GL_CULL_FACE);

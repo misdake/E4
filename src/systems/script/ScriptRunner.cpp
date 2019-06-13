@@ -23,7 +23,13 @@ void registerTypes(sol::state& lua) {
         "Transform",
         "x", &E4::Transform::x,
         "y", &E4::Transform::y,
-        "z", &E4::Transform::z
+        "z", &E4::Transform::z,
+        "rx", &E4::Transform::rx,
+        "ry", &E4::Transform::ry,
+        "rz", &E4::Transform::rz,
+        "sx", &E4::Transform::sx,
+        "sy", &E4::Transform::sy,
+        "sz", &E4::Transform::sz
     );
     lua.new_usertype<E4::Drawable>(
         "Drawable" //TODO more fields

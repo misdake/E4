@@ -25,10 +25,11 @@ void E4::UniformSlot::bind(const ShaderData& shaderData) {
             break;
         case ShaderDataType::TEXTURE:
             glActiveTexture(GL_TEXTURE0);
-            glBindTexture(GL_TEXTURE_2D, shaderData.texture.textureId);
+            glBindTexture(GL_TEXTURE_2D, shaderData.textureId);
             glUniform1i(location, 0);
             break;
-        case ShaderDataType::MATRIX:
+        case ShaderDataType::MAT4:
+            glUniformMatrix4fv(location, 1, false, shaderData.mat4->array());
             break;
     }
 }

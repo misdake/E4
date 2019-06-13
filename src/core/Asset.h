@@ -35,12 +35,6 @@ namespace E4 {
         static const uint32_t MAX_INDEX = std::numeric_limits<uint32_t>::max();
 
         Asset() : pool(nullptr), index(MAX_INDEX) {}
-        Asset(const Asset& other) : pool(other.pool), index(other.index) {}
-        Asset& operator=(const Asset& other) {
-            pool = other.pool;
-            index = other.index;
-            return *this;
-        }
 
         T* operator->() { return &get(); }
         const T* operator->() const { return &get(); }

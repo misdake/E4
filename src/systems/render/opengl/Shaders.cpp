@@ -5,7 +5,7 @@
 #include "../../../components/Drawable.h"
 
 const char* ShaderBasic_VS = "void main() {\n"
-                             "    gl_Position = vec4(aPosition.xyz + uWorld, 1.0);\n"
+                             "    gl_Position = uWorld * vec4(aPosition.xyz, 1.0);\n"
                              "    vColor = aColor;\n"
                              "}";
 
@@ -32,15 +32,15 @@ void E4::ShaderBasic::bind(GlRenderer& renderer, const Transform& transform, con
 }
 
 const char* ShaderTexture_VS = "void main() {\n"
-                             "    gl_Position = vec4(aPosition.xyz + uWorld, 1.0);\n"
-                             "    vTexcoord = aTexcoord;\n"
-                             "}";
+                               "    gl_Position = uWorld * vec4(aPosition.xyz, 1.0);\n"
+                               "    vTexcoord = aTexcoord;\n"
+                               "}";
 
 const char* ShaderTexture_PS = "out vec4 outputColor;\n"
-                             "void main()\n"
-                             "{\n"
-                             "   outputColor = texture(uTexture, vTexcoord);\n"
-                             "}";
+                               "void main()\n"
+                               "{\n"
+                               "   outputColor = texture(uTexture, vTexcoord);\n"
+                               "}";
 
 E4::ShaderTexture::ShaderTexture(GlRenderer& renderer) : Shader(ShaderTexture_VS, ShaderTexture_PS) {
     addVertexAttribute(renderer.attributeSlots.POSITION);

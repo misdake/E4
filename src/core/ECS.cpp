@@ -10,7 +10,9 @@ E4::Entity E4::EcsCore::createEntity() {
 }
 
 E4::Transform& E4::EcsCore::createTransform(Entity entity) {
-    return ecs.assign<E4::Transform>(entity);
+    auto& transform = ecs.assign<E4::Transform>(entity);
+    transform.worldTransform.mat4 = mat4.alloc();
+    return transform;
 }
 
 E4::Drawable& E4::EcsCore::createDrawable(Entity entity) {

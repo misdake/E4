@@ -9,15 +9,15 @@ function update()
         entity.transform.y = -entity.transform.y
     end
     if (inputStateCurr.keys[4 + 1]>0) then
-        entity.transform.x = entity.transform.x - 0.005
+        entity.transform.rz = entity.transform.rz - 0.01
     end
     if (inputStateCurr.keys[7 + 1]>0) then
-        entity.transform.x = entity.transform.x + 0.005
+        entity.transform.rz = entity.transform.rz + 0.01
     end
     if (inputStateCurr.keys[22 + 1]>0) then
-        entity.transform.y = entity.transform.y - 0.005
+        entity.transform.ry = entity.transform.ry - 0.01
     end
     if (inputStateCurr.keys[26 + 1]>0) then
-        entity.transform.y = entity.transform.y + 0.005
+        entity.transform.ry = entity.transform.ry + 0.01
     end
 end

@@ -18,6 +18,7 @@ namespace E4 {
 
         entt::registry ecs;
         sol::state* state;
+        AssetPool<Mat4> mat4;
 
     public:
         Entity createEntity();
