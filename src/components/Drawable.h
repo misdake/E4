@@ -12,12 +12,12 @@ namespace E4 {
     struct Material {
         Shader* shader;
         Asset<Texture> texture;
+        ShaderData color;
     };
 
     struct Mesh {
         FloatBuffer position;
         FloatBuffer texcoord;
-        FloatBuffer color;
 
         int vertexCount;
         ShortBuffer index;

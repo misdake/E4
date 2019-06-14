@@ -26,6 +26,7 @@ add_executable(app
         src/core/ECS.cpp  src/core/ECS.h
         src/core/Lua.h
         src/core/ScriptBridge.cpp src/core/ScriptBridge.h
+        src/core/assets/BuiltinMesh.cpp src/core/assets/BuiltinMesh.h
 
         src/components/Components.h
         src/components/Transform.h

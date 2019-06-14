@@ -28,36 +28,13 @@ void E4::ScriptBridge::bind(App& app, sol::state& lua, EcsCore& ecs) {
         material->shader = &app.renderer.shaderTexture;
         return material;
     };
-    lua["newMesh"] = [&]() { //TODO load built-in mesh or file
-        std::vector<float> position = {
-            0.5f, 0.5f, 0.0f,
-            0.5f, -0.5f, 0.0f,
-            -0.5f, -0.5f, 0.0f,
-            -0.5f, 0.5f, 0.0f,
-        };
-        std::vector<float> color = {
-            1.0f, 0.0f, 0.0f,
-            0.0f, 1.0f, 0.0f,
-            0.0f, 0.0f, 1.0f,
-            1.0f, 0.0f, 1.0f,
-        };
-        std::vector<float> texcoord = {
-            1.0f, 1.0f,
-            1.0f, 0.0f,
-            0.0f, 0.0f,
-            0.0f, 1.0f,
-        };
-        std::vector<uint16_t> index = {
-            0, 1, 2,
-            0, 2, 3,
-        };
-
-        Asset<Mesh> mesh = app.meshes.alloc();
-        mesh->position.set(position, 3, 4).upload();
-        mesh->texcoord.set(texcoord, 2, 4).upload();
-        mesh->color.set(color, 3, 4).upload();
-        mesh->index.set(index, 6).upload();
-        return mesh;
+    lua["newMesh"] = [&](std::string meshName) {
+        if (meshName.rfind("builtin:", 0) == 0) {
+            return app.meshLoader.create(meshName, app.meshes);
+        } else {
+            //TODO load from file
+            return Asset<Mesh>();
+        }
     };
 
     lua["createDrawable"] = [&](Entity entity) {

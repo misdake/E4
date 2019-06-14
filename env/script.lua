@@ -12,8 +12,8 @@ function update()
     end
 
     if inputStateCurr.mouseButton1 then
-        entity.transform.x = entity.transform.x + (inputStateCurr.mouseX - entity.x) * 0.01
-        entity.transform.y = entity.transform.y + (inputStateCurr.mouseY - entity.y) * -0.01
+        entity.transform.x = entity.transform.x + (inputStateCurr.mouseX - entity.x) * 1 * dt
+        entity.transform.y = entity.transform.y + (inputStateCurr.mouseY - entity.y) * -1 * dt
         entity.x = inputStateCurr.mouseX
         entity.y = inputStateCurr.mouseY
     end
@@ -32,7 +32,7 @@ function update()
         transform.sy = 0.1
         transform.sz = 0.1
         local drawable = createDrawable(e)
-        drawable.mesh = newMesh()
+        drawable.mesh = newMesh("builtin:plane")
         drawable.material = newMaterial("footprint.png")
         createScript(e, "script1.lua")
     end

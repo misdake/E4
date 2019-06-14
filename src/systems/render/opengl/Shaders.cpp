@@ -6,20 +6,19 @@
 
 const char* ShaderBasic_VS = "void main() {\n"
                              "    gl_Position = uWorld * vec4(aPosition.xyz, 1.0);\n"
-                             "    vColor = aColor;\n"
                              "}";
 
 const char* ShaderBasic_PS = "out vec4 outputColor;\n"
                              "void main()\n"
                              "{\n"
-                             "   outputColor = vec4(vColor.rgb, 1.0f);\n"
+                             "   outputColor = uColor;\n"
                              "}";
 
 E4::ShaderBasic::ShaderBasic(GlRenderer& renderer) : Shader(ShaderBasic_VS, ShaderBasic_PS) {
     addVertexAttribute(renderer.attributeSlots.POSITION);
     addVertexAttribute(renderer.attributeSlots.COLOR);
     addVertexUniform(renderer.uniformSlots.WORLD);
-    addVarying("vColor", E4::ShaderDataType::VEC4);
+    addPixelUniform(renderer.uniformSlots.COLOR);
 }
 
 void E4::ShaderBasic::bind(GlRenderer& renderer, const Transform& transform, const E4::Drawable& drawable) {
@@ -27,8 +26,8 @@ void E4::ShaderBasic::bind(GlRenderer& renderer, const Transform& transform, con
     const Material& material = drawable.material.get();
 
     renderer.attributeSlots.POSITION.bind(mesh.position);
-    renderer.attributeSlots.COLOR.bind(mesh.color);
     renderer.uniformSlots.WORLD.bind(transform.worldTransform);
+    renderer.uniformSlots.COLOR.bind(material.color);
 }
 
 const char* ShaderTexture_VS = "void main() {\n"

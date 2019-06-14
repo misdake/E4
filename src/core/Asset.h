@@ -1,6 +1,5 @@
 #pragma once
 
-#include <stdio.h>
 #include <vector>
 #include <stack>
 #include <cstdint>
@@ -42,8 +41,6 @@ namespace E4 {
         bool valid() const;
         T& get();
         const T& get() const;
-
-        const std::string& name() const;
     };
 
     template<typename T>
@@ -154,17 +151,6 @@ namespace E4 {
             //TODO error
             std::cout << "access an invalid pointer" << std::endl;
             return pool->array[index];
-        }
-    }
-
-    template<typename T>
-    const std::string& Asset<T>::name() const {
-        if (index < MAX_INDEX && index < pool->array.size()) {
-            return pool->names[index];
-        } else {
-            //TODO error
-            std::cout << "access an invalid pointer" << std::endl;
-            return pool->names[index];
         }
     }
 

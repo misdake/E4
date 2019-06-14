@@ -14,12 +14,6 @@ int main(int argc, char* argv[]) {
             -0.5f, -0.5f, 0.0f,
             -0.5f, 0.5f, 0.0f,
         };
-        std::vector<float> color = {
-            1.0f, 0.0f, 0.0f,
-            0.0f, 1.0f, 0.0f,
-            0.0f, 0.0f, 1.0f,
-            1.0f, 0.0f, 1.0f,
-        };
         std::vector<float> texcoord = {
             1.0f, 1.0f,
             1.0f, 0.0f,
@@ -34,13 +28,12 @@ int main(int argc, char* argv[]) {
         E4::Asset<E4::Mesh> mesh = app.meshes.alloc();
         mesh->position.set(position, 3, 4).upload();
         mesh->texcoord.set(texcoord, 2, 4).upload();
-        mesh->color.set(color, 3, 4).upload();
 //        mesh->vertexCount = 6;
         mesh->index.set(index, 6).upload();
 
         E4::Asset<E4::Material> material1 = app.materials.alloc();
-        material1->texture = app.textures.get("street.jpg");
-        material1->shader = &app.renderer.shaderTexture;
+        material1->color.set(1, 0, 0, 1);
+        material1->shader = &app.renderer.shaderBasic;
         E4::Asset<E4::Material> material2 = app.materials.alloc();
         material2->texture = app.textures.get("favicon.png");
         material2->shader = &app.renderer.shaderTexture;

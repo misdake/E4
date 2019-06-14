@@ -1,15 +1,17 @@
 #pragma once
 
-#include "../util/Window.h"
 #include "ECS.h"
+
+#include "Asset.h"
+#include "../components/Drawable.h"
+#include "../systems/script/ScriptFile.h"
 
 #include "../systems/render/Renderer.h"
 #include "../systems/transform/Transformer.h"
 #include "../systems/script/ScriptRunner.h"
 
-#include "Asset.h"
-#include "../components/Drawable.h"
-#include "../systems/script/ScriptFile.h"
+#include "../util/Window.h"
+#include "assets/BuiltinMesh.h"
 
 namespace E4 {
 
@@ -30,6 +32,7 @@ namespace E4 {
         AssetPool<Material> materials;
         AssetLoader<Texture> textures;
         AssetLoader<ScriptFile> scripts;
+        BuiltinMeshLoader meshLoader;
 
         void load(const std::function<void(App&)>& onLoaded);
 
