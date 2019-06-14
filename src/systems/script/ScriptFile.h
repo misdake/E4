@@ -10,9 +10,9 @@ namespace E4 {
     public:
         std::string folder;
         std::string name;
-        std::string content;
 
-        ScriptFunctions* functions;
+        bool scriptLoaded;
+        uint32_t scriptIndex;
 
         ScriptFile& load(std::string folder, std::string name);
         void unload();

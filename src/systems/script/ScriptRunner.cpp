@@ -1,18 +1,26 @@
 #include "ScriptRunner.h"
 
-#include <iostream>
-
 #include "ScriptFile.h"
-#include "ScriptFunctions.h"
 #include "../../core/Lua.h"
 #include "../../util/FrameState.h"
 #include "../../components/Transform.h"
 #include "../../components/Script.h"
+#include "../../util/File.h"
 
 void registerTypes(sol::state& lua) {
     lua.script(R"(
         function prepareEntity(id)
             entity = entities[id]
+        end
+        function runLoad(index)
+            if scripts[index].load ~= nil then
+                scripts[index].load()
+            end
+        end
+        function runUpdate(index)
+            if scripts[index].update ~= nil then
+                scripts[index].update()
+            end
         end
     )");
 
@@ -110,32 +118,27 @@ void E4::ScriptRunner::run(EcsCore& ecs, const E4::FrameState& frameState) {
         lua["prepareEntity"](entity);
 
         E4::Script& script = view.get(entity);
+        //if script functions are not loaded => load script and extract functions
+        if (!script.file->scriptLoaded) {
+            script.file->scriptLoaded = true;
+            std::string content = readFile(script.file->folder + "/" + script.file->name);
+            state->script(content);
+            uint32_t index = script.file->scriptIndex = (script.file->scriptIndex > 0) ? script.file->scriptIndex : ++scriptIndex;
+            lua["scripts"][index] = lua.create_table();
+            lua["scripts"][index]["load"] = lua["load"];
+            lua["scripts"][index]["update"] = lua["update"];
+        }
+
         if (!script.loaded) {
-            //if script functions are not loaded => load script and extract functions
-            if (!script.file->functions) {
-                state->script(script.file->content);
-                script.file->functions = new ScriptFunctions(lua, ++scriptIndex);
-            }
-
             //call load
-            sol::function& load = script.file->functions->load;
             script.loaded = true;
-            if (load != sol::nil) {
-                load();
-            }
+            lua["runLoad"](script.file->scriptIndex);
 
+            //call update
             E4::Script& script2 = view.get(entity); //load again. load() might call createScript, invalidating script.
-            //call update
-            sol::function& update = script2.file->functions->update;
-            if (update != sol::nil) {
-                update();
-            }
+            lua["runUpdate"](script2.file->scriptIndex);
         } else {
-            //call update
-            sol::function& update = script.file->functions->update;
-            if (update != sol::nil) {
-                update();
-            }
+            lua["runUpdate"](script.file->scriptIndex);
         }
 
     }

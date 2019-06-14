@@ -20,6 +20,11 @@ int main(int argc, char* argv[]) {
     });
 
     app.enterLoop([](E4::App& app, const E4::FrameState& frameState) {
+        if (!frameState.inputStatePrev.keys[SDL_SCANCODE_F5] && frameState.inputStateCurr.keys[SDL_SCANCODE_F5]) {
+            app.ecs.view<E4::Script>().each([](E4::Script& script) {
+                script.file->scriptLoaded = false;
+            });
+        }
     });
 
     return 0;
