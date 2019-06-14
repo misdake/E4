@@ -8,10 +8,13 @@
 #include <glbinding/gl/gl.h>
 using namespace gl;
 
-E4::Texture& E4::Texture::load(std::string nname) {
+E4::Texture& E4::Texture::load(std::string nfolder, std::string nname) {
     if (this->loading) return *this;
     this->loading = true;
+    this->folder = std::move(nfolder);
     this->name = std::move(nname);
+
+    std::string filepath = this->folder + "/" + this->name;
 
     stbi_set_flip_vertically_on_load(true);
     uint32_t& textureId = shaderData.textureId;
@@ -24,13 +27,13 @@ E4::Texture& E4::Texture::load(std::string nname) {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     // 加载并生成纹理
     int nrChannels;
-    stbi_uc* data = stbi_load(this->name.c_str(), &this->w, &this->h, &nrChannels, 0);
+    stbi_uc* data = stbi_load(filepath.c_str(), &this->w, &this->h, &nrChannels, 0);
     if (data) {
         glTexImage2D(GL_TEXTURE_2D, 0, nrChannels == 4 ? GL_RGBA : GL_RGB, this->w, this->h, 0, nrChannels == 4 ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE, data);
         glGenerateMipmap(GL_TEXTURE_2D);
         this->loaded = true;
     } else {
-        std::cout << "Failed to load texture" << std::endl;
+        std::cout << "Failed to load texture " << filepath << std::endl;
         this->loaded = false;
     }
     stbi_image_free(data);

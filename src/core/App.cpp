@@ -4,9 +4,16 @@
 
 #include "ScriptBridge.h"
 
+E4::App::App(uint16_t width, uint16_t height, const std::string& folder) :
+    width(width),
+    height(height),
+    textures(folder),
+    scripts(folder),
+    folder(folder) {
+
+}
+
 void E4::App::load(const std::function<void(App&)>& onLoaded) {
-    int width = 500;
-    int height = 500;
     window.create(
         {
             .title = std::string("abc"),
@@ -23,13 +30,15 @@ void E4::App::load(const std::function<void(App&)>& onLoaded) {
     ecs.state = scriptRunner.state;
     ecs.createEntity(); //make the '0' object
 
-    ScriptBridge::bind(*this, *ecs.state, ecs);
+    ScriptBridge::load(*this, *ecs.state, ecs);
 
     onLoaded(*this);
 }
 
 void E4::App::enterLoop(const std::function<void(E4::App&, const E4::FrameState&)>& onFrame) {
     window.enterEventLoop([&onFrame, this](const FrameState& frameState) -> void {
+        ScriptBridge::update(*this, *ecs.state, ecs);
+
         onFrame(*this, frameState);
 
         scriptRunner.run(ecs, frameState);

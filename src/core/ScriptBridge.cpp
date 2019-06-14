@@ -3,7 +3,7 @@
 #include "Lua.h"
 #include "App.h"
 
-void E4::ScriptBridge::bind(App& app, sol::state& lua, EcsCore& ecs) {
+void E4::ScriptBridge::load(App& app, sol::state& lua, EcsCore& ecs) {
     lua["requestTransform"] = [&lua, &ecs](Entity entity) {
         lua["entities"][entity]["transform"] = std::ref(ecs.getComponent<Transform>(entity));
     };
@@ -54,4 +54,15 @@ void E4::ScriptBridge::bind(App& app, sol::state& lua, EcsCore& ecs) {
         script.file = app.scripts.get(scriptName);
         return std::ref<Script>(script);
     };
+
+    lua.script(R"(
+        function mouse1down()
+            return (not inputStatePrev.mouseButton1) and (inputStateCurr.mouseButton1)
+        end
+    )");
+}
+
+void E4::ScriptBridge::update(App& app, sol::state& lua, EcsCore& ecs) {
+    lua["screenWidth"] = app.window.getWidth();
+    lua["screenHeight"] = app.window.getHeight();
 }

@@ -34,6 +34,12 @@ namespace E4 {
         AssetLoader<ScriptFile> scripts;
         BuiltinMeshLoader meshLoader;
 
+        uint16_t width;
+        uint16_t height;
+        std::string folder;
+
+        explicit App(uint16_t width, uint16_t height, const std::string& folder);
+
         void load(const std::function<void(App&)>& onLoaded);
 
         void enterLoop(const std::function<void(App&, const FrameState&)>& onFrame);

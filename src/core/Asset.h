@@ -80,6 +80,7 @@ namespace E4 {
     protected:
         friend class Asset<T>;
 
+        std::string folder;
         std::vector<std::string> names;
         std::map<std::string, uint32_t> map;
 
@@ -100,11 +101,15 @@ namespace E4 {
             return Asset<T>(*this, index);
         }
     public:
+        AssetLoader(std::string folder) :
+            folder(std::move(folder)) {
+        }
+
         Asset<T> get(const std::string& name) {
             auto iter = map.find(name);
             if (iter == map.end()) {
                 Asset<T> t = alloc(name);
-                t->load(name);
+                t->load(folder, name);
                 return t;
             } else {
                 uint32_t index = iter->second;

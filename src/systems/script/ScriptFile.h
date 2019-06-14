@@ -8,12 +8,13 @@ namespace E4 {
 
     class ScriptFile {
     public:
+        std::string folder;
         std::string name;
         std::string content;
 
         ScriptFunctions* functions;
 
-        ScriptFile& load(std::string name);
+        ScriptFile& load(std::string folder, std::string name);
         void unload();
     };
 

@@ -13,7 +13,8 @@ namespace E4 {
 
     class ScriptBridge {
     public:
-        static void bind(App& app, sol::state& lua, EcsCore& ecs);
+        static void load(App& app, sol::state& lua, EcsCore& ecs);
+        static void update(App& app, sol::state& lua, EcsCore& ecs);
     };
 
 }
