@@ -3,6 +3,7 @@
 #include <cstdint>
 #include "../../../math/Mat4.h"
 #include "../../../core/Asset.h"
+#include "../../../math/Color.h"
 
 namespace E4 {
     enum class ShaderDataType {
@@ -25,12 +26,7 @@ namespace E4 {
             float w;
         } numbers;
 
-        struct Colors { //TODO replace with Color
-            float r;
-            float g;
-            float b;
-            float a;
-        } colors;
+        Color color;
 
         uint32_t textureId;
 

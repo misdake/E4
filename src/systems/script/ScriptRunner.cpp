@@ -107,10 +107,9 @@ void E4::ScriptRunner::run(EcsCore& ecs, const E4::FrameState& frameState) {
 
     auto view = ecs.view<E4::Script>();
     for (auto entity: view) {
-        E4::Script& script = view.get(entity);
-
         lua["prepareEntity"](entity);
 
+        E4::Script& script = view.get(entity);
         if (!script.loaded) {
             //if script functions are not loaded => load script and extract functions
             if (!script.file->functions) {
@@ -120,16 +119,23 @@ void E4::ScriptRunner::run(EcsCore& ecs, const E4::FrameState& frameState) {
 
             //call load
             sol::function& load = script.file->functions->load;
+            script.loaded = true;
             if (load != sol::nil) {
                 load();
             }
-            script.loaded = true;
-        }
 
-        //call update
-        sol::function& update = script.file->functions->update;
-        if (update != sol::nil) {
-            update();
+            E4::Script& script2 = view.get(entity); //load again. load() might call createScript, invalidating script.
+            //call update
+            sol::function& update = script2.file->functions->update;
+            if (update != sol::nil) {
+                update();
+            }
+        } else {
+            //call update
+            sol::function& update = script.file->functions->update;
+            if (update != sol::nil) {
+                update();
+            }
         }
 
     }

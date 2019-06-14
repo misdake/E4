@@ -22,10 +22,16 @@ void E4::ScriptBridge::bind(App& app, sol::state& lua, EcsCore& ecs) {
         return std::ref<Transform>(transform);
     };
 
-    lua["newMaterial"] = [&](std::string textureName) {
+    lua["newMaterialTexture"] = [&](std::string textureName) {
         Asset<Material> material = app.materials.alloc();
         material->texture = app.textures.get(textureName);
         material->shader = &app.renderer.shaderTexture;
+        return material;
+    };
+    lua["newMaterialColor"] = [&](std::string color) {
+        Asset<Material> material = app.materials.alloc();
+        material->color.color.set(color);
+        material->shader = &app.renderer.shaderBasic;
         return material;
     };
     lua["newMesh"] = [&](std::string meshName) {

@@ -33,7 +33,8 @@ function update()
         transform.sz = 0.1
         local drawable = createDrawable(e)
         drawable.mesh = newMesh("builtin:plane")
-        drawable.material = newMaterial("footprint.png")
+        drawable.material = newMaterialTexture("footprint.png")
+        -- drawable.material = newMaterialColor("FF0080FF")
         createScript(e, "script1.lua")
     end
 end
