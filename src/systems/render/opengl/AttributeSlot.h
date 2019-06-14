@@ -21,9 +21,9 @@ namespace E4 {
 
     class AttributeSlots {
     public:
-        AttributeSlot POSITION = AttributeSlot("aPosition", ShaderDataType::VEC3);
-        AttributeSlot TEXCOORD = AttributeSlot("aTexcoord", ShaderDataType::VEC2);
-        AttributeSlot COLOR = AttributeSlot("aColor", ShaderDataType::VEC4);
+        AttributeSlot position = AttributeSlot("aPosition", ShaderDataType::VEC3);
+        AttributeSlot texcoord = AttributeSlot("aTexcoord", ShaderDataType::VEC2);
+        AttributeSlot color = AttributeSlot("aColor", ShaderDataType::VEC4);
     };
 
 }
