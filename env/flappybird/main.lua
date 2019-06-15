@@ -120,7 +120,6 @@ function checkDead()
     	if ((x > left - entity.birdsize) and (x < right + entity.birdsize)) then
     		local up = pipe.y + entity.pipegap - dy
     		local down = pipe.y - entity.pipegap + dy
-    		print(dy)
     		if (y < down) or (y > up) then
         		gameEnd()
     		end

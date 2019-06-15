@@ -1,7 +1,5 @@
 #include "App.h"
 
-#include <iostream>
-
 #include "ScriptBridge.h"
 
 E4::App::App(uint16_t width, uint16_t height, const std::string& folder) :

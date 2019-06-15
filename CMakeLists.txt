@@ -18,6 +18,10 @@ link_directories(library)
 find_package(glbinding REQUIRED)
 include_directories(${GLBINDING_INCLUDE_DIRS})
 
+IF (CMAKE_BUILD_TYPE STREQUAL Debug)
+    add_definitions(-DDEBUG)
+ENDIF()
+
 add_executable(app
         src/main.cpp
 

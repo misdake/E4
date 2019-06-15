@@ -53,8 +53,10 @@ void E4::GlRenderer::draw(const E4::Transform& transform, const E4::Drawable& dr
 }
 
 void E4::GlRenderer::checkError() {
+#ifdef DEBUG
     GLenum error = glGetError();
     if (error != GL_NO_ERROR) {
         std::cout << "error" << std::endl;
     }
+#endif
 }

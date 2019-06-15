@@ -38,6 +38,7 @@ bool E4::Window::create(const E4::WindowConfig& inConfig) {
         return false;
     }
     gGlContext = SDL_GL_CreateContext(gWindow);
+    SDL_GL_SetSwapInterval(1);
     if (gGlContext == nullptr) {
         std::cout << "Cannot create OpenGL context with error " << SDL_GetError() << std::endl;
         return false;
