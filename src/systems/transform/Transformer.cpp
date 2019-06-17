@@ -14,7 +14,7 @@ void update(E4::EcsCore& ecs, E4::Transform& transform, uint64_t frameIndex) {
     );
     if (transform.parent > 0) {
         auto& parentTransform = ecs.getComponent<E4::Transform>(transform.parent);
-        update(ecs, parentTransform, frameIndex);
+        update(ecs, parentTransform, frameIndex); //TODO check resursion
         E4::Mat4::multiply(parentTransform.worldTransform.mat4.get(), mat4, mat4);
     }
     transform.lastFrame = frameIndex;

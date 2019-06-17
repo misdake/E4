@@ -28,7 +28,7 @@ namespace E4 {
         Asset(AssetPool<T>& pool, uint32_t index) : pool(&pool), index(index) {}
 
     public:
-        static const uint32_t MAX_INDEX = std::numeric_limits<uint32_t>::max();
+        static const uint32_t MAX_INDEX = std::numeric_limits<uint32_t>::max(); //TODO use 0 as invalid index
 
         Asset() : pool(nullptr), index(MAX_INDEX) {}
 
