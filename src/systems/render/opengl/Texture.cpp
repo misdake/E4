@@ -1,8 +1,5 @@
-#include <utility>
-
 #include "Texture.h"
 
-#include <iostream>
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb/stb_image.h>
 #include <glbinding/gl/gl.h>
@@ -33,7 +30,7 @@ E4::Texture& E4::Texture::load(std::string nfolder, std::string nname) {
         glGenerateMipmap(GL_TEXTURE_2D);
         this->loaded = true;
     } else {
-        std::cout << "Failed to load texture " << filepath << std::endl;
+        Log::error("Failed to load texture %s", filepath.c_str());
         this->loaded = false;
     }
     stbi_image_free(data);

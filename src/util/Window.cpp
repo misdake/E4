@@ -1,9 +1,9 @@
 #include "Window.h"
+#include "Log.h"
 
 #include <SDL.h>
 #include <glbinding/glbinding.h>
 #include <sstream>
-#include <stdio.h>
 
 E4::Window::Window() : frameState{} {
     frameState.frameIndex = 0;
@@ -15,7 +15,7 @@ E4::Window::Window() : frameState{} {
 
     // initialize sdl
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) < 0) {
-        std::cout << "SDL cannot init with error " << SDL_GetError() << std::endl;
+        Log::error("SDL cannot init with error %s", SDL_GetError());
     }
 
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
@@ -34,13 +34,13 @@ bool E4::Window::create(const E4::WindowConfig& inConfig) {
     config = inConfig;
     gWindow = SDL_CreateWindow(config.title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, config.width, config.height, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
     if (gWindow == nullptr) {
-        std::cout << "Cannot create window with error " << SDL_GetError() << std::endl;
+        Log::error("Cannot create window with error %s", SDL_GetError());
         return false;
     }
     gGlContext = SDL_GL_CreateContext(gWindow);
     SDL_GL_SetSwapInterval(1);
     if (gGlContext == nullptr) {
-        std::cout << "Cannot create OpenGL context with error " << SDL_GetError() << std::endl;
+        Log::error("Cannot create OpenGL context with error %s", SDL_GetError());
         return false;
     }
 

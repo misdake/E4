@@ -1,6 +1,5 @@
 #include "Shader.h"
 
-#include <iostream>
 #include <sstream>
 #include <glbinding/gl/gl.h>
 using namespace gl;
@@ -39,7 +38,7 @@ uint32_t compileShader(GLenum shaderType, const std::string& content) {
                 break;
         }
 
-        printf("Compile failure in %s shader:\n%s\n", strShaderType, strInfoLog);
+        E4::Log::error("Compile failure in %s shader:\n%s\n", strShaderType, strInfoLog);
         delete[] strInfoLog;
     }
     return shaderId;
@@ -131,7 +130,7 @@ void E4::Shader::compile() {
 
         auto* strInfoLog = new GLchar[infoLogLength + 1];
         glGetProgramInfoLog(programId, infoLogLength, nullptr, strInfoLog);
-        printf("Linker failure: %s\n", strInfoLog);
+        Log::error("Linker failure: %s\n", strInfoLog);
         delete[] strInfoLog;
         return;
     }

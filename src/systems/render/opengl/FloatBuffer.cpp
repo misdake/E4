@@ -1,8 +1,9 @@
 #include "FloatBuffer.h"
 
-#include <iostream> //TODO
 #include <glbinding/gl/gl.h>
 using namespace gl;
+
+#include "../../../util/Log.h"
 
 E4::FloatBuffer::FloatBuffer(std::vector<float> array, uint32_t floatPerVertex, uint32_t countVertex) :
     array(std::move(array)),
@@ -17,8 +18,8 @@ E4::FloatBuffer::FloatBuffer() :
     countVertex(0) {
 }
 E4::FloatBuffer& E4::FloatBuffer::set(std::vector<float> narray, uint32_t nfloatPerVertex, uint32_t ncountVertex) {
-    if (bufferId > 0) { //TODO
-        std::cout << "abandoning uploaded buffer" << std::endl;
+    if (bufferId > 0) {
+        Log::error("abandoning uploaded buffer");
     }
     array = std::move(narray);
     bufferId = 0;
@@ -28,8 +29,8 @@ E4::FloatBuffer& E4::FloatBuffer::set(std::vector<float> narray, uint32_t nfloat
 }
 
 void E4::FloatBuffer::upload() {
-    if (bufferId > 0) { //TODO
-        std::cout << "abandoning uploaded buffer" << std::endl;
+    if (bufferId > 0) {
+        Log::error("abandoning uploaded buffer");
     }
     glGenVertexArrays(1, &bufferId);
     glBindBuffer(GL_ARRAY_BUFFER, bufferId);

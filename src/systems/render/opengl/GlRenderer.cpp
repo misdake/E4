@@ -1,6 +1,5 @@
 #include "GlRenderer.h"
 
-#include <iostream>
 #include <glbinding/gl/gl.h>
 using namespace gl;
 
@@ -56,7 +55,7 @@ void E4::GlRenderer::checkError() {
 #ifdef DEBUG
     GLenum error = glGetError();
     if (error != GL_NO_ERROR) {
-        std::cout << "error" << std::endl;
+        Log::error("glerror");
     }
 #endif
 }

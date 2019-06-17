@@ -5,18 +5,15 @@
 #include <cstdint>
 #include <limits>
 #include <map>
-#include <iostream> //TODO
+#include <string>
+#include "../util/Log.h"
 
 namespace E4 {
 
     template<typename T>
-    class AssetLoader;
-
-    template<typename T>
     class AssetPool;
-
     template<typename T>
-    class Asset;
+    class AssetLoader;
 
     template<typename T>
     class Asset {
@@ -69,8 +66,7 @@ namespace E4 {
                 empty.push_back(p.index);
                 p.index = Asset<T>::MAX_INDEX;
             } else {
-                //TODO error
-                std::cout << "free an invalid pointer" << std::endl;
+                Log::error("free an invalid pointer");
             }
         }
     };
@@ -126,8 +122,7 @@ namespace E4 {
                 map.erase(names[p.index]);
                 names[p.index] = "";
             } else {
-                //TODO error
-                std::cout << "asset not found" << std::endl;
+                Log::error("asset not found");
             }
         }
     };
@@ -142,8 +137,7 @@ namespace E4 {
         if (index < MAX_INDEX && index < pool->array.size()) {
             return pool->array[index];
         } else {
-            //TODO error
-            std::cout << "access an invalid pointer" << std::endl;
+            Log::error("free an invalid pointer");
             return pool->array[index];
         }
     }
@@ -153,8 +147,7 @@ namespace E4 {
         if (index < MAX_INDEX && index < pool->array.size()) {
             return pool->array[index];
         } else {
-            //TODO error
-            std::cout << "access an invalid pointer" << std::endl;
+            Log::error("free an invalid pointer");
             return pool->array[index];
         }
     }

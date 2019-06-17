@@ -55,10 +55,12 @@ add_executable(app
         src/util/Window.cpp src/util/Window.h
         src/util/InputState.cpp src/util/InputState.h
         src/util/FrameState.h
+        src/util/Log.cpp src/util/Log.h
 
         src/math/Mat4.cpp src/math/Mat4.h
         src/math/Vec3.cpp src/math/Vec3.h
-        src/math/Color.cpp src/math/Color.h)
+        src/math/Color.cpp src/math/Color.h
+        )
 target_link_libraries(app lua53 ${SDL2_LIBRARY} ${GLBINDING_LIBRARIES})
 
 #output executable

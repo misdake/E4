@@ -1,8 +1,9 @@
 #include "ShortBuffer.h"
 
-#include <iostream> //TODO
 #include <glbinding/gl/gl.h>
 using namespace gl;
+
+#include "../../../util/Log.h"
 
 E4::ShortBuffer::ShortBuffer(std::vector<uint16_t> array, uint32_t countIndices) :
     array(std::move(array)),
@@ -15,8 +16,8 @@ E4::ShortBuffer::ShortBuffer() :
     countIndices(0) {
 }
 E4::ShortBuffer& E4::ShortBuffer::set(std::vector<uint16_t> narray, uint32_t ncountIndices) {
-    if (bufferId > 0) { //TODO
-        std::cout << "abandoning uploaded buffer" << std::endl;
+    if (bufferId > 0) {
+        Log::error("abandoning uploaded buffer");
     }
     array = std::move(narray);
     bufferId = 0;
@@ -25,8 +26,8 @@ E4::ShortBuffer& E4::ShortBuffer::set(std::vector<uint16_t> narray, uint32_t nco
 }
 
 void E4::ShortBuffer::upload() {
-    if (bufferId > 0) { //TODO
-        std::cout << "abandoning uploaded buffer" << std::endl;
+    if (bufferId > 0) {
+        Log::error("abandoning uploaded buffer");
     }
     glGenVertexArrays(1, &bufferId);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferId);

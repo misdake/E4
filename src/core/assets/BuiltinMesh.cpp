@@ -1,10 +1,12 @@
 #include "BuiltinMesh.h"
 
+#include "../../util/Log.h"
+
 E4::Asset<E4::Mesh> E4::BuiltinMeshLoader::create(const std::string& meshName, E4::AssetPool<E4::Mesh>& pool) {
     if (meshName.rfind("builtin:plane", 0) == 0) {
         return createPlane(pool);
     } else {
-        //TODO report error
+        Log::error("create mesh with unknown name %s", meshName.c_str());
         return Asset<Mesh>();
     }
 }
