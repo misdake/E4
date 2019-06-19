@@ -9,11 +9,6 @@ namespace E4 {
         bool loaded;
         Asset<ScriptFile> file;
         //TODO script attributes
-
-        Script() :
-            loaded(false),
-            file() {
-        }
     };
 
 }

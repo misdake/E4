@@ -5,15 +5,15 @@
 
 void E4::ScriptBridge::load(App& app, sol::state& lua, Ecs& ecs) {
     lua["createEntity"] = [&lua, &ecs]() {
-        uint64_t id = ecs.newEntity().id;
-        lua["entities"][id] = lua.create_table_with("id", id);
-        return id;
+        Entity& e = ecs.newEntity();
+        lua["entities"][e.index] = lua.create_table_with("index", e.index);
+        return e.id;
     };
-    lua["createTransform"] = [&](uint64_t id) {
-        auto& transform = ecs.create<Transform>(ecs.getEntityById(id));
+    lua["createTransform"] = [&](uint32_t index) {
+        auto& transform = ecs.create<Transform>(ecs.getEntityByIndex(index));
         transform.sx = transform.sy = transform.sz = 1;
         transform.worldTransform.mat4 = app.mat4.alloc();
-        lua["entities"][id]["transform"] = std::ref<Transform>(transform);
+        lua["entities"][index]["transform"] = std::ref<Transform>(transform);
         return std::ref<Transform>(transform);
     };
 
@@ -38,25 +38,19 @@ void E4::ScriptBridge::load(App& app, sol::state& lua, Ecs& ecs) {
         }
     };
 
-    lua["createDrawable"] = [&](uint64_t id) {
-        auto& drawable = ecs.create<Drawable>(ecs.getEntityById(id));
-        lua["entities"][id]["drawable"] = std::ref<Drawable>(drawable);
+    lua["createDrawable"] = [&](uint32_t index) {
+        auto& drawable = ecs.create<Drawable>(ecs.getEntityByIndex(index));
+        lua["entities"][index]["drawable"] = std::ref<Drawable>(drawable);
         return std::ref<Drawable>(drawable);
     };
 
-    lua["createScript"] = [&](uint64_t id, std::string scriptName) {
-        auto& script = ecs.create<Script>(ecs.getEntityById(id));
+    lua["createScript"] = [&](uint32_t index, std::string scriptName) {
+        auto& script = ecs.create<Script>(ecs.getEntityByIndex(index));
         script.loaded = false;
         script.file = app.scripts.get(scriptName);
-        lua["entities"][id]["script"] = std::ref<Script>(script);
+        lua["entities"][index]["script"] = std::ref<Script>(script);
         return std::ref<Script>(script);
     };
-
-    lua.script(R"(
-        function mouse1down()
-            return (not inputStatePrev.mouseButton1) and (inputStateCurr.mouseButton1)
-        end
-    )");
 
     lua.script(R"(
         function prepareEntity(id)

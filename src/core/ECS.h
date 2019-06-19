@@ -165,6 +165,9 @@ namespace E4 {
         EntityCore<TYPES...>& getEntityById(uint64_t id) {
             return entities.get(entityIds[id]);
         }
+        EntityCore<TYPES...>& getEntityByIndex(uint32_t index) {
+            return entities.get(index);
+        }
         void deleteEntity(EntityCore<TYPES...>& entity) {
             (this->EcsBase<TYPES...>::template remove<TYPES>(entity), ...);
             entityIds.erase(entity.id);
