@@ -1,12 +1,11 @@
 #pragma once
 
+#include "../../core/ECS.h"
 #include "opengl/Shaders.h"
 #include "opengl/GlRenderer.h"
 #include "../../util/FrameState.h"
 
 namespace E4 {
-
-    class EcsCore;
 
     class Renderer {
     public:
@@ -20,7 +19,7 @@ namespace E4 {
         void init();
         void resize(int w, int h);
 
-        void run(EcsCore& ecs, const E4::FrameState& state);
+        void run(Ecs& ecs, const E4::FrameState& state);
     };
 
 }

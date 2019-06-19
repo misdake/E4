@@ -20,7 +20,7 @@ namespace E4 {
         Window window;
 
         //ecs
-        EcsCore ecs;
+        Ecs ecs;
 
         //systems
         Transformer transform;
@@ -28,6 +28,7 @@ namespace E4 {
         ScriptRunner scriptRunner;
 
         //resources
+        AssetPool<Mat4> mat4;
         AssetPool<Mesh> meshes;
         AssetPool<Material> materials;
         AssetLoader<Texture> textures;

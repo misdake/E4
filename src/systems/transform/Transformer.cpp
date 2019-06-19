@@ -1,9 +1,8 @@
 #include "Transformer.h"
 
-#include "../../core/ECS.h"
 #include "../../components/Transform.h"
 
-void update(E4::EcsCore& ecs, E4::Transform& transform, uint64_t frameIndex) {
+void update(E4::Ecs& ecs, E4::Transform& transform, uint64_t frameIndex) {
     if (transform.lastFrame == frameIndex) return;
 
     E4::Mat4& mat4 = transform.worldTransform.mat4.get();
@@ -13,15 +12,15 @@ void update(E4::EcsCore& ecs, E4::Transform& transform, uint64_t frameIndex) {
         transform.sx, transform.sy, transform.sz
     );
     if (transform.parent > 0) {
-        auto& parentTransform = ecs.getComponent<E4::Transform>(transform.parent);
+        auto& parentTransform = ecs.get<E4::Transform>(ecs.getEntityById(transform.parent));
         update(ecs, parentTransform, frameIndex); //TODO check resursion
         E4::Mat4::multiply(parentTransform.worldTransform.mat4.get(), mat4, mat4);
     }
     transform.lastFrame = frameIndex;
 }
 
-void E4::Transformer::run(E4::EcsCore& ecs, E4::FrameState frameState) {
-    ecs.view<Transform>().each([&](Transform& position) {
+void E4::Transformer::run(E4::Ecs& ecs, E4::FrameState frameState) {
+    ecs.fortype<Transform>([&](Entity& entity, Transform& position) {
         update(ecs, position, frameState.frameIndex);
     });
 }

@@ -1,14 +1,13 @@
 #pragma once
 
+#include "../../core/ECS.h"
 #include "../../util/FrameState.h"
 
 namespace E4 {
 
-    class EcsCore;
-
     class Transformer {
     public:
-        void run(EcsCore& ecs, FrameState frameState);
+        void run(Ecs& ecs, FrameState frameState);
     };
 
 }

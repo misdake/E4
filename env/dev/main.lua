@@ -1,4 +1,3 @@
-
 function load()
 	print("load "..entity.id)
 
@@ -9,7 +8,6 @@ end
 
 function update()
 	-- print("update "..entity.id)
-	requestTransform(entity.id)
 
     if not inputStatePrev.mouseButton1 and inputStateCurr.mouseButton1 then
         entity.x = inputStateCurr.mouseX
@@ -24,11 +22,9 @@ function update()
     end
 
     if not inputStatePrev.mouseButton2 and inputStateCurr.mouseButton2 then
-	    requestDrawable(entity.id)
 	    entity.drawable.material = newMaterialTexture("footprint.png")
     end
     if not inputStatePrev.mouseButton3 and inputStateCurr.mouseButton3 then
-	    requestDrawable(entity.id)
 	    entity.drawable.material = newMaterialTexture("favicon.png")
     end
 

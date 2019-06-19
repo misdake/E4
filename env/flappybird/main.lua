@@ -60,8 +60,6 @@ end
 
 function updatePipe(index)
     local pipe = entity.pipes[index]
-    requestTransform(pipe.pipe1)
-    requestTransform(pipe.pipe2)
     local t1 = entities[pipe.pipe1].transform
     local t2 = entities[pipe.pipe2].transform
     t1.x = pipe.x
@@ -85,7 +83,6 @@ end
 
 function load()
     gameLoad()
-    requestTransform(entity.id)
     entity.transform.sx = screenHeight / screenWidth
     entity.bird = createChild(-0.5, 0.5, 0.25, "flappybird.png")
 
@@ -129,8 +126,6 @@ function checkDead()
 end
 
 function update()
-    requestTransform(entity.bird)
-
     updatePipe(0)
     updatePipe(1)
     updatePipe(2)

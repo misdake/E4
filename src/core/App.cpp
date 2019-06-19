@@ -25,17 +25,14 @@ void E4::App::load(const std::function<void(App&)>& onLoaded) {
     renderer.init();
     renderer.resize(width, height);
 
-    ecs.state = scriptRunner.state;
-    ecs.createEntity(); //make the '0' object
-
-    ScriptBridge::load(*this, *ecs.state, ecs);
+    ScriptBridge::load(*this, *scriptRunner.state, ecs);
 
     onLoaded(*this);
 }
 
 void E4::App::enterLoop(const std::function<void(E4::App&, const E4::FrameState&)>& onFrame) {
     window.enterEventLoop([&onFrame, this](const FrameState& frameState) -> void {
-        ScriptBridge::update(*this, *ecs.state, ecs);
+        ScriptBridge::update(*this, *scriptRunner.state, ecs, frameState);
 
         onFrame(*this, frameState);
 
