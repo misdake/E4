@@ -13,7 +13,7 @@ function createChild(x, y, size, textureName)
     transform.z = 0;
     transform.sx = size;
     transform.sy = size;
-    transform.parent = entity.id;
+    transform.parent = entity.index;
     local drawable = createDrawable(e)
     drawable.mesh = newMesh("builtin:plane")
     drawable.material = newMaterialTexture(textureName)

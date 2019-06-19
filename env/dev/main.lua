@@ -1,13 +1,13 @@
 function load()
-	print("load "..entity.id)
+	print("load "..entity.index)
 
-    local drawable = createDrawable(entity.id)
+    local drawable = createDrawable(entity.index)
     drawable.mesh = newMesh("builtin:plane")
     drawable.material = newMaterialTexture("street.jpg")
 end
 
 function update()
-	-- print("update "..entity.id)
+	-- print("update "..entity.index)
 
     if not inputStatePrev.mouseButton1 and inputStateCurr.mouseButton1 then
         entity.x = inputStateCurr.mouseX
