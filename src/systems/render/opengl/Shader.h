@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "DataType.h"
+#include "../Environment.h"
 
 namespace E4 {
     class AttributeSlot;
@@ -34,7 +35,7 @@ namespace E4 {
 
         Shader(std::string vsMain, std::string psMain);
         void use();
-        virtual void bind(GlRenderer& renderer, const Transform& transform, const Drawable& drawable) = 0;
+        virtual void bind(GlRenderer& renderer, const Transform& transform, const Drawable& drawable, const E4::Environment& environment) = 0;
 
     private:
         void compile();

@@ -2,6 +2,7 @@
 
 #include "UniformSlot.h"
 #include "AttributeSlot.h"
+#include "../Environment.h"
 
 namespace E4 {
 
@@ -22,7 +23,7 @@ namespace E4 {
 
         void clear();
 
-        void draw(const Transform& transform, const Drawable& drawable);
+        void draw(const Transform& transform, const Drawable& drawable, const E4::Environment& environment);
 
         void checkError();
     };

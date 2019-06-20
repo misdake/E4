@@ -20,7 +20,7 @@ E4::ShaderBasic::ShaderBasic(GlRenderer& renderer) : Shader(ShaderBasic_VS, Shad
     addPixelUniform(renderer.uniformSlots.color);
 }
 
-void E4::ShaderBasic::bind(GlRenderer& renderer, const Transform& transform, const E4::Drawable& drawable) {
+void E4::ShaderBasic::bind(GlRenderer& renderer, const Transform& transform, const Drawable& drawable, const E4::Environment& environment) {
     const Mesh& mesh = drawable.mesh.get();
     const Material& material = drawable.material.get();
 
@@ -47,7 +47,7 @@ E4::ShaderTexture::ShaderTexture(GlRenderer& renderer) : Shader(ShaderTexture_VS
     addVarying("vTexcoord", E4::ShaderDataType::VEC2);
 }
 
-void E4::ShaderTexture::bind(GlRenderer& renderer, const Transform& transform, const E4::Drawable& drawable) {
+void E4::ShaderTexture::bind(GlRenderer& renderer, const Transform& transform, const Drawable& drawable, const E4::Environment& environment) {
     const Mesh& mesh = drawable.mesh.get();
     const Material& material = drawable.material.get();
 

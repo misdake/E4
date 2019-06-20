@@ -31,14 +31,14 @@ void E4::GlRenderer::clear() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void E4::GlRenderer::draw(const E4::Transform& transform, const E4::Drawable& drawable) {
+void E4::GlRenderer::draw(const Transform& transform, const Drawable& drawable, const E4::Environment& environment) {
     checkError();
 
     if (!drawable.material.valid() || !drawable.mesh.valid()) return;
 
     const Material& material = drawable.material.get();
     material.shader->use();
-    material.shader->bind(*this, transform, drawable);
+    material.shader->bind(*this, transform, drawable, environment);
 
     const ShortBuffer& indexBuffer = drawable.mesh->index;
     if (indexBuffer.countIndices > 0) {

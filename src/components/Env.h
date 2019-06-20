@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../systems/render/opengl/DataType.h"
+
 namespace E4 {
 
     enum class LightType {

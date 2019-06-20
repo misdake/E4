@@ -65,7 +65,7 @@ add_executable(app
         src/math/Mat4.cpp src/math/Mat4.h
         src/math/Vec3.cpp src/math/Vec3.h
         src/math/Color.cpp src/math/Color.h
-        )
+        src/systems/render/Environment.cpp src/systems/render/Environment.h)
 target_link_libraries(app lua53 ${SDL2_LIBRARY} ${GLBINDING_LIBRARIES})
 
 #output executable
