@@ -1,9 +1,9 @@
-#include "BuiltinMesh.h"
+#include "MeshLoader_builtin.h"
 
-#include "../../util/Log.h"
+#include "../util/Log.h"
 
-E4::Asset<E4::Mesh> E4::BuiltinMeshLoader::create(const std::string& meshName, E4::AssetPool<E4::Mesh>& pool) {
-    if (meshName.rfind("builtin:plane", 0) == 0) {
+E4::Asset<E4::Mesh> E4::MeshLoader_builtin::create(const std::string& meshName, E4::AssetPool<E4::Mesh>& pool) {
+    if (meshName.rfind("plane", 0) == 0) {
         return createPlane(pool);
     } else {
         Log::error("create mesh with unknown name %s", meshName.c_str());
@@ -11,7 +11,7 @@ E4::Asset<E4::Mesh> E4::BuiltinMeshLoader::create(const std::string& meshName, E
     }
 }
 
-E4::Asset<E4::Mesh> E4::BuiltinMeshLoader::createPlane(AssetPool<Mesh>& pool) {
+E4::Asset<E4::Mesh> E4::MeshLoader_builtin::createPlane(AssetPool<Mesh>& pool) {
     std::vector<float> position = {
         0.5f, 0.5f, 0.0f,
         0.5f, -0.5f, 0.0f,

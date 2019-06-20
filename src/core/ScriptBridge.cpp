@@ -3,6 +3,14 @@
 #include "Lua.h"
 #include "App.h"
 
+static bool endsWith(const std::string& str, const std::string& suffix) {
+    return str.size() >= suffix.size() && 0 == str.compare(str.size() - suffix.size(), suffix.size(), suffix);
+}
+
+static bool startsWith(const std::string& str, const std::string& prefix) {
+    return str.size() >= prefix.size() && 0 == str.compare(0, prefix.size(), prefix);
+}
+
 void E4::ScriptBridge::load(App& app, sol::state& lua, Ecs& ecs) {
     lua["createEntity"] = [&lua, &ecs]() {
         Entity& e = ecs.newEntity();
@@ -29,13 +37,20 @@ void E4::ScriptBridge::load(App& app, sol::state& lua, Ecs& ecs) {
         material->shader = &app.renderer.shaderBasic;
         return material;
     };
+
     lua["newMesh"] = [&](std::string meshName) {
-        if (meshName.rfind("builtin:", 0) == 0) {
-            return app.meshLoader.create(meshName, app.meshes);
-        } else {
-            //TODO load from file
-            return Asset<Mesh>();
+        static const std::string prefix_builtin = "builtin:";
+        static const uint64_t prefix_builtin_len = prefix_builtin.length();
+        static const std::string prefix_file = "file:";
+        static const uint64_t prefix_file_len = prefix_file.length();
+        if (startsWith(meshName, prefix_builtin)) {
+            return app.meshLoader_builtin.create(meshName.substr(prefix_builtin_len), app.meshes);
+        } else if (startsWith(meshName, prefix_file)) {
+            if (endsWith(meshName, ".obj")) {
+                return app.meshLoader_obj.create(app.folder, meshName.substr(prefix_file_len), app.meshes);
+            }
         }
+        return Asset<Mesh>();
     };
 
     lua["createDrawable"] = [&](uint32_t index) {

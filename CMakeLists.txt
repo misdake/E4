@@ -30,7 +30,10 @@ add_executable(app
         src/core/ECS.cpp  src/core/ECS.h
         src/core/Lua.h
         src/core/ScriptBridge.cpp src/core/ScriptBridge.h
-        src/core/assets/BuiltinMesh.cpp src/core/assets/BuiltinMesh.h
+
+        src/assets/MeshLoader_builtin.cpp src/assets/MeshLoader_builtin.h
+        src/assets/MeshLoader_obj.cpp src/assets/MeshLoader_obj.h
+        src/assets/ObjFileLoader.cpp src/assets/ObjFileLoader.h
 
         src/components/Components.h
         src/components/Transform.h

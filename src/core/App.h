@@ -11,7 +11,8 @@
 #include "../systems/script/ScriptRunner.h"
 
 #include "../util/Window.h"
-#include "assets/BuiltinMesh.h"
+#include "../assets/MeshLoader_builtin.h"
+#include "../assets/MeshLoader_obj.h"
 
 namespace E4 {
 
@@ -33,7 +34,8 @@ namespace E4 {
         AssetPool<Material> materials;
         AssetLoader<Texture> textures;
         AssetLoader<ScriptFile> scripts;
-        BuiltinMeshLoader meshLoader;
+        MeshLoader_builtin meshLoader_builtin;
+        MeshLoader_obj meshLoader_obj;
 
         uint16_t width;
         uint16_t height;
