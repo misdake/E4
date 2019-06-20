@@ -5,9 +5,11 @@
 
 namespace E4 {
 
+    class App;
+
     class MeshLoader_obj {
     public:
-        Asset<Mesh> create(const std::string& folder, const std::string& filename, AssetPool<Mesh>& pool);
+        uint64_t create(const std::string& folder, const std::string& filename, App& app);
     };
 
 }

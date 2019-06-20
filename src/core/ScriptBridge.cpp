@@ -7,6 +7,9 @@ void E4::ScriptBridge::load(App& app, sol::state& lua, Ecs& ecs) {
     lua["newEntity"] = [&app]() {
         return app.scene.newEntity().index;
     };
+    lua["newEntityFromFile"] = [&app](std::string modelName) {
+        return app.scene.newEntityFromFile(modelName).index;
+    };
 
     lua["createTransform"] = [&app](uint32_t index) {
         return app.scene.createTransform(index);

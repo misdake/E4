@@ -12,7 +12,7 @@ void update(E4::Ecs& ecs, E4::Transform& transform, uint64_t frameIndex) {
         transform.sx, transform.sy, transform.sz
     );
     if (transform.parent > 0) {
-        auto& parentTransform = ecs.get<E4::Transform>(ecs.getEntityById(transform.parent));
+        auto& parentTransform = ecs.get<E4::Transform>(ecs.getEntityByIndex(transform.parent));
         update(ecs, parentTransform, frameIndex); //TODO check resursion
         E4::Mat4::multiply(parentTransform.worldTransform.mat4.get(), mat4, mat4);
     }

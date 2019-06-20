@@ -21,8 +21,7 @@ namespace E4 {
         void init(App* app, sol::state* lua, Ecs* ecs);
 
         Entity& newEntity();
-        Entity& getEntityById(uint64_t id);
-        Entity& getEntityByIndex(uint32_t index);
+        Entity& newEntityFromFile(const std::string& modelName);
         std::reference_wrapper<Transform> createTransform(Entity& entity);
         std::reference_wrapper<Transform> createTransform(uint32_t index);
         std::reference_wrapper<Drawable> createDrawable(Entity& entity);
@@ -31,7 +30,7 @@ namespace E4 {
         std::reference_wrapper<Script> createScript(uint32_t index, const std::string& scriptName);
         Asset<Material> newMaterialTexture(const std::string& textureName);
         Asset<Material> newMaterialColor(const std::string& color);
-        Asset<Mesh> newMesh(std::string meshName);
+        Asset<Mesh> newMesh(const std::string& meshName);
     };
 
 }

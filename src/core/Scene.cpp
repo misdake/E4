@@ -3,6 +3,14 @@
 #include "Lua.h"
 #include "App.h"
 
+static bool endsWith(const std::string& str, const std::string& suffix) {
+    return str.size() >= suffix.size() && 0 == str.compare(str.size() - suffix.size(), suffix.size(), suffix);
+}
+
+static bool startsWith(const std::string& str, const std::string& prefix) {
+    return str.size() >= prefix.size() && 0 == str.compare(0, prefix.size(), prefix);
+}
+
 void E4::Scene::init(E4::App* _app, sol::state* _lua, E4::Ecs* _ecs) {
     app = _app;
     state = _lua;
@@ -15,11 +23,13 @@ E4::Entity& E4::Scene::newEntity() {
     lua["entities"][e.index] = lua.create_table_with("index", e.index);
     return e;
 }
-E4::Entity& E4::Scene::getEntityById(uint64_t id) {
-    return ecs->getEntityById(id);
-}
-E4::Entity& E4::Scene::getEntityByIndex(uint32_t index) {
-    return ecs->getEntityByIndex(index);
+E4::Entity& E4::Scene::newEntityFromFile(const std::string& modelName) {
+    if (endsWith(modelName, ".obj")) {
+        uint64_t entityId = app->meshLoader_obj.create(app->folder, modelName, *app);
+        return ecs->getEntityById(entityId);
+    }
+    Log::error("newEntityFromFile: unknown model format, %s", modelName.c_str());
+    return ecs->getEntityById(0);
 }
 
 std::reference_wrapper<E4::Transform> E4::Scene::createTransform(E4::Entity& entity) {
@@ -69,25 +79,12 @@ E4::Asset<E4::Material> E4::Scene::newMaterialColor(const std::string& color) {
     return material;
 }
 
-static bool endsWith(const std::string& str, const std::string& suffix) {
-    return str.size() >= suffix.size() && 0 == str.compare(str.size() - suffix.size(), suffix.size(), suffix);
-}
-
-static bool startsWith(const std::string& str, const std::string& prefix) {
-    return str.size() >= prefix.size() && 0 == str.compare(0, prefix.size(), prefix);
-}
-
-E4::Asset<E4::Mesh> E4::Scene::newMesh(std::string meshName) {
+E4::Asset<E4::Mesh> E4::Scene::newMesh(const std::string& meshName) {
     static const std::string prefix_builtin = "builtin:";
     static const uint64_t prefix_builtin_len = prefix_builtin.length();
-    static const std::string prefix_file = "file:";
-    static const uint64_t prefix_file_len = prefix_file.length();
     if (startsWith(meshName, prefix_builtin)) {
         return app->meshLoader_builtin.create(meshName.substr(prefix_builtin_len), app->meshes);
-    } else if (startsWith(meshName, prefix_file)) {
-        if (endsWith(meshName, ".obj")) {
-            return app->meshLoader_obj.create(app->folder, meshName.substr(prefix_file_len), app->meshes);
-        }
     }
+    Log::error("newMesh: unknown mesh, %s", meshName.c_str());
     return Asset<Mesh>();
 }
