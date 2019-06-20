@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ECS.h"
+#include "Scene.h"
 
 #include "Asset.h"
 #include "../components/Drawable.h"
@@ -22,6 +23,7 @@ namespace E4 {
 
         //ecs
         Ecs ecs;
+        Scene scene;
 
         //systems
         Transformer transform;

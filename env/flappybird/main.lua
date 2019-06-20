@@ -6,7 +6,7 @@ function mouse3()
 end
 
 function createChild(x, y, size, textureName)
-    local e = createEntity()
+    local e = newEntity()
     local transform = createTransform(e)
     transform.x = x;
     transform.y = y;

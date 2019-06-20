@@ -12,11 +12,15 @@ int main(int argc, char* argv[]) {
     E4::App app(500, 500, folder);
 
     app.load([](E4::App& app) {
-        app.scriptRunner.run(R"(
-            local e = createEntity()
-            createTransform(e)
-            createScript(e, "main.lua")
-        )");
+        E4::Entity& e = app.scene.newEntity();
+        app.scene.createTransform(e);
+        app.scene.createScript(e, "main.lua");
+
+//        app.scriptRunner.run(R"(
+//            local e = newEntity()
+//            createTransform(e)
+//            createScript(e, "main.lua")
+//        )");
     });
 
     app.enterLoop([](E4::App& app, const E4::FrameState& frameState) {

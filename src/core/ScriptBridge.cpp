@@ -3,68 +3,30 @@
 #include "Lua.h"
 #include "App.h"
 
-static bool endsWith(const std::string& str, const std::string& suffix) {
-    return str.size() >= suffix.size() && 0 == str.compare(str.size() - suffix.size(), suffix.size(), suffix);
-}
-
-static bool startsWith(const std::string& str, const std::string& prefix) {
-    return str.size() >= prefix.size() && 0 == str.compare(0, prefix.size(), prefix);
-}
-
 void E4::ScriptBridge::load(App& app, sol::state& lua, Ecs& ecs) {
-    lua["createEntity"] = [&lua, &ecs]() {
-        Entity& e = ecs.newEntity();
-        lua["entities"][e.index] = lua.create_table_with("index", e.index);
-        return e.id;
-    };
-    lua["createTransform"] = [&](uint32_t index) {
-        auto& transform = ecs.create<Transform>(ecs.getEntityByIndex(index));
-        transform.sx = transform.sy = transform.sz = 1;
-        transform.worldTransform.mat4 = app.mat4.alloc();
-        lua["entities"][index]["transform"] = std::ref<Transform>(transform);
-        return std::ref<Transform>(transform);
+    lua["newEntity"] = [&app]() {
+        return app.scene.newEntity().index;
     };
 
-    lua["newMaterialTexture"] = [&](std::string textureName) {
-        Asset<Material> material = app.materials.alloc();
-        material->texture = app.textures.get(textureName);
-        material->shader = &app.renderer.shaderTexture;
-        return material;
+    lua["createTransform"] = [&app](uint32_t index) {
+        return app.scene.createTransform(index);
     };
-    lua["newMaterialColor"] = [&](std::string color) {
-        Asset<Material> material = app.materials.alloc();
-        material->color.color.set(color);
-        material->shader = &app.renderer.shaderBasic;
-        return material;
-    };
-
-    lua["newMesh"] = [&](std::string meshName) {
-        static const std::string prefix_builtin = "builtin:";
-        static const uint64_t prefix_builtin_len = prefix_builtin.length();
-        static const std::string prefix_file = "file:";
-        static const uint64_t prefix_file_len = prefix_file.length();
-        if (startsWith(meshName, prefix_builtin)) {
-            return app.meshLoader_builtin.create(meshName.substr(prefix_builtin_len), app.meshes);
-        } else if (startsWith(meshName, prefix_file)) {
-            if (endsWith(meshName, ".obj")) {
-                return app.meshLoader_obj.create(app.folder, meshName.substr(prefix_file_len), app.meshes);
-            }
-        }
-        return Asset<Mesh>();
-    };
-
-    lua["createDrawable"] = [&](uint32_t index) {
-        auto& drawable = ecs.create<Drawable>(ecs.getEntityByIndex(index));
-        lua["entities"][index]["drawable"] = std::ref<Drawable>(drawable);
-        return std::ref<Drawable>(drawable);
+    lua["createDrawable"] = [&app](uint32_t index) {
+        return app.scene.createDrawable(index);
     };
 
     lua["createScript"] = [&](uint32_t index, std::string scriptName) {
-        auto& script = ecs.create<Script>(ecs.getEntityByIndex(index));
-        script.loaded = false;
-        script.file = app.scripts.get(scriptName);
-        lua["entities"][index]["script"] = std::ref<Script>(script);
-        return std::ref<Script>(script);
+        return app.scene.createScript(index, scriptName);
+    };
+
+    lua["newMaterialTexture"] = [&app](std::string textureName) {
+        return app.scene.newMaterialTexture(textureName);
+    };
+    lua["newMaterialColor"] = [&app](std::string color) {
+        return app.scene.newMaterialColor(color);
+    };
+    lua["newMesh"] = [&app](std::string meshName) {
+        return app.scene.newMesh(meshName);
     };
 
     lua.script(R"(

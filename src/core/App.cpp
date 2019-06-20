@@ -7,7 +7,8 @@ E4::App::App(uint16_t width, uint16_t height, const std::string& folder) :
     height(height),
     textures(folder),
     scripts(folder),
-    folder(folder) {
+    folder(folder),
+    scene() {
 
 }
 
@@ -24,6 +25,8 @@ void E4::App::load(const std::function<void(App&)>& onLoaded) {
 
     renderer.init();
     renderer.resize(width, height);
+
+    scene.init(this, scriptRunner.state, &ecs);
 
     ScriptBridge::load(*this, *scriptRunner.state, ecs);
 

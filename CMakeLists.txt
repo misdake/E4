@@ -28,6 +28,7 @@ add_executable(app
         src/core/App.cpp src/core/App.h
         src/core/Asset.cpp src/core/Asset.h
         src/core/ECS.cpp  src/core/ECS.h
+        src/core/Scene.cpp src/core/Scene.h
         src/core/Lua.h
         src/core/ScriptBridge.cpp src/core/ScriptBridge.h
 
