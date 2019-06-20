@@ -66,6 +66,20 @@ std::reference_wrapper<E4::Script> E4::Scene::createScript(uint32_t index, const
     return createScript(ecs->getEntityByIndex(index), scriptName);
 }
 
+std::reference_wrapper<E4::Env> E4::Scene::createEnv(E4::Entity& entity, const std::string& color) {
+    sol::state& lua = *state;
+    auto& env = ecs->create<Env>(entity);
+    env.light.enabled = true;
+    env.light.lightType = LightType::DIRECTIONAL;
+    env.light.direction.set(0.707, 0.707, 0); //TODO lua accessable
+    env.light.color.color.set(color);
+    lua["entities"][entity.index]["env"] = std::ref<Env>(env);
+    return std::ref<Env>(env);
+}
+std::reference_wrapper<E4::Env> E4::Scene::createEnv(uint32_t index, const std::string& color) {
+    return createEnv(ecs->getEntityByIndex(index), color);
+}
+
 E4::Asset<E4::Material> E4::Scene::newMaterialTexture(const std::string& textureName) {
     Asset<Material> material = app->materials.alloc();
     material->texture = app->textures.get(textureName);

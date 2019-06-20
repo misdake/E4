@@ -17,9 +17,11 @@ void E4::ScriptBridge::load(App& app, sol::state& lua, Ecs& ecs) {
     lua["createDrawable"] = [&app](uint32_t index) {
         return app.scene.createDrawable(index);
     };
-
     lua["createScript"] = [&](uint32_t index, std::string scriptName) {
         return app.scene.createScript(index, scriptName);
+    };
+    lua["createEnv"] = [&](uint32_t index, std::string color) {
+        return app.scene.createEnv(index, color);
     };
 
     lua["newMaterialTexture"] = [&app](std::string textureName) {

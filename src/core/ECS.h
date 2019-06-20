@@ -191,7 +191,7 @@ namespace E4 {
         }
     };
 
-    using Ecs = EcsCore<Transform, Drawable, Script>;
-    using Entity = EntityCore<Transform, Drawable, Script>;
+    using Ecs = EcsCore<Transform, Drawable, Script, Env>;
+    using Entity = EntityCore<Transform, Drawable, Script, Env>;
 
 }

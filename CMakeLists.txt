@@ -40,6 +40,7 @@ add_executable(app
         src/components/Transform.h
         src/components/Drawable.h
         src/components/Script.h
+        src/components/Env.h
 
         src/systems/transform/Transformer.cpp src/systems/transform/Transformer.h
         src/systems/render/Renderer.cpp src/systems/render/Renderer.h

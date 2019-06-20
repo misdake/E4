@@ -28,6 +28,8 @@ namespace E4 {
         std::reference_wrapper<Drawable> createDrawable(uint32_t index);
         std::reference_wrapper<Script> createScript(Entity& entity, const std::string& scriptName);
         std::reference_wrapper<Script> createScript(uint32_t index, const std::string& scriptName);
+        std::reference_wrapper<Env> createEnv(Entity& entity, const std::string& color);
+        std::reference_wrapper<Env> createEnv(uint32_t index, const std::string& color);
         Asset<Material> newMaterialTexture(const std::string& textureName);
         Asset<Material> newMaterialColor(const std::string& color);
         Asset<Mesh> newMesh(const std::string& meshName);

@@ -2,6 +2,7 @@ function load()
     entity.transform.sx = 0.3
     entity.transform.sy = 0.3
     entity.transform.sz = 0.3
+    entity.transform.y = -0.5
 
     local e = newEntityFromFile("Male_LookingUp.obj")
     entities[e].transform.parent = entity.index
