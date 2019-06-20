@@ -18,6 +18,7 @@ namespace E4 {
     struct Mesh {
         FloatBuffer position;
         FloatBuffer texcoord;
+        FloatBuffer normal;
 
         int vertexCount;
         ShortBuffer index;

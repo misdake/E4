@@ -41,12 +41,9 @@ namespace E4 {
 
 
     class ObjFileLoader {
-    private:
+    public:
         static void loadObjFile(const std::string& folder, const std::string& filename, ObjFile& objFile);
         static void loadMtlFile(const std::string& folder, const std::string& filename, MtlFile& mtlFile);
-    public:
-        static std::vector<Asset<Mesh>> objFileToMeshes(const std::string& folder, const std::string& filename, AssetPool<Mesh>& pool);
-        static std::vector<Asset<Mesh>> objFileToDrawables(const std::string& folder, const std::string& filename, AssetPool<Mesh>& meshes, AssetPool<Material>& materials);
     };
 
 }

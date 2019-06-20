@@ -160,8 +160,6 @@ void E4::ObjFileLoader::loadObjFile(const std::string& folder, const std::string
                 }
                 break;
             }
-            case '#':
-                break;
             default:
                 break;
         }
@@ -170,38 +168,56 @@ void E4::ObjFileLoader::loadObjFile(const std::string& folder, const std::string
 }
 
 void E4::ObjFileLoader::loadMtlFile(const std::string& folder, const std::string& filename, E4::MtlFile& mtlFile) {
+    std::string fileContent = readFile(folder, filename);
 
-}
+    std::istringstream fileInput(fileContent);
 
-std::vector<E4::Asset<E4::Mesh>> E4::ObjFileLoader::objFileToMeshes(
-    const std::string& folder,
-    const std::string& filename,
-    E4::AssetPool<E4::Mesh>& pool
-) {
-    std::vector<Asset<Mesh>> r;
+    std::string line;
 
-    ObjFile objFile;
-    loadObjFile(folder, filename, objFile);
-    for (Obj& obj : objFile.objs) {
-        Asset<Mesh> mesh = pool.alloc();
-        r.push_back(mesh);
-        uint64_t vertexCount = obj.position.size() / 3;
-        mesh->position.set(obj.position, 3, vertexCount).upload();
-        if (!obj.texcoord.empty()) mesh->texcoord.set(obj.texcoord, 2, obj.texcoord.size() / 2).upload();
-        mesh->vertexCount = vertexCount;
+    Mtl* curr = nullptr;
+    while (std::getline(fileInput, line)) {
+        std::istringstream lineInput(line);
+        std::string w;
+        if (!(lineInput >> w)) continue;
+        switch (w[0]) {
+            case 'n': {
+                if (w == "newmtl") {
+                    Mtl& mtl = mtlFile.mtls.emplace_back();
+                    lineInput >> mtl.name;
+                    curr = &mtl;
+                    break;
+                }
+            }
+            case 'N': {
+                if (w == "Ns") {
+                    lineInput >> curr->Ns;
+                } else if (w == "Ni") {
+                    lineInput >> curr->Ni;
+                }
+                break;
+            }
+            case 'K': {
+                if (w == "Ka") {
+                    lineInput >> curr->Ka[0] >> curr->Ka[1] >> curr->Ka[2];
+                } else if (w == "Kd") {
+                    lineInput >> curr->Kd[0] >> curr->Kd[1] >> curr->Kd[2];
+                } else if (w == "Ks") {
+                    lineInput >> curr->Ks[0] >> curr->Ks[1] >> curr->Ks[2];
+                }
+                break;
+            }
+            case 'd': {
+                if (w == "d") {
+                    lineInput >> curr->d;
+                }
+                break;
+            }
+            case 'i': {
+                if (w == "illum") {
+                    lineInput >> curr->illum;
+                }
+            }
+        }
     }
-
-    return r;
 }
 
-std::vector<E4::Asset<E4::Mesh>> E4::ObjFileLoader::objFileToDrawables(
-    const std::string& folder,
-    const std::string& filename,
-    E4::AssetPool<E4::Mesh>& pool,
-    E4::AssetPool<E4::Material>& materialPool
-) {
-
-
-
-    return std::vector<E4::Asset<E4::Mesh>>();
-}
