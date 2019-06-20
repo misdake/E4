@@ -38,6 +38,7 @@ function createPipe(index)
         x = 0,
         y = 0
     }
+    print("createPipe "..index)
 end
 
 function setupPipe(index)
@@ -101,7 +102,7 @@ function checkDead()
 
     local x = entity.x
     local y = entity.y
-    for i = 0,3 do
+    for i = 0,2 do
     	local pipe = entity.pipes[i]
     	local left = pipe.x - 0.25
     	local right = pipe.x + 0.25
