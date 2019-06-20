@@ -11,9 +11,9 @@ uint64_t E4::MeshLoader_obj::create(const std::string& folder, const std::string
 
     for (Asset<Mesh> mesh : meshList) {
         Entity& child = app.scene.newEntity();
-        Transform& transform = app.scene.createTransform(root);
+        Transform& transform = app.scene.createTransform(child);
         transform.parent = root.index;
-        Drawable& drawable = app.scene.createDrawable(root);
+        Drawable& drawable = app.scene.createDrawable(child);
         drawable.mesh = mesh;
         drawable.material = app.scene.newMaterialColor("FFFFFFFF");
     }

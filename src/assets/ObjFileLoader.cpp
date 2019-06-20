@@ -23,10 +23,16 @@ void E4::ObjFileLoader::loadObjFile(const std::string& folder, const std::string
                 break;
             }
             case 'o': {
-                Obj& obj = objFile.objs.emplace_back();
-                obj.smooth = true;
-                curr = &obj;
-                lineInput >> curr->name;
+                //TODO write name to curr.
+                break;
+            }
+            case 'u': {
+                if (w == "usemtl") {
+                    Obj& obj = objFile.objs.emplace_back();
+                    obj.smooth = true;
+                    curr = &obj;
+                    lineInput >> curr->mtlName;
+                }
                 break;
             }
             case 'v': {
@@ -151,12 +157,6 @@ void E4::ObjFileLoader::loadObjFile(const std::string& folder, const std::string
                     curr->smooth = true;
                 } else if (v == "off") {
                     curr->smooth = false;
-                }
-                break;
-            }
-            case 'u': {
-                if (w == "usemtl") {
-                    lineInput >> curr->mtlName;
                 }
                 break;
             }
