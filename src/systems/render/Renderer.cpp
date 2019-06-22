@@ -15,7 +15,10 @@ void E4::Renderer::run(Ecs& ecs, const E4::FrameState& state) {
     Environment environment;
     ecs.fortype<E4::Transform, E4::Env>([&](Entity& entity, Transform& transform, Env& env) {
         if (env.light.enabled) {
-            environment.lights.push_back(&env.light);
+            Mat4& world = transform.worldTransform.mat4.get();
+            Light& light = env.light;
+            Vec3 lightDirection = world * Vec3(light.direction.numbers.x, light.direction.numbers.y, light.direction.numbers.z);
+            environment.lights.emplace_back(lightDirection, &light);
         }
     });
 

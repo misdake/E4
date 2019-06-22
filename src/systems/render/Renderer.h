@@ -13,6 +13,7 @@ namespace E4 {
 
         ShaderBasic shaderBasic = ShaderBasic(glRenderer);
         ShaderTexture shaderTexture = ShaderTexture(glRenderer);
+        ShaderLight shaderLight = ShaderLight(glRenderer);
 
         GlRenderer glRenderer;
 

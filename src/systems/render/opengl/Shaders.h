@@ -18,4 +18,10 @@ namespace E4 {
         void bind(GlRenderer& renderer, const Transform& Transform, const Drawable& drawable, const E4::Environment& environment) override;
     };
 
+    class ShaderLight : public Shader {
+    public:
+        explicit ShaderLight(GlRenderer& renderer);
+        void bind(GlRenderer& renderer, const Transform& Transform, const Drawable& drawable, const E4::Environment& environment) override;
+    };
+
 }

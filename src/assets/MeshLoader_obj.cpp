@@ -36,7 +36,7 @@ uint64_t E4::MeshLoader_obj::create(const std::string& folder, const std::string
         transform.parent = root.index;
         Drawable& drawable = app.scene.createDrawable(child);
         drawable.mesh = mesh;
-        drawable.material = app.scene.newMaterialColor("FFFFFFFF");
+        drawable.material = app.scene.newMaterialLight("FFFFFFFF");
         drawable.material->color.set(mtl.Kd[0], mtl.Kd[1], mtl.Kd[2], 1);
     }
 

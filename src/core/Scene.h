@@ -32,6 +32,7 @@ namespace E4 {
         std::reference_wrapper<Env> createEnv(uint32_t index, const std::string& color);
         Asset<Material> newMaterialTexture(const std::string& textureName);
         Asset<Material> newMaterialColor(const std::string& color);
+        Asset<Material> newMaterialLight(const std::string& color);
         Asset<Mesh> newMesh(const std::string& meshName);
     };
 

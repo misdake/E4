@@ -71,7 +71,7 @@ std::reference_wrapper<E4::Env> E4::Scene::createEnv(E4::Entity& entity, const s
     auto& env = ecs->create<Env>(entity);
     env.light.enabled = true;
     env.light.lightType = LightType::DIRECTIONAL;
-    env.light.direction.set(0.707, 0.707, 0); //TODO lua accessable
+    env.light.direction.set(0.8, 0.8, -0.8); //TODO lua accessable
     env.light.color.color.set(color);
     lua["entities"][entity.index]["env"] = std::ref<Env>(env);
     return std::ref<Env>(env);
@@ -90,6 +90,12 @@ E4::Asset<E4::Material> E4::Scene::newMaterialColor(const std::string& color) {
     Asset<Material> material = app->materials.alloc();
     material->color.color.set(color);
     material->shader = &app->renderer.shaderBasic;
+    return material;
+}
+E4::Asset<E4::Material> E4::Scene::newMaterialLight(const std::string& color) {
+    Asset<Material> material = app->materials.alloc();
+    material->color.color.set(color);
+    material->shader = &app->renderer.shaderLight;
     return material;
 }
 

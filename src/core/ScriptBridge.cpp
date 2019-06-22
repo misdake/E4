@@ -30,6 +30,9 @@ void E4::ScriptBridge::load(App& app, sol::state& lua, Ecs& ecs) {
     lua["newMaterialColor"] = [&app](std::string color) {
         return app.scene.newMaterialColor(color);
     };
+    lua["newMaterialLight"] = [&app](std::string color) {
+        return app.scene.newMaterialLight(color);
+    };
     lua["newMesh"] = [&app](std::string meshName) {
         return app.scene.newMesh(meshName);
     };
