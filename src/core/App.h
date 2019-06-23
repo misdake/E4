@@ -14,6 +14,7 @@
 #include "../util/Window.h"
 #include "../assets/MeshLoader_builtin.h"
 #include "../assets/MeshLoader_obj.h"
+#include "../systems/env/EnvBuilder.h"
 
 namespace E4 {
 
@@ -26,6 +27,7 @@ namespace E4 {
         Scene scene;
 
         //systems
+        EnvBuilder envBuilder;
         Transformer transform;
         Renderer renderer;
         ScriptRunner scriptRunner;

@@ -11,7 +11,8 @@ namespace E4 {
 
         uint64_t lastFrame;
         uint32_t parent;
-        ShaderData worldTransform;
+        ShaderData world;
+        ShaderData wvp;
     };
 
 }

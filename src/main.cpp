@@ -9,12 +9,15 @@ int main(int argc, char* argv[]) {
     if (argc == 2) {
         folder = argv[1];
     }
-    E4::App app(500, 500, folder);
+    E4::App app(800, 500, folder);
 
     app.load([](E4::App& app) {
         E4::Entity& e = app.scene.newEntity();
         app.scene.createTransform(e);
         app.scene.createScript(e, "main.lua");
+
+        auto& env =app.ecs.create<E4::Env>(e);
+        env.camera.enabled = true;
 
 //        app.scriptRunner.run(R"(
 //            local e = newEntity()
@@ -29,6 +32,12 @@ int main(int argc, char* argv[]) {
                 script.file->scriptLoaded = false;
             });
         }
+
+        static float t = 0;
+        t += 0.001f * frameState.deltatime;
+        auto& env = app.ecs.get<E4::Env>(app.ecs.getEntityByIndex(1));
+        env.camera.target.x = 0.3*std::sin(t);
+        env.camera.target.y = 0.3*std::cos(t);
     });
 
     return 0;

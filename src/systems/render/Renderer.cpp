@@ -3,7 +3,7 @@
 #include "../../core/ECS.h"
 #include "../../components/Transform.h"
 #include "../../components/Drawable.h"
-#include "Environment.h"
+#include "../env/Environment.h"
 
 void E4::Renderer::init() {
     glRenderer.init();
@@ -11,16 +11,11 @@ void E4::Renderer::init() {
 void E4::Renderer::resize(int w, int h) {
     glRenderer.resize(w, h);
 }
-void E4::Renderer::run(Ecs& ecs, const E4::FrameState& state) {
-    Environment environment;
-    ecs.fortype<E4::Transform, E4::Env>([&](Entity& entity, Transform& transform, Env& env) {
-        if (env.light.enabled) {
-            Mat4& world = transform.worldTransform.mat4.get();
-            Light& light = env.light;
-            Vec3 lightDirection = world * Vec3(light.direction.numbers.x, light.direction.numbers.y, light.direction.numbers.z);
-            environment.lights.emplace_back(lightDirection, &light);
-        }
-    });
+void E4::Renderer::run(Ecs& ecs, const E4::FrameState& state, const E4::Environment& environment) {
+    for(auto&[transform, light] : environment.lights) {
+        Mat4& world = transform->world.mat4.get();
+        light->world = world * Vec3(light->direction.x, light->direction.y, light->direction.z);
+    }
 
     glRenderer.clear();
     ecs.fortype<E4::Transform, E4::Drawable>([&](Entity& entity, Transform& transform, Drawable& drawable) {

@@ -5,7 +5,7 @@
 #include "../../../components/Drawable.h"
 
 const char* ShaderBasic_VS = "void main() {\n"
-                             "    gl_Position = uWorld * vec4(aPosition.xyz, 1.0);\n"
+                             "    gl_Position = uWVP * vec4(aPosition.xyz, 1.0);\n"
                              "}";
 
 const char* ShaderBasic_PS = "out vec4 outputColor;\n"
@@ -17,6 +17,7 @@ E4::ShaderBasic::ShaderBasic(GlRenderer& renderer) : Shader(ShaderBasic_VS, Shad
     addVertexAttribute(renderer.attributeSlots.position);
     addVertexAttribute(renderer.attributeSlots.color);
     addVertexUniform(renderer.uniformSlots.world);
+    addVertexUniform(renderer.uniformSlots.wvp);
     addPixelUniform(renderer.uniformSlots.color);
 }
 
@@ -25,12 +26,13 @@ void E4::ShaderBasic::bind(GlRenderer& renderer, const Transform& transform, con
     const Material& material = drawable.material.get();
 
     renderer.attributeSlots.position.bind(mesh.position);
-    renderer.uniformSlots.world.bind(transform.worldTransform);
+    renderer.uniformSlots.world.bind(transform.world);
+    renderer.uniformSlots.wvp.bind(transform.wvp);
     renderer.uniformSlots.color.bind(material.color);
 }
 
 const char* ShaderTexture_VS = "void main() {\n"
-                               "    gl_Position = uWorld * vec4(aPosition.xyz, 1.0);\n"
+                               "    gl_Position = uWVP * vec4(aPosition.xyz, 1.0);\n"
                                "    vTexcoord = aTexcoord;\n"
                                "}";
 
@@ -43,6 +45,7 @@ E4::ShaderTexture::ShaderTexture(GlRenderer& renderer) : Shader(ShaderTexture_VS
     addVertexAttribute(renderer.attributeSlots.position);
     addVertexAttribute(renderer.attributeSlots.texcoord);
     addVertexUniform(renderer.uniformSlots.world);
+    addVertexUniform(renderer.uniformSlots.wvp);
     addPixelUniform(renderer.uniformSlots.texture);
     addVarying("vTexcoord", E4::ShaderDataType::VEC2);
 }
@@ -53,12 +56,13 @@ void E4::ShaderTexture::bind(GlRenderer& renderer, const Transform& transform, c
 
     renderer.attributeSlots.position.bind(mesh.position);
     renderer.attributeSlots.texcoord.bind(mesh.texcoord);
-    renderer.uniformSlots.world.bind(transform.worldTransform);
+    renderer.uniformSlots.world.bind(transform.world);
+    renderer.uniformSlots.wvp.bind(transform.wvp);
     renderer.uniformSlots.texture.bind(material.texture->shaderData);
 }
 
 const char* ShaderLight_VS = "void main() {\n"
-                             "    gl_Position = uWorld * vec4(aPosition.xyz, 1.0);\n"
+                             "    gl_Position = uWVP * vec4(aPosition.xyz, 1.0);\n"
                              "    vNormal = normalize((uWorld * vec4(aNormal, 0.0)).xyz);\n"
                              "}";
 
@@ -73,6 +77,7 @@ E4::ShaderLight::ShaderLight(GlRenderer& renderer) : Shader(ShaderLight_VS, Shad
     addVertexAttribute(renderer.attributeSlots.position);
     addVertexAttribute(renderer.attributeSlots.normal);
     addVertexUniform(renderer.uniformSlots.world);
+    addVertexUniform(renderer.uniformSlots.wvp);
     addPixelUniform(renderer.uniformSlots.color);
     addPixelUniform(renderer.uniformSlots.light);
     addPixelUniform(renderer.uniformSlots.lightColor);
@@ -83,14 +88,14 @@ void E4::ShaderLight::bind(GlRenderer& renderer, const Transform& transform, con
     const Mesh& mesh = drawable.mesh.get();
     const Material& material = drawable.material.get();
 
-    const std::pair<Vec3, Light*>& pair = environment.lights[0];
-    Vec3 lightVal = pair.first;
+    const std::pair<Transform*, Light*>& pair = environment.lights[0];
     Light& light = *pair.second;
 
     renderer.attributeSlots.position.bind(mesh.position);
     renderer.attributeSlots.normal.bind(mesh.normal);
-    renderer.uniformSlots.world.bind(transform.worldTransform);
+    renderer.uniformSlots.world.bind(transform.world);
+    renderer.uniformSlots.wvp.bind(transform.wvp);
     renderer.uniformSlots.color.bind(material.color);
-    renderer.uniformSlots.light.bind(ShaderData(lightVal.x, lightVal.y, lightVal.z));
+    renderer.uniformSlots.light.bind(ShaderData(light.world.x, light.world.y, light.world.z));
     renderer.uniformSlots.lightColor.bind(light.color);
 }

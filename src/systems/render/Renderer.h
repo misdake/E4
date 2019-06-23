@@ -7,6 +7,8 @@
 
 namespace E4 {
 
+    class App;
+
     class Renderer {
     public:
         Renderer() = default;
@@ -20,7 +22,7 @@ namespace E4 {
         void init();
         void resize(int w, int h);
 
-        void run(Ecs& ecs, const E4::FrameState& state);
+        void run(Ecs& ecs, const E4::FrameState& state, const E4::Environment& environment);
     };
 
 }

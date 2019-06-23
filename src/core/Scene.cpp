@@ -36,7 +36,8 @@ std::reference_wrapper<E4::Transform> E4::Scene::createTransform(E4::Entity& ent
     sol::state& lua = *state;
     auto& transform = ecs->create<Transform>(entity);
     transform.sx = transform.sy = transform.sz = 1;
-    transform.worldTransform.mat4 = app->mat4.alloc();
+    transform.world.mat4 = app->mat4.alloc();
+    transform.wvp.mat4 = app->mat4.alloc();
     lua["entities"][entity.index]["transform"] = std::ref<Transform>(transform);
     return std::ref<Transform>(transform);
 }
@@ -70,7 +71,7 @@ std::reference_wrapper<E4::Env> E4::Scene::createEnv(E4::Entity& entity, const s
     sol::state& lua = *state;
     auto& env = ecs->create<Env>(entity);
     env.light.enabled = true;
-    env.light.lightType = LightType::DIRECTIONAL;
+    env.light.type = LightType::DIRECTIONAL;
     env.light.direction.set(0.8, 0.8, -0.8); //TODO lua accessable
     env.light.color.color.set(color);
     lua["entities"][entity.index]["env"] = std::ref<Env>(env);
