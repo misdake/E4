@@ -64,12 +64,15 @@ void E4::ShaderTexture::bind(GlRenderer& renderer, const Transform& transform, c
 const char* ShaderLight_VS = "void main() {\n"
                              "    gl_Position = uWVP * vec4(aPosition.xyz, 1.0);\n"
                              "    vNormal = normalize((uWorld * vec4(aNormal, 0.0)).xyz);\n"
+                             "    vWorldPos = uWorld * vec4(aPosition.xyz, 1.0);"
                              "}";
 
 const char* ShaderLight_PS = "out vec4 outputColor;\n"
                              "void main() {\n"
                              "   vec3 normal = normalize(vNormal);\n"
-                             "   float dot = dot(normal, uLight.xyz);\n" //TODO support point light
+                             "   vec3 diff = normalize(uLight.xyz - vWorldPos.xyz/vWorldPos.w);\n"
+                             "   vec3 lightDir = uLight.w * diff + (1.0 - uLight.w) * uLight.xyz;\n"
+                             "   float dot = max(0.0, dot(normal, lightDir));\n"
                              "   outputColor = vec4(dot * uColor.rgb * uLightColor.rgb, uColor.a);\n"
                              "}";
 
@@ -82,6 +85,7 @@ E4::ShaderLight::ShaderLight(GlRenderer& renderer) : Shader(ShaderLight_VS, Shad
     addPixelUniform(renderer.uniformSlots.light);
     addPixelUniform(renderer.uniformSlots.lightColor);
     addVarying("vNormal", E4::ShaderDataType::VEC3);
+    addVarying("vWorldPos", E4::ShaderDataType::VEC4);
 }
 
 void E4::ShaderLight::bind(GlRenderer& renderer, const Transform& transform, const Drawable& drawable, const E4::Environment& environment) {
@@ -96,6 +100,6 @@ void E4::ShaderLight::bind(GlRenderer& renderer, const Transform& transform, con
     renderer.uniformSlots.world.bind(transform.world);
     renderer.uniformSlots.wvp.bind(transform.wvp);
     renderer.uniformSlots.color.bind(material.color);
-    renderer.uniformSlots.light.bind(ShaderData(light.world.x, light.world.y, light.world.z));
+    renderer.uniformSlots.light.bind(light.world);
     renderer.uniformSlots.lightColor.bind(light.color);
 }

@@ -265,7 +265,7 @@ E4::Mat4 E4::Mat4::operator*(const Mat4& right) const {
     return result;
 }
 
-E4::Vec3 E4::Mat4::operator*(const Vec3& src) const {
+E4::Vec3 E4::Mat4::transformPoint(const E4::Vec3& src) const {
     Vec3 dst{};
     dst.x = m00 * src.x + m10 * src.y + m20 * src.z + m30;
     dst.y = m01 * src.x + m11 * src.y + m21 * src.z + m31;
@@ -275,5 +275,18 @@ E4::Vec3 E4::Mat4::operator*(const Vec3& src) const {
     dst.x *= iw;
     dst.y *= iw;
     dst.z *= iw;
+    return dst;
+}
+
+E4::Vec3 E4::Mat4::transformNormal(const E4::Vec3& src) const {
+    Mat4 m{};
+    invert(m);
+    m.transpose();
+
+    Vec3 dst{};
+    dst.x = m00 * src.x + m10 * src.y + m20 * src.z;
+    dst.y = m01 * src.x + m11 * src.y + m21 * src.z;
+    dst.z = m02 * src.x + m12 * src.y + m22 * src.z;
+    dst.normalize();
     return dst;
 }

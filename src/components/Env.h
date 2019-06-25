@@ -19,8 +19,6 @@ namespace E4 {
         float znear;
         float zfar;
 
-        Mat4 vp;
-
         void action(uint16_t width, uint16_t height) {
             vp.setTRS( //TODO
                 target.x, target.y, 0,
@@ -28,6 +26,8 @@ namespace E4 {
                 1.0f * height / width, 1, 1
             );
         }
+
+        Mat4 vp;
     };
 
     enum class LightType {
@@ -40,7 +40,23 @@ namespace E4 {
         ShaderData color;
 
         Vec3 direction;
-        Vec3 world;
+
+        void transform(Mat4& tworld) {
+            switch (type) {
+                case LightType::POINT: {
+                    Vec3 pos = tworld.transformPoint(Vec3(0, 0, 0));
+                    world.set(pos.x, pos.y, pos.z, 1);
+                    break;
+                }
+                case LightType::DIRECTIONAL: {
+                    Vec3 dir = tworld.transformNormal(direction);
+                    world.set(dir.x, dir.y, dir.z, 0);
+                    break;
+                }
+            }
+        }
+
+        ShaderData world;
     };
 
     struct Env {

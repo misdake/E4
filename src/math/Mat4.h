@@ -47,7 +47,8 @@ namespace E4 {
         static void multiply(const Mat4& left, const Mat4& right, Mat4& dest);
         Mat4 operator*(const Mat4& right) const;
 
-        Vec3 operator*(const Vec3& src) const;
+        Vec3 transformPoint(const Vec3& src) const;
+        Vec3 transformNormal(const Vec3& src) const;
 
     };
 

@@ -71,7 +71,7 @@ std::reference_wrapper<E4::Env> E4::Scene::createEnv(E4::Entity& entity, const s
     sol::state& lua = *state;
     auto& env = ecs->create<Env>(entity);
     env.light.enabled = true;
-    env.light.type = LightType::DIRECTIONAL;
+    env.light.type = LightType::POINT;
     env.light.direction.set(0.8, 0.8, -0.8); //TODO lua accessable
     env.light.color.color.set(color);
     lua["entities"][entity.index]["env"] = std::ref<Env>(env);
