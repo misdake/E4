@@ -16,7 +16,10 @@ int main(int argc, char* argv[]) {
         app.scene.createTransform(e);
         app.scene.createScript(e, "main.lua");
 
-        auto& env =app.ecs.create<E4::Env>(e);
+
+        E4::Entity& e2 = app.scene.newEntity();
+        app.scene.createTransform(e2);
+        auto& env =app.ecs.create<E4::Env>(e2);
         env.camera.enabled = true;
 
 //        app.scriptRunner.run(R"(

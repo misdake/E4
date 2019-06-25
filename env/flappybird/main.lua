@@ -76,7 +76,7 @@ function updatePipe(index)
         pipe.x = pipe.x - dt * 1
     end
 
-    if (pipe.x < -screenHeight / screenWidth - 0.5) then
+    if (pipe.x < -screenWidth /screenHeight - 0.5) then
         pipe.x = pipe.x + 3 * entity.pipeinterval
         pipe.y = newY()
     end
@@ -84,7 +84,7 @@ end
 
 function load()
     gameLoad()
-    entity.transform.sx = screenHeight / screenWidth
+    -- entity.transform.sx = screenHeight / screenWidth
     entity.bird = createChild(-0.5, 0.5, 0.25, "flappybird.png")
 
     entity.pipes = {}

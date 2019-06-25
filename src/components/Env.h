@@ -12,14 +12,12 @@ namespace E4 {
     struct Camera {
         bool enabled;
         CameraType type;
-        Vec3 eye;
-        Vec3 target;
-        Vec3 up;
         float fov;
         float znear;
         float zfar;
 
-        void action(uint16_t width, uint16_t height) {
+        void action(Mat4& world, uint16_t width, uint16_t height) {
+            const Vec3& target = world.transformPoint(Vec3(0, 0, 0));
             vp.setTRS( //TODO
                 target.x, target.y, 0,
                 0, 0, 0,
@@ -39,8 +37,6 @@ namespace E4 {
         LightType type;
         ShaderData color;
 
-        Vec3 direction;
-
         void transform(Mat4& tworld) {
             switch (type) {
                 case LightType::POINT: {
@@ -49,7 +45,7 @@ namespace E4 {
                     break;
                 }
                 case LightType::DIRECTIONAL: {
-                    Vec3 dir = tworld.transformNormal(direction);
+                    Vec3 dir = tworld.transformNormal(Vec3(0, 0, -1));
                     world.set(dir.x, dir.y, dir.z, 0);
                     break;
                 }

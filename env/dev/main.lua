@@ -32,9 +32,28 @@ function load()
     drawable.material = newMaterialTexture("street.jpg")
 end
 
+function mouse1()
+	return (not inputStatePrev.mouseButton1) and inputStateCurr.mouseButton1
+end
+function mouse2()
+	return (not inputStatePrev.mouseButton2) and inputStateCurr.mouseButton2
+end
+function mouse3()
+	return (not inputStatePrev.mouseButton3) and inputStateCurr.mouseButton3
+end
+
 function update()
     entity.time = entity.time + dt;
     local rad = math.fmod(entity.time, math.pi * 2);
+    if mouse1() then
+        entities[entity.l].env.light.type = LightType.POINT
+    end
+    if mouse2() then
+        entities[entity.l].env.light.enabled = not entities[entity.l].env.light.enabled
+    end
+    if mouse3() then
+        entities[entity.l].env.light.type = LightType.DIRECTIONAL
+    end
     entities[entity.l].transform.x = math.sin(rad) * 0.8
     entities[entity.l].transform.z = math.cos(rad) * 0.8
 end

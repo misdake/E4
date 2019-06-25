@@ -77,6 +77,22 @@ void E4::ScriptBridge::load(App& app, sol::state& lua, Ecs& ecs) {
     lua.new_usertype<E4::Script>(
         "Script"
     );
+    lua.new_usertype<E4::Env>(
+        "Env",
+        "camera", &E4::Env::camera,
+        "light", &E4::Env::light
+    );
+    lua.new_usertype<E4::Camera>(
+        "Camera",
+        "enabled", &E4::Camera::enabled
+    );
+    lua.new_usertype<E4::Light>(
+        "Light",
+        "enabled", &E4::Light::enabled,
+        "type", &E4::Light::type
+    );
+
+    lua["LightType"] = lua.create_table_with("POINT", LightType::POINT, "DIRECTIONAL", LightType::DIRECTIONAL);
 }
 
 void firstFrame(sol::state& lua, const E4::FrameState& frameState, E4::Ecs& ecs) {

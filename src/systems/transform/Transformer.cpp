@@ -28,7 +28,8 @@ void update(E4::Ecs& ecs, E4::Transform& transform, uint64_t frameIndex, const E
 
 void E4::Transformer::run(Ecs& ecs, const FrameState& frameState, const E4::Environment& environment) {
     if (environment.camera.second != nullptr) {
-        environment.camera.second->action(frameState.width, frameState.height);
+        update(ecs, *environment.camera.first, frameState.frameIndex, environment);
+        environment.camera.second->action(environment.camera.first->world.mat4.get(), frameState.width, frameState.height);
     }
 
     ecs.fortype<Transform>([&](Entity& entity, Transform& position) {
