@@ -12,7 +12,9 @@ namespace E4 {
     struct Material {
         Shader* shader;
         Asset<Texture> texture;
-        ShaderData color;
+        ShaderData ambient;
+        ShaderData diffuse;
+        ShaderData specular;
     };
 
     struct Mesh {

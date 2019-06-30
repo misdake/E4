@@ -67,17 +67,18 @@ std::reference_wrapper<E4::Script> E4::Scene::createScript(uint32_t index, const
     return createScript(ecs->getEntityByIndex(index), scriptName);
 }
 
-std::reference_wrapper<E4::Env> E4::Scene::createEnv(E4::Entity& entity, const std::string& color) {
+std::reference_wrapper<E4::Env> E4::Scene::createEnv(E4::Entity& entity, const std::string& ambient, const std::string& diffuse) {
     sol::state& lua = *state;
     auto& env = ecs->create<Env>(entity);
     env.light.enabled = true;
     env.light.type = LightType::POINT;
-    env.light.color.color.set(color);
+    env.light.ambient.color.set(ambient);
+    env.light.diffuse.color.set(diffuse);
     lua["entities"][entity.index]["env"] = std::ref<Env>(env);
     return std::ref<Env>(env);
 }
-std::reference_wrapper<E4::Env> E4::Scene::createEnv(uint32_t index, const std::string& color) {
-    return createEnv(ecs->getEntityByIndex(index), color);
+std::reference_wrapper<E4::Env> E4::Scene::createEnv(uint32_t index, const std::string& ambient, const std::string& diffuse) {
+    return createEnv(ecs->getEntityByIndex(index), ambient, diffuse);
 }
 
 E4::Asset<E4::Material> E4::Scene::newMaterialTexture(const std::string& textureName) {
@@ -88,13 +89,14 @@ E4::Asset<E4::Material> E4::Scene::newMaterialTexture(const std::string& texture
 }
 E4::Asset<E4::Material> E4::Scene::newMaterialColor(const std::string& color) {
     Asset<Material> material = app->materials.alloc();
-    material->color.color.set(color);
+    material->diffuse.color.set(color);
     material->shader = &app->renderer.shaderBasic;
     return material;
 }
-E4::Asset<E4::Material> E4::Scene::newMaterialLight(const std::string& color) {
+E4::Asset<E4::Material> E4::Scene::newMaterialLight(const std::string& ambient, const std::string& diffuse) {
     Asset<Material> material = app->materials.alloc();
-    material->color.color.set(color);
+    material->ambient.color.set(ambient);
+    material->diffuse.color.set(diffuse);
     material->shader = &app->renderer.shaderLight;
     return material;
 }

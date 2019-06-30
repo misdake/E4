@@ -35,7 +35,9 @@ namespace E4 {
     struct Light {
         bool enabled;
         LightType type;
-        ShaderData color;
+        ShaderData ambient;
+        ShaderData diffuse;
+        ShaderData specular;
 
         void transform(Mat4& tworld) {
             switch (type) {

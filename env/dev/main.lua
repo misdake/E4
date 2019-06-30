@@ -25,7 +25,7 @@ function load()
     entities[lightEntity].transform.sx = 0.1
     entities[lightEntity].transform.sy = 0.1
     entities[lightEntity].transform.sz = 0.1
-    createEnv(lightEntity, "FFFFFFFF")
+    createEnv(lightEntity, "FF404040", "FFFFFFFF")
     entity.l = lightEntity;
     local drawable = createDrawable(lightEntity)
     drawable.mesh = newMesh("builtin:plane")

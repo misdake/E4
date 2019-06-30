@@ -20,8 +20,8 @@ void E4::ScriptBridge::load(App& app, sol::state& lua, Ecs& ecs) {
     lua["createScript"] = [&](uint32_t index, std::string scriptName) {
         return app.scene.createScript(index, scriptName);
     };
-    lua["createEnv"] = [&](uint32_t index, std::string color) {
-        return app.scene.createEnv(index, color);
+    lua["createEnv"] = [&](uint32_t index, std::string ambient, std::string diffuse) {
+        return app.scene.createEnv(index, ambient, diffuse);
     };
 
     lua["newMaterialTexture"] = [&app](std::string textureName) {
@@ -30,8 +30,8 @@ void E4::ScriptBridge::load(App& app, sol::state& lua, Ecs& ecs) {
     lua["newMaterialColor"] = [&app](std::string color) {
         return app.scene.newMaterialColor(color);
     };
-    lua["newMaterialLight"] = [&app](std::string color) {
-        return app.scene.newMaterialLight(color);
+    lua["newMaterialLight"] = [&app](std::string ambient, std::string diffuse) {
+        return app.scene.newMaterialLight(ambient, diffuse);
     };
     lua["newMesh"] = [&app](std::string meshName) {
         return app.scene.newMesh(meshName);

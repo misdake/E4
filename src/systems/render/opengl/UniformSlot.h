@@ -21,9 +21,11 @@ namespace E4 {
         UniformSlot world = UniformSlot("uWorld", ShaderDataType::MAT4);
         UniformSlot wvp = UniformSlot("uWVP", ShaderDataType::MAT4);
         UniformSlot texture = UniformSlot("uTexture", ShaderDataType::TEXTURE);
-        UniformSlot color = UniformSlot("uColor", ShaderDataType::VEC4);
+        UniformSlot ambient = UniformSlot("uAmbient", ShaderDataType::VEC4);
+        UniformSlot diffuse = UniformSlot("uDiffuse", ShaderDataType::VEC4);
         UniformSlot light = UniformSlot("uLight", ShaderDataType::VEC4);
-        UniformSlot lightColor = UniformSlot("uLightColor", ShaderDataType::VEC4);
+        UniformSlot lightAmbient = UniformSlot("uLightAmbient", ShaderDataType::VEC4);
+        UniformSlot lightDiffuse = UniformSlot("uLightDiffuse", ShaderDataType::VEC4);
     };
 
 }
