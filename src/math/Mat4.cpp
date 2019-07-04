@@ -306,3 +306,25 @@ void E4::Mat4::setPerspective(float fovy, float aspect, float zNear, float zFar)
     m23 = -1.0;
     m32 = -(2.0 * zFar * zNear) / (zFar - zNear);
 }
+
+void E4::Mat4::setOrtho(float l, float r, float t, float b, float n, float f) {
+    m00 = 2 / (r - l);
+    m01 = 0;
+    m02 = 0;
+    m03 = 0;
+
+    m10 = 0;
+    m11 = 2 / (t - b);
+    m12 = 0;
+    m13 = 0;
+
+    m20 = 0;
+    m21 = 0;
+    m22 = -2 / (f - n);
+    m23 = 0;
+
+    m30 = -(r + l) / (r - l);
+    m31 = -(t + b) / (t - b);
+    m32 = -(f + n) / (f - n);
+    m33 = 1;
+}

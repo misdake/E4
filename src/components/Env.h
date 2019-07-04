@@ -20,7 +20,7 @@ namespace E4 {
 
         void init() {
             enabled = true;
-            type = CameraType::ORTHO;
+            type = CameraType::PROJ;
             fov = M_PI / 4;
             znear = 0.1;
             zfar = 100;
@@ -28,20 +28,21 @@ namespace E4 {
         void action(Mat4& world, uint16_t width, uint16_t height) {
             const Vec3& p = world.transformPoint(Vec3(0, 0, 0));
             pos.set(p.x, p.y, p.z);
-            switch(type) {
-                case CameraType::ORTHO:{
-                    vp.setTRS( //TODO
-                        p.x, p.y, 0,
-                        0, 0, 0,
-                        1.0f * height / width, 1, 1
-                    );
+            float aspect = 1.0f * width / height;
+            switch (type) {
+                case CameraType::ORTHO: {
+                    Mat4 ortho{};
+                    Mat4 invWorld{};
+                    world.invert(invWorld);
+                    ortho.setOrtho(-aspect * fov, aspect * fov, fov, -fov, znear, zfar);
+                    Mat4::multiply(ortho, invWorld, vp);
                     break;
                 }
-                case CameraType::PROJ:{
+                case CameraType::PROJ: {
                     Mat4 perspective{};
                     Mat4 invWorld{};
                     world.invert(invWorld);
-                    perspective.setPerspective(fov, 1.0f * width / height, znear, zfar);
+                    perspective.setPerspective(fov, aspect, znear, zfar);
                     Mat4::multiply(perspective, invWorld, vp);
                     break;
                 }
@@ -56,6 +57,7 @@ namespace E4 {
         POINT,
         DIRECTIONAL,
     };
+
     struct Light {
         bool enabled;
         LightType type;

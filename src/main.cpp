@@ -22,7 +22,8 @@ int main(int argc, char* argv[]) {
         transform.z = 3;
         auto& env = app.ecs.create<E4::Env>(e2);
         env.camera.init();
-        env.camera.type = E4::CameraType::PROJ;
+        env.camera.type = E4::CameraType::ORTHO;
+        env.camera.fov = 2;
 
 //        app.scriptRunner.run(R"(
 //            local e = newEntity()
