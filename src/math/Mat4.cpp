@@ -290,3 +290,19 @@ E4::Vec3 E4::Mat4::transformNormal(const E4::Vec3& src) const {
     dst.normalize();
     return dst;
 }
+
+void E4::Mat4::setPerspective(float fovy, float aspect, float zNear, float zFar) {
+    float ymax = zNear * std::tan(fovy);
+    float ymin = -ymax;
+    float xmin = ymin * aspect;
+    float xmax = ymax * aspect;
+
+    setIdentity();
+    m00 = (2.0 * zNear) / (xmax - xmin);
+    m11 = (2.0 * zNear) / (ymax - ymin);
+    m22 = -(zFar + zNear) / (zFar - zNear);
+    m20 = (xmax + xmin) / (xmax - xmin);
+    m21 = (ymax + ymin) / (ymax - ymin);
+    m23 = -1.0;
+    m32 = -(2.0 * zFar * zNear) / (zFar - zNear);
+}

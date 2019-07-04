@@ -19,9 +19,10 @@ int main(int argc, char* argv[]) {
 
         E4::Entity& e2 = app.scene.newEntity();
         E4::Transform& transform = app.scene.createTransform(e2);
-        transform.z = 10;
-        auto& env =app.ecs.create<E4::Env>(e2);
-        env.camera.enabled = true;
+        transform.z = 3;
+        auto& env = app.ecs.create<E4::Env>(e2);
+        env.camera.init();
+        env.camera.type = E4::CameraType::PROJ;
 
 //        app.scriptRunner.run(R"(
 //            local e = newEntity()

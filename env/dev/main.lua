@@ -45,14 +45,11 @@ end
 function update()
     entity.time = entity.time + dt;
     local rad = math.fmod(entity.time, math.pi * 2);
-    if mouse1() then
-        entities[entity.l].env.light.type = LightType.POINT
+    if inputStateCurr.mouseButton1 then
+        entities[2].transform.z = entities[2].transform.z + 0.01
     end
-    if mouse2() then
-        entities[entity.l].env.light.enabled = not entities[entity.l].env.light.enabled
-    end
-    if mouse3() then
-        entities[entity.l].env.light.type = LightType.DIRECTIONAL
+    if inputStateCurr.mouseButton3 then
+        entities[2].transform.z = entities[2].transform.z - 0.01
     end
     entities[entity.l].transform.x = math.sin(rad) * 0.8
     entities[entity.l].transform.z = math.cos(rad) * 0.8

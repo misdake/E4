@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cmath>
+
 #include "../systems/render/opengl/DataType.h"
 
 namespace E4 {
@@ -16,14 +18,34 @@ namespace E4 {
         float znear;
         float zfar;
 
+        void init() {
+            enabled = true;
+            type = CameraType::ORTHO;
+            fov = M_PI / 4;
+            znear = 0.1;
+            zfar = 100;
+        }
         void action(Mat4& world, uint16_t width, uint16_t height) {
             const Vec3& p = world.transformPoint(Vec3(0, 0, 0));
             pos.set(p.x, p.y, p.z);
-            vp.setTRS( //TODO
-                p.x, p.y, 0,
-                0, 0, 0,
-                1.0f * height / width, 1, 1
-            );
+            switch(type) {
+                case CameraType::ORTHO:{
+                    vp.setTRS( //TODO
+                        p.x, p.y, 0,
+                        0, 0, 0,
+                        1.0f * height / width, 1, 1
+                    );
+                    break;
+                }
+                case CameraType::PROJ:{
+                    Mat4 perspective{};
+                    Mat4 invWorld{};
+                    world.invert(invWorld);
+                    perspective.setPerspective(fov, 1.0f * width / height, znear, zfar);
+                    Mat4::multiply(perspective, invWorld, vp);
+                    break;
+                }
+            }
         }
 
         ShaderData pos;
@@ -40,7 +62,6 @@ namespace E4 {
         ShaderData ambient;
         ShaderData diffuse;
         ShaderData specular;
-        ShaderData specularExp;
 
         void transform(Mat4& tworld) {
             switch (type) {
