@@ -39,6 +39,8 @@ uint64_t E4::MeshLoader_obj::create(const std::string& folder, const std::string
         drawable.material = app.scene.newMaterialLight("FF000000", "FFFFFFFF");
         drawable.material->ambient.set(mtl.Ka[0], mtl.Ka[1], mtl.Ka[2], 1);
         drawable.material->diffuse.set(mtl.Kd[0], mtl.Kd[1], mtl.Kd[2], 1);
+        drawable.material->specular.set(mtl.Ks[0], mtl.Ks[1], mtl.Ks[2], 1);
+        drawable.material->specularExp.set(mtl.Ns);
     }
 
     return root.id;

@@ -15,6 +15,7 @@ namespace E4 {
         ShaderData ambient;
         ShaderData diffuse;
         ShaderData specular;
+        ShaderData specularExp;
     };
 
     struct Mesh {

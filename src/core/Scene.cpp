@@ -74,6 +74,7 @@ std::reference_wrapper<E4::Env> E4::Scene::createEnv(E4::Entity& entity, const s
     env.light.type = LightType::POINT;
     env.light.ambient.color.set(ambient);
     env.light.diffuse.color.set(diffuse);
+    env.light.specular.color.set(diffuse); //TODO
     lua["entities"][entity.index]["env"] = std::ref<Env>(env);
     return std::ref<Env>(env);
 }
@@ -89,7 +90,7 @@ E4::Asset<E4::Material> E4::Scene::newMaterialTexture(const std::string& texture
 }
 E4::Asset<E4::Material> E4::Scene::newMaterialColor(const std::string& color) {
     Asset<Material> material = app->materials.alloc();
-    material->diffuse.color.set(color);
+    material->ambient.color.set(color);
     material->shader = &app->renderer.shaderBasic;
     return material;
 }
@@ -97,6 +98,8 @@ E4::Asset<E4::Material> E4::Scene::newMaterialLight(const std::string& ambient, 
     Asset<Material> material = app->materials.alloc();
     material->ambient.color.set(ambient);
     material->diffuse.color.set(diffuse);
+    material->specular.color.set(diffuse); //TODO
+    material->specularExp.set(10); //TODO
     material->shader = &app->renderer.shaderLight;
     return material;
 }

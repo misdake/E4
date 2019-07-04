@@ -18,7 +18,8 @@ int main(int argc, char* argv[]) {
 
 
         E4::Entity& e2 = app.scene.newEntity();
-        app.scene.createTransform(e2);
+        E4::Transform& transform = app.scene.createTransform(e2);
+        transform.z = 10;
         auto& env =app.ecs.create<E4::Env>(e2);
         env.camera.enabled = true;
 

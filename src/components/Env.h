@@ -17,14 +17,16 @@ namespace E4 {
         float zfar;
 
         void action(Mat4& world, uint16_t width, uint16_t height) {
-            const Vec3& target = world.transformPoint(Vec3(0, 0, 0));
+            const Vec3& p = world.transformPoint(Vec3(0, 0, 0));
+            pos.set(p.x, p.y, p.z);
             vp.setTRS( //TODO
-                target.x, target.y, 0,
+                p.x, p.y, 0,
                 0, 0, 0,
                 1.0f * height / width, 1, 1
             );
         }
 
+        ShaderData pos;
         Mat4 vp;
     };
 
@@ -38,6 +40,7 @@ namespace E4 {
         ShaderData ambient;
         ShaderData diffuse;
         ShaderData specular;
+        ShaderData specularExp;
 
         void transform(Mat4& tworld) {
             switch (type) {
