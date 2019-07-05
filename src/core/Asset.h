@@ -28,9 +28,7 @@ namespace E4 {
         Asset(AssetPool<T>& pool, uint32_t index) : pool(&pool), index(index) {}
 
     public:
-        static const uint32_t MAX_INDEX = std::numeric_limits<uint32_t>::max(); //TODO use 0 as invalid index
-
-        Asset() : pool(nullptr), index(MAX_INDEX) {}
+        Asset() : pool(nullptr), index(0) {}
 
         T* operator->() { return &get(); }
         const T* operator->() const { return &get(); }
@@ -49,6 +47,10 @@ namespace E4 {
         std::deque<uint32_t> empty;
 
     public:
+        AssetPool() {
+            array.emplace_back();
+        }
+
         Asset<T> alloc() {
             uint32_t index = 0;
             if (empty.empty()) {
@@ -129,12 +131,12 @@ namespace E4 {
 
     template<typename T>
     bool Asset<T>::valid() const {
-        return index < MAX_INDEX && index < pool->array.size();
+        return 0 < index && index < pool->array.size();
     }
 
     template<typename T>
     T& Asset<T>::get() {
-        if (index < MAX_INDEX && index < pool->array.size()) {
+        if (0 < index && index < pool->array.size()) {
             return pool->array[index];
         } else {
             Log::error("free an invalid pointer");
@@ -144,7 +146,7 @@ namespace E4 {
 
     template<typename T>
     const T& Asset<T>::get() const {
-        if (index < MAX_INDEX && index < pool->array.size()) {
+        if (0 < index && index < pool->array.size()) {
             return pool->array[index];
         } else {
             Log::error("free an invalid pointer");

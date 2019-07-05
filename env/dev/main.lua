@@ -45,11 +45,18 @@ end
 function update()
     entity.time = entity.time + dt;
     local rad = math.fmod(entity.time, math.pi * 2);
-    if inputStateCurr.mouseButton1 then
-        entities[2].transform.z = entities[2].transform.z + 0.01
+    if  (not inputStatePrev.mouseButton1) and inputStateCurr.mouseButton1 then
+        entity.mouseX = inputStateCurr.mouseX
+        entity.mouseY = inputStateCurr.mouseY
     end
-    if inputStateCurr.mouseButton3 then
-        entities[2].transform.z = entities[2].transform.z - 0.01
+    if inputStatePrev.mouseButton1 and inputStateCurr.mouseButton1 then
+        entities[2].transform.ry = entities[2].transform.ry + (inputStateCurr.mouseX - inputStatePrev.mouseX) * math.pi / 1000
+        entities[2].transform.rx = entities[2].transform.rx + (inputStateCurr.mouseY - inputStatePrev.mouseY) * math.pi / 1000
+        entity.mouseX = inputStateCurr.mouseX
+        entity.mouseY = inputStateCurr.mouseY
+    end
+    if  (not inputStateCurr.mouseButton1) and inputStatePrev.mouseButton1 then
+
     end
     entities[entity.l].transform.x = math.sin(rad) * 0.8
     entities[entity.l].transform.z = math.cos(rad) * 0.8

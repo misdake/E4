@@ -5,9 +5,9 @@
 E4::App::App(uint16_t width, uint16_t height, const std::string& folder) :
     width(width),
     height(height),
+    folder(folder),
     textures(folder),
     scripts(folder),
-    folder(folder),
     scene() {
 
 }

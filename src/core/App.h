@@ -26,6 +26,10 @@ namespace E4 {
         Ecs ecs;
         Scene scene;
 
+        uint16_t width;
+        uint16_t height;
+        std::string folder;
+
         //systems
         EnvBuilder envBuilder;
         Transformer transform;
@@ -40,10 +44,6 @@ namespace E4 {
         AssetLoader<ScriptFile> scripts;
         MeshLoader_builtin meshLoader_builtin;
         MeshLoader_obj meshLoader_obj;
-
-        uint16_t width;
-        uint16_t height;
-        std::string folder;
 
         explicit App(uint16_t width, uint16_t height, const std::string& folder);
 
