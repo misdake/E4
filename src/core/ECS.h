@@ -11,7 +11,7 @@ namespace E4 {
 
     template<typename T>
     struct Line {
-        static constexpr uint8_t LINE_SIZE_POT = 4;
+        static constexpr uint8_t LINE_SIZE_POT = 16;
         static constexpr uint32_t LINE_SIZE = 1u << LINE_SIZE_POT;
         static constexpr uint32_t LINE_MASK = LINE_SIZE - 1;
         std::vector<uint32_t> empty;
@@ -134,6 +134,24 @@ namespace E4 {
         template<class T>
         bool has(ComponentMember<T>& entityCore) {
             return entityCore._has();
+        }
+        template<class T>
+        T& getOrCreate(ComponentMember<T>& entityCore) {
+            if (!entityCore._has()) {
+                return create<T>(entityCore);
+            } else {
+                return get<T>(entityCore);
+            }
+        }
+        template<class T>
+        T& getOrCreate(ComponentMember<T>& entityCore, bool& created) {
+            if (!entityCore._has()) {
+                created = true;
+                return create<T>(entityCore);
+            } else {
+                created = false;
+                return get<T>(entityCore);
+            }
         }
         template<class T>
         T& get(ComponentMember<T>& entityCore) {

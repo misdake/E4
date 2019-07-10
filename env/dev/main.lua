@@ -7,9 +7,10 @@ function load()
 
     local cameraEntity = newEntity()
     entity.cameraEntity = cameraEntity
+    entity.cameraFov = math.pi / 4
     local cameraTransform = createTransform(cameraEntity)
     cameraTransform.z = 3
-    enableCamera(cameraEntity, "PROJ", math.pi / 4)
+    enableCamera(cameraEntity, "PROJ", entity.cameraFov)
 
     local e1 = newEntityFromFile("Male_LookingUp.obj")
     entities[e1].transform.x = -3
@@ -63,9 +64,9 @@ function update()
         entity.mouseY = inputStateCurr.mouseY
         print(t.ry)
     end
-    if  (not inputStateCurr.mouseButton1) and inputStatePrev.mouseButton1 then
 
-    end
+    enableCamera(entity.cameraEntity, "PROJ", entity.cameraFov + inputStateCurr.wheelY * 0.1);
+
     entities[entity.l].transform.x = math.sin(rad) * 0.8
     entities[entity.l].transform.z = math.cos(rad) * 0.8
 end

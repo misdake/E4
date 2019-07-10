@@ -69,14 +69,9 @@ std::reference_wrapper<E4::Script> E4::Scene::createScript(uint32_t index, const
 
 std::reference_wrapper<E4::Env> E4::Scene::enableLight(E4::Entity& entity, const std::string& ambient, const std::string& diffuse, const std::string& specular) {
     sol::state& lua = *state;
-    E4::Env* p = nullptr;
-    if(!ecs->has<Env>(entity)) { //TODO extract getOrCreate
-        p = &ecs->create<Env>(entity);
-        lua["entities"][entity.index]["env"] = std::ref<Env>(*p);
-    } else {
-        p = &ecs->get<Env>(entity);
-    }
-    auto& env = *p;
+    bool created = false;
+    auto& env = ecs->getOrCreate<Env>(entity, created);
+    if (created) lua["entities"][entity.index]["env"] = std::ref<Env>(env);
     env.light.enabled = true;
     env.light.type = LightType::POINT;
     env.light.ambient.color.set(ambient);
@@ -90,8 +85,7 @@ std::reference_wrapper<E4::Env> E4::Scene::enableLight(uint32_t index, const std
 
 void E4::Scene::disableLight(E4::Entity& entity) {
     sol::state& lua = *state;
-    if(ecs->has<Env>(entity)) {
-    } else {
+    if (ecs->has<Env>(entity)) {
         ecs->get<Env>(entity).light.enabled = false;
     }
 }
@@ -101,14 +95,9 @@ void E4::Scene::disableLight(uint32_t index) {
 
 std::reference_wrapper<E4::Env> E4::Scene::enableCamera(E4::Entity& entity, const std::string& type, float fov) {
     sol::state& lua = *state;
-    E4::Env* p = nullptr;
-    if(!ecs->has<Env>(entity)) { //TODO extract getOrCreate
-        p = &ecs->create<Env>(entity);
-        lua["entities"][entity.index]["env"] = std::ref<Env>(*p);
-    } else {
-        p = &ecs->get<Env>(entity);
-    }
-    auto& env = *p;
+    bool created = false;
+    auto& env = ecs->getOrCreate<Env>(entity, created);
+    if (created) lua["entities"][entity.index]["env"] = std::ref<Env>(env);
     env.camera.enabled = true;
     env.camera.init();
     env.camera.type = type == "PROJ" ? CameraType::PROJ : CameraType::ORTHO;
@@ -121,8 +110,7 @@ std::reference_wrapper<E4::Env> E4::Scene::enableCamera(uint32_t index, const st
 
 void E4::Scene::disableCamera(E4::Entity& entity) {
     sol::state& lua = *state;
-    if(ecs->has<Env>(entity)) {
-    } else {
+    if (ecs->has<Env>(entity)) {
         ecs->get<Env>(entity).camera.enabled = false;
     }
 }

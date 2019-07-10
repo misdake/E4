@@ -106,7 +106,6 @@ void E4::ScriptBridge::load(App& app, sol::state& lua, Ecs& ecs) {
 
 void firstFrame(sol::state& lua, const E4::FrameState& frameState, E4::Ecs& ecs) {
     lua["inputStatePrev"] = lua.create_table_with(
-        "wheel", 0,
         "mouseX", 0,
         "mouseY", 0,
         "mouseButton1", false,
@@ -115,7 +114,6 @@ void firstFrame(sol::state& lua, const E4::FrameState& frameState, E4::Ecs& ecs)
         "keys", &frameState.inputStatePrev.keys
     );
     lua["inputStateCurr"] = lua.create_table_with(
-        "wheel", 0,
         "mouseX", 0,
         "mouseY", 0,
         "mouseButton1", false,
