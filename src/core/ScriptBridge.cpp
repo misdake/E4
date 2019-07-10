@@ -23,8 +23,14 @@ void E4::ScriptBridge::load(App& app, sol::state& lua, Ecs& ecs) {
     lua["enableLight"] = [&](uint32_t index, std::string ambient, std::string diffuse, std::string specular) {
         return app.scene.enableLight(index, ambient, diffuse, specular);
     };
-    lua["disable"] = [&](uint32_t index) {
+    lua["disableLight"] = [&](uint32_t index) {
         return app.scene.disableLight(index);
+    };
+    lua["enableCamera"] = [&](uint32_t index, std::string type, float fov) {
+        return app.scene.enableCamera(index, type, fov);
+    };
+    lua["disableCamera"] = [&](uint32_t index) {
+        return app.scene.disableCamera(index);
     };
 
     lua["newMaterialTexture"] = [&app](std::string textureName) {
@@ -80,20 +86,20 @@ void E4::ScriptBridge::load(App& app, sol::state& lua, Ecs& ecs) {
     lua.new_usertype<E4::Script>(
         "Script"
     );
-    lua.new_usertype<E4::Env>(
-        "Env",
-        "camera", &E4::Env::camera,
-        "light", &E4::Env::light
-    );
-    lua.new_usertype<E4::Camera>(
-        "Camera",
-        "enabled", &E4::Camera::enabled
-    );
-    lua.new_usertype<E4::Light>(
-        "Light",
-        "enabled", &E4::Light::enabled,
-        "type", &E4::Light::type
-    );
+//    lua.new_usertype<E4::Env>(
+//        "Env",
+//        "camera", &E4::Env::camera,
+//        "light", &E4::Env::light
+//    );
+//    lua.new_usertype<E4::Camera>(
+//        "Camera",
+//        "enabled", &E4::Camera::enabled
+//    );
+//    lua.new_usertype<E4::Light>(
+//        "Light",
+//        "enabled", &E4::Light::enabled,
+//        "type", &E4::Light::type
+//    );
 
     lua["LightType"] = lua.create_table_with("POINT", LightType::POINT, "DIRECTIONAL", LightType::DIRECTIONAL);
 }

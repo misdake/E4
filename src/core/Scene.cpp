@@ -99,6 +99,37 @@ void E4::Scene::disableLight(uint32_t index) {
     return disableLight(ecs->getEntityByIndex(index));
 }
 
+std::reference_wrapper<E4::Env> E4::Scene::enableCamera(E4::Entity& entity, const std::string& type, float fov) {
+    sol::state& lua = *state;
+    E4::Env* p = nullptr;
+    if(!ecs->has<Env>(entity)) { //TODO extract getOrCreate
+        p = &ecs->create<Env>(entity);
+        lua["entities"][entity.index]["env"] = std::ref<Env>(*p);
+    } else {
+        p = &ecs->get<Env>(entity);
+    }
+    auto& env = *p;
+    env.camera.enabled = true;
+    env.camera.init();
+    env.camera.type = type == "PROJ" ? CameraType::PROJ : CameraType::ORTHO;
+    env.camera.fov = fov;
+    return std::ref<Env>(env);
+}
+std::reference_wrapper<E4::Env> E4::Scene::enableCamera(uint32_t index, const std::string& type, float fov) {
+    return enableCamera(ecs->getEntityByIndex(index), type, fov);
+}
+
+void E4::Scene::disableCamera(E4::Entity& entity) {
+    sol::state& lua = *state;
+    if(ecs->has<Env>(entity)) {
+    } else {
+        ecs->get<Env>(entity).camera.enabled = false;
+    }
+}
+void E4::Scene::disableCamera(uint32_t index) {
+    return disableCamera(ecs->getEntityByIndex(index));
+}
+
 E4::Asset<E4::Material> E4::Scene::newMaterialTexture(const std::string& textureName) {
     Asset<Material> material = app->materials.alloc();
     material->texture = app->textures.get(textureName);

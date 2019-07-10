@@ -17,13 +17,13 @@ int main(int argc, char* argv[]) {
         app.scene.createScript(e, "main.lua");
 
 
-        E4::Entity& e2 = app.scene.newEntity();
-        E4::Transform& transform = app.scene.createTransform(e2);
-        transform.z = 3;
-        auto& env = app.ecs.create<E4::Env>(e2);
-        env.camera.init();
-        env.camera.type = E4::CameraType::ORTHO;
-        env.camera.fov = 2;
+//        E4::Entity& e2 = app.scene.newEntity();
+//        E4::Transform& transform = app.scene.createTransform(e2);
+//        transform.z = 3;
+//        auto& env = app.ecs.create<E4::Env>(e2);
+//        env.camera.init();
+//        env.camera.type = E4::CameraType::PROJ;
+//        env.camera.fov = M_PI / 4;
 
 //        app.scriptRunner.run(R"(
 //            local e = newEntity()

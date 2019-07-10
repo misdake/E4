@@ -32,6 +32,10 @@ namespace E4 {
         std::reference_wrapper<Env> enableLight(uint32_t index, const std::string& ambient, const std::string& diffuse, const std::string& specular);
         void disableLight(Entity& entity);
         void disableLight(uint32_t index);
+        std::reference_wrapper<Env> enableCamera(Entity& entity, const std::string& type, float fov);
+        std::reference_wrapper<Env> enableCamera(uint32_t index, const std::string& type, float fov);
+        void disableCamera(Entity& entity);
+        void disableCamera(uint32_t index);
         Asset<Material> newMaterialTexture(const std::string& textureName);
         Asset<Material> newMaterialColor(const std::string& color);
         Asset<Material> newMaterialLight(const std::string& ambient, const std::string& diffuse);

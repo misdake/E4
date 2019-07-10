@@ -5,6 +5,12 @@ function load()
     entity.transform.sz = 0.3
     entity.transform.y = -0.5
 
+    local cameraEntity = newEntity()
+    entity.cameraEntity = cameraEntity
+    local cameraTransform = createTransform(cameraEntity)
+    cameraTransform.z = 3
+    enableCamera(cameraEntity, "PROJ", math.pi / 4)
+
     local e1 = newEntityFromFile("Male_LookingUp.obj")
     entities[e1].transform.x = -3
     entities[e1].transform.ry = 1
@@ -50,10 +56,12 @@ function update()
         entity.mouseY = inputStateCurr.mouseY
     end
     if inputStatePrev.mouseButton1 and inputStateCurr.mouseButton1 then
-        entities[2].transform.ry = entities[2].transform.ry + (inputStateCurr.mouseX - inputStatePrev.mouseX) * math.pi / 1000
-        entities[2].transform.rx = entities[2].transform.rx + (inputStateCurr.mouseY - inputStatePrev.mouseY) * math.pi / 1000
+        local t = entities[entity.cameraEntity].transform
+        t.ry = t.ry + (inputStateCurr.mouseX - inputStatePrev.mouseX) * math.pi / 1000
+        t.rx = t.rx + (inputStateCurr.mouseY - inputStatePrev.mouseY) * math.pi / 1000
         entity.mouseX = inputStateCurr.mouseX
         entity.mouseY = inputStateCurr.mouseY
+        print(t.ry)
     end
     if  (not inputStateCurr.mouseButton1) and inputStatePrev.mouseButton1 then
 
