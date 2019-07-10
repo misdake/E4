@@ -132,6 +132,10 @@ namespace E4 {
             return this->EcsComponent<T>::createComponent(entityCore.getRef());
         }
         template<class T>
+        bool has(ComponentMember<T>& entityCore) {
+            return entityCore._has();
+        }
+        template<class T>
         T& get(ComponentMember<T>& entityCore) {
             return this->EcsComponent<T>::getComponent(entityCore.getVal());
         }

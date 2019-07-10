@@ -20,8 +20,11 @@ void E4::ScriptBridge::load(App& app, sol::state& lua, Ecs& ecs) {
     lua["createScript"] = [&](uint32_t index, std::string scriptName) {
         return app.scene.createScript(index, scriptName);
     };
-    lua["createEnv"] = [&](uint32_t index, std::string ambient, std::string diffuse) {
-        return app.scene.createEnv(index, ambient, diffuse);
+    lua["enableLight"] = [&](uint32_t index, std::string ambient, std::string diffuse, std::string specular) {
+        return app.scene.enableLight(index, ambient, diffuse, specular);
+    };
+    lua["disable"] = [&](uint32_t index) {
+        return app.scene.disableLight(index);
     };
 
     lua["newMaterialTexture"] = [&app](std::string textureName) {

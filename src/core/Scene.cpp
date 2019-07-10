@@ -67,19 +67,36 @@ std::reference_wrapper<E4::Script> E4::Scene::createScript(uint32_t index, const
     return createScript(ecs->getEntityByIndex(index), scriptName);
 }
 
-std::reference_wrapper<E4::Env> E4::Scene::createEnv(E4::Entity& entity, const std::string& ambient, const std::string& diffuse) {
+std::reference_wrapper<E4::Env> E4::Scene::enableLight(E4::Entity& entity, const std::string& ambient, const std::string& diffuse, const std::string& specular) {
     sol::state& lua = *state;
-    auto& env = ecs->create<Env>(entity);
+    E4::Env* p = nullptr;
+    if(!ecs->has<Env>(entity)) { //TODO extract getOrCreate
+        p = &ecs->create<Env>(entity);
+        lua["entities"][entity.index]["env"] = std::ref<Env>(*p);
+    } else {
+        p = &ecs->get<Env>(entity);
+    }
+    auto& env = *p;
     env.light.enabled = true;
     env.light.type = LightType::POINT;
     env.light.ambient.color.set(ambient);
     env.light.diffuse.color.set(diffuse);
-    env.light.specular.color.set(diffuse); //TODO
-    lua["entities"][entity.index]["env"] = std::ref<Env>(env);
+    env.light.specular.color.set(specular);
     return std::ref<Env>(env);
 }
-std::reference_wrapper<E4::Env> E4::Scene::createEnv(uint32_t index, const std::string& ambient, const std::string& diffuse) {
-    return createEnv(ecs->getEntityByIndex(index), ambient, diffuse);
+std::reference_wrapper<E4::Env> E4::Scene::enableLight(uint32_t index, const std::string& ambient, const std::string& diffuse, const std::string& specular) {
+    return enableLight(ecs->getEntityByIndex(index), ambient, diffuse, specular);
+}
+
+void E4::Scene::disableLight(E4::Entity& entity) {
+    sol::state& lua = *state;
+    if(ecs->has<Env>(entity)) {
+    } else {
+        ecs->get<Env>(entity).light.enabled = false;
+    }
+}
+void E4::Scene::disableLight(uint32_t index) {
+    return disableLight(ecs->getEntityByIndex(index));
 }
 
 E4::Asset<E4::Material> E4::Scene::newMaterialTexture(const std::string& textureName) {
