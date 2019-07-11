@@ -67,20 +67,20 @@ std::reference_wrapper<E4::Script> E4::Scene::createScript(uint32_t index, const
     return createScript(ecs->getEntityByIndex(index), scriptName);
 }
 
-std::reference_wrapper<E4::Env> E4::Scene::enableLight(E4::Entity& entity, const std::string& ambient, const std::string& diffuse, const std::string& specular) {
+std::reference_wrapper<E4::Env> E4::Scene::enableLight(E4::Entity& entity, LightType lightType, const std::string& ambient, const std::string& diffuse, const std::string& specular) {
     sol::state& lua = *state;
     bool created = false;
     auto& env = ecs->getOrCreate<Env>(entity, created);
     if (created) lua["entities"][entity.index]["env"] = std::ref<Env>(env);
     env.light.enabled = true;
-    env.light.type = LightType::POINT;
+    env.light.type = lightType;
     env.light.ambient.color.set(ambient);
     env.light.diffuse.color.set(diffuse);
     env.light.specular.color.set(specular);
     return std::ref<Env>(env);
 }
-std::reference_wrapper<E4::Env> E4::Scene::enableLight(uint32_t index, const std::string& ambient, const std::string& diffuse, const std::string& specular) {
-    return enableLight(ecs->getEntityByIndex(index), ambient, diffuse, specular);
+std::reference_wrapper<E4::Env> E4::Scene::enableLight(uint32_t index, LightType lightType, const std::string& ambient, const std::string& diffuse, const std::string& specular) {
+    return enableLight(ecs->getEntityByIndex(index), lightType, ambient, diffuse, specular);
 }
 
 void E4::Scene::disableLight(E4::Entity& entity) {
@@ -93,19 +93,19 @@ void E4::Scene::disableLight(uint32_t index) {
     return disableLight(ecs->getEntityByIndex(index));
 }
 
-std::reference_wrapper<E4::Env> E4::Scene::enableCamera(E4::Entity& entity, const std::string& type, float fov) {
+std::reference_wrapper<E4::Env> E4::Scene::enableCamera(E4::Entity& entity, CameraType cameraType, float fov) {
     sol::state& lua = *state;
     bool created = false;
     auto& env = ecs->getOrCreate<Env>(entity, created);
     if (created) lua["entities"][entity.index]["env"] = std::ref<Env>(env);
     env.camera.enabled = true;
     env.camera.init();
-    env.camera.type = type == "PROJ" ? CameraType::PROJ : CameraType::ORTHO;
+    env.camera.type = cameraType;
     env.camera.fov = fov;
     return std::ref<Env>(env);
 }
-std::reference_wrapper<E4::Env> E4::Scene::enableCamera(uint32_t index, const std::string& type, float fov) {
-    return enableCamera(ecs->getEntityByIndex(index), type, fov);
+std::reference_wrapper<E4::Env> E4::Scene::enableCamera(uint32_t index, CameraType cameraType, float fov) {
+    return enableCamera(ecs->getEntityByIndex(index), cameraType, fov);
 }
 
 void E4::Scene::disableCamera(E4::Entity& entity) {

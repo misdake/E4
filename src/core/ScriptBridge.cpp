@@ -20,13 +20,13 @@ void E4::ScriptBridge::load(App& app, sol::state& lua, Ecs& ecs) {
     lua["createScript"] = [&](uint32_t index, std::string scriptName) {
         return app.scene.createScript(index, scriptName);
     };
-    lua["enableLight"] = [&](uint32_t index, std::string ambient, std::string diffuse, std::string specular) {
-        return app.scene.enableLight(index, ambient, diffuse, specular);
+    lua["enableLight"] = [&](uint32_t index, LightType lightType, std::string ambient, std::string diffuse, std::string specular) {
+        return app.scene.enableLight(index, lightType, ambient, diffuse, specular);
     };
     lua["disableLight"] = [&](uint32_t index) {
         return app.scene.disableLight(index);
     };
-    lua["enableCamera"] = [&](uint32_t index, std::string type, float fov) {
+    lua["enableCamera"] = [&](uint32_t index, CameraType type, float fov) {
         return app.scene.enableCamera(index, type, fov);
     };
     lua["disableCamera"] = [&](uint32_t index) {
@@ -102,6 +102,7 @@ void E4::ScriptBridge::load(App& app, sol::state& lua, Ecs& ecs) {
 //    );
 
     lua["LightType"] = lua.create_table_with("POINT", LightType::POINT, "DIRECTIONAL", LightType::DIRECTIONAL);
+    lua["CameraType"] = lua.create_table_with("ORTHO", CameraType::ORTHO, "PROJ", CameraType::PROJ);
 }
 
 void firstFrame(sol::state& lua, const E4::FrameState& frameState, E4::Ecs& ecs) {

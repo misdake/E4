@@ -28,12 +28,12 @@ namespace E4 {
         std::reference_wrapper<Drawable> createDrawable(uint32_t index);
         std::reference_wrapper<Script> createScript(Entity& entity, const std::string& scriptName);
         std::reference_wrapper<Script> createScript(uint32_t index, const std::string& scriptName);
-        std::reference_wrapper<Env> enableLight(Entity& entity, const std::string& ambient, const std::string& diffuse, const std::string& specular);
-        std::reference_wrapper<Env> enableLight(uint32_t index, const std::string& ambient, const std::string& diffuse, const std::string& specular);
+        std::reference_wrapper<Env> enableLight(Entity& entity, LightType lightType, const std::string& ambient, const std::string& diffuse, const std::string& specular);
+        std::reference_wrapper<Env> enableLight(uint32_t index, LightType lightType, const std::string& ambient, const std::string& diffuse, const std::string& specular);
         void disableLight(Entity& entity);
         void disableLight(uint32_t index);
-        std::reference_wrapper<Env> enableCamera(Entity& entity, const std::string& type, float fov);
-        std::reference_wrapper<Env> enableCamera(uint32_t index, const std::string& type, float fov);
+        std::reference_wrapper<Env> enableCamera(Entity& entity, CameraType type, float fov);
+        std::reference_wrapper<Env> enableCamera(uint32_t index, CameraType type, float fov);
         void disableCamera(Entity& entity);
         void disableCamera(uint32_t index);
         Asset<Material> newMaterialTexture(const std::string& textureName);

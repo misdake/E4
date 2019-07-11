@@ -10,7 +10,7 @@ function load()
     entity.cameraFov = math.pi / 4
     local cameraTransform = createTransform(cameraEntity)
     cameraTransform.z = 3
-    enableCamera(cameraEntity, "PROJ", entity.cameraFov)
+    enableCamera(cameraEntity, CameraType.PROJ, entity.cameraFov)
 
     local e1 = newEntityFromFile("Male_LookingUp.obj")
     entities[e1].transform.x = -3
@@ -32,7 +32,7 @@ function load()
     entities[lightEntity].transform.sx = 0.1
     entities[lightEntity].transform.sy = 0.1
     entities[lightEntity].transform.sz = 0.1
-    enableLight(lightEntity, "FF404040", "FFFFFFFF", "FFFFFFFF")
+    enableLight(lightEntity, LightType.POINT, "FF404040", "FFFFFFFF", "FFFFFFFF")
     entity.l = lightEntity;
     local drawable = createDrawable(lightEntity)
     drawable.mesh = newMesh("builtin:plane")
@@ -65,7 +65,7 @@ function update()
         print(t.ry)
     end
 
-    enableCamera(entity.cameraEntity, "PROJ", entity.cameraFov + inputStateCurr.wheelY * 0.1);
+    enableCamera(entity.cameraEntity, CameraType.PROJ, entity.cameraFov + inputStateCurr.wheelY * 0.1);
 
     entities[entity.l].transform.x = math.sin(rad) * 0.8
     entities[entity.l].transform.z = math.cos(rad) * 0.8
