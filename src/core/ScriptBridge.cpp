@@ -7,19 +7,20 @@ void E4::ScriptBridge::load(App& app, sol::state& lua, Ecs& ecs) {
     lua["newEntity"] = [&app]() {
         return app.scene.newEntity().index;
     };
-    lua["newEntityFromFile"] = [&app](std::string modelName) {
+    lua["newEntityFromFile"] = [&](std::string modelName) {
         return app.scene.newEntityFromFile(modelName).index;
     };
 
-    lua["createTransform"] = [&app](uint32_t index) {
+    lua["createTransform"] = [&](uint32_t index) {
         return app.scene.createTransform(index);
     };
-    lua["createDrawable"] = [&app](uint32_t index) {
+    lua["createDrawable"] = [&](uint32_t index) {
         return app.scene.createDrawable(index);
     };
     lua["createScript"] = [&](uint32_t index, std::string scriptName) {
         return app.scene.createScript(index, scriptName);
     };
+
     lua["enableLight"] = [&](uint32_t index, LightType lightType, std::string ambient, std::string diffuse, std::string specular) {
         return app.scene.enableLight(index, lightType, ambient, diffuse, specular);
     };
@@ -33,16 +34,16 @@ void E4::ScriptBridge::load(App& app, sol::state& lua, Ecs& ecs) {
         return app.scene.disableCamera(index);
     };
 
-    lua["newMaterialTexture"] = [&app](std::string textureName) {
+    lua["newMaterialTexture"] = [&](std::string textureName) {
         return app.scene.newMaterialTexture(textureName);
     };
-    lua["newMaterialColor"] = [&app](std::string color) {
+    lua["newMaterialColor"] = [&](std::string color) {
         return app.scene.newMaterialColor(color);
     };
-    lua["newMaterialLight"] = [&app](std::string ambient, std::string diffuse) {
+    lua["newMaterialLight"] = [&](std::string ambient, std::string diffuse) {
         return app.scene.newMaterialLight(ambient, diffuse);
     };
-    lua["newMesh"] = [&app](std::string meshName) {
+    lua["newMesh"] = [&](std::string meshName) {
         return app.scene.newMesh(meshName);
     };
 

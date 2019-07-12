@@ -38,7 +38,6 @@ function createPipe(index)
         x = 0,
         y = 0
     }
-    print("createPipe "..index)
 end
 
 function setupPipe(index)
@@ -84,7 +83,7 @@ end
 
 function load()
     gameLoad()
-    -- entity.transform.sx = screenHeight / screenWidth
+    entity.transform.sx = screenHeight / screenWidth
     entity.bird = createChild(-0.5, 0.5, 0.25, "flappybird.png")
 
     entity.pipes = {}

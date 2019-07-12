@@ -11,8 +11,8 @@ namespace E4 {
 
     template<typename T>
     struct Line {
-        static constexpr uint8_t LINE_SIZE_POT = 16;
-        static constexpr uint32_t LINE_SIZE = 1u << LINE_SIZE_POT;
+        static constexpr uint8_t LINE_SIZE_POT = 4;
+        static constexpr uint32_t LINE_SIZE = 1u << LINE_SIZE_POT; //16
         static constexpr uint32_t LINE_MASK = LINE_SIZE - 1;
         std::vector<uint32_t> empty;
         std::vector<T*> lists;

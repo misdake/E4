@@ -62,7 +62,6 @@ function update()
         t.rx = t.rx + (inputStateCurr.mouseY - inputStatePrev.mouseY) * math.pi / 1000
         entity.mouseX = inputStateCurr.mouseX
         entity.mouseY = inputStateCurr.mouseY
-        print(t.ry)
     end
 
     enableCamera(entity.cameraEntity, CameraType.PROJ, entity.cameraFov + inputStateCurr.wheelY * 0.1);

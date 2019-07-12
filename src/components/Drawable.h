@@ -25,22 +25,6 @@ namespace E4 {
 
         int vertexCount;
         ShortBuffer index;
-
-        void print() {
-            if (index.countIndices > 0) {
-                Log::debug("indexed %d", index.countIndices);
-            } else {
-                Log::debug("vertices %d", vertexCount);
-            }
-
-            if (position.countVertex > 0) {
-                Log::debug("position: id %d, countVertex %d, floatPerVertex %d, len %d", position.bufferId, position.countVertex, position.floatPerVertex, position.array.size());
-            }
-
-            if (texcoord.countVertex > 0) {
-                Log::debug("texcoord: id %d, countVertex %d, floatPerVertex %d, len %d", texcoord.bufferId, texcoord.countVertex, texcoord.floatPerVertex, texcoord.array.size());
-            }
-        }
     };
 
     struct Drawable {
