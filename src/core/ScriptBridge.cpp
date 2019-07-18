@@ -2,51 +2,55 @@
 
 #include "Lua.h"
 #include "App.h"
+#include "../util/File.h"
 
 void E4::ScriptBridge::load(App& app, sol::state& lua, Ecs& ecs) {
-    lua["newEntity"] = [&app]() {
+    lua.set_function("newEntity", [&app]() {
         return app.scene.newEntity().index;
-    };
-    lua["newEntityFromFile"] = [&](std::string modelName) {
+    });
+    lua.set_function("newEntityFromFile", [&](std::string modelName) {
         return app.scene.newEntityFromFile(modelName).index;
-    };
+    });
 
-    lua["createTransform"] = [&](uint32_t index) {
+    lua.set_function("createTransform", [&](uint32_t index) {
         return app.scene.createTransform(index);
-    };
-    lua["createDrawable"] = [&](uint32_t index) {
+    });
+    lua.set_function("createDrawable", [&](uint32_t index) {
         return app.scene.createDrawable(index);
-    };
-    lua["createScript"] = [&](uint32_t index, std::string scriptName) {
+    });
+    lua.set_function("createScript", [&](uint32_t index, std::string scriptName) {
         return app.scene.createScript(index, scriptName);
-    };
+    });
 
-    lua["enableLight"] = [&](uint32_t index, LightType lightType, std::string ambient, std::string diffuse, std::string specular) {
+    lua.set_function("enableLight", [&](uint32_t index, LightType lightType, std::string ambient, std::string diffuse, std::string specular) {
         return app.scene.enableLight(index, lightType, ambient, diffuse, specular);
-    };
-    lua["disableLight"] = [&](uint32_t index) {
+    });
+    lua.set_function("disableLight", [&](uint32_t index) {
         return app.scene.disableLight(index);
-    };
-    lua["enableCamera"] = [&](uint32_t index, CameraType type, float fov) {
+    });
+    lua.set_function("enableCamera", [&](uint32_t index, CameraType type, float fov) {
         return app.scene.enableCamera(index, type, fov);
-    };
-    lua["disableCamera"] = [&](uint32_t index) {
+    });
+    lua.set_function("disableCamera", [&](uint32_t index) {
         return app.scene.disableCamera(index);
-    };
+    });
 
-    lua["newMaterialTexture"] = [&](std::string textureName) {
+    lua.set_function("newMaterialTexture", [&](std::string textureName) {
         return app.scene.newMaterialTexture(textureName);
-    };
-    lua["newMaterialColor"] = [&](std::string color) {
+    });
+    lua.set_function("newMaterialColor", [&](std::string color) {
         return app.scene.newMaterialColor(color);
-    };
-    lua["newMaterialLight"] = [&](std::string ambient, std::string diffuse) {
+    });
+    lua.set_function("newMaterialLight", [&](std::string ambient, std::string diffuse) {
         return app.scene.newMaterialLight(ambient, diffuse);
-    };
-    lua["newMesh"] = [&](std::string meshName) {
+    });
+    lua.set_function("newMesh", [&](std::string meshName) {
         return app.scene.newMesh(meshName);
-    };
+    });
 
+    lua.set_function("readFile", [&](std::string fileName) {
+        return readFile(app.folder, fileName);
+    });
     lua.script(R"(
         function prepareEntity(id)
             entity = entities[id]
