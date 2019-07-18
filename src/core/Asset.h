@@ -64,9 +64,9 @@ namespace E4 {
         }
 
         void free(const Asset<T>& p) {
-            if (p.index < Asset<T>::MAX_INDEX && p.index < array.size()) {
+            if (p.index != 0 && p.index < array.size()) {
                 empty.push_back(p.index);
-                p.index = Asset<T>::MAX_INDEX;
+                p.index = 0;
             } else {
                 Log::error("free an invalid pointer");
             }
@@ -99,7 +99,7 @@ namespace E4 {
             return Asset<T>(*this, index);
         }
     public:
-        AssetLoader(std::string folder) :
+        explicit AssetLoader(std::string folder) :
             folder(std::move(folder)) {
         }
 
@@ -139,7 +139,7 @@ namespace E4 {
         if (0 < index && index < pool->array.size()) {
             return pool->array[index];
         } else {
-            Log::error("free an invalid pointer");
+            Log::error("invalid pointer");
             return pool->array[index];
         }
     }
@@ -149,7 +149,7 @@ namespace E4 {
         if (0 < index && index < pool->array.size()) {
             return pool->array[index];
         } else {
-            Log::error("free an invalid pointer");
+            Log::error("invalid pointer");
             return pool->array[index];
         }
     }
