@@ -6,12 +6,14 @@
 #include <limits>
 #include <map>
 #include <string>
+#include <functional>
 #include "../util/Log.h"
 
 namespace E4 {
 
     template<typename T>
     class AssetPool;
+
     template<typename T>
     class AssetLoader;
 
@@ -32,10 +34,14 @@ namespace E4 {
 
         T* operator->() { return &get(); }
         const T* operator->() const { return &get(); }
+        T& operator*() { return get(); }
+        const T& operator*() const { return get(); }
 
         bool valid() const;
         T& get();
         const T& get() const;
+
+        void free();
     };
 
     template<typename T>
@@ -44,17 +50,20 @@ namespace E4 {
         friend class Asset<T>;
 
         std::vector<T> array;
+        std::vector<bool> bitmap;
         std::deque<uint32_t> empty;
 
     public:
         AssetPool() {
             array.emplace_back();
+            bitmap.emplace_back(false);
         }
 
         Asset<T> alloc() {
             uint32_t index = 0;
             if (empty.empty()) {
                 array.emplace_back();
+                bitmap.emplace_back(false);
                 index = array.size() - 1;
             } else {
                 index = empty.back();
@@ -64,11 +73,41 @@ namespace E4 {
         }
 
         void free(const Asset<T>& p) {
+            if (p.pool != this) {
+                Log::error("it's not my pointer");
+                return;
+            }
             if (p.index != 0 && p.index < array.size()) {
                 empty.push_back(p.index);
-                p.index = 0;
             } else {
                 Log::error("free an invalid pointer");
+            }
+        }
+
+        void checkBegin() {
+            std::fill(bitmap.begin(), bitmap.end(), false);
+            bitmap[0] = true;
+            for (auto& e : empty) {
+                bitmap[e] = true;
+            }
+        }
+        void check(const Asset<T>& p) {
+            if (p.pool != this) {
+                Log::error("it's not my pointer");
+                return;
+            }
+            if (p.index != 0 && p.index < array.size()) {
+                bitmap[p.index] = true;
+            } else {
+                Log::error("free an invalid pointer");
+            }
+        }
+        void checkEnd(std::function<void(Asset<T>&)>&& garbageCallback) {
+            for (int i = 0; i < array.size(); i++) {
+                if (!bitmap[i]) {
+                    Asset<T> asset(*this, i);
+                    garbageCallback(asset);
+                }
             }
         }
     };
@@ -152,6 +191,11 @@ namespace E4 {
             Log::error("invalid pointer");
             return pool->array[index];
         }
+    }
+
+    template<typename T>
+    void Asset<T>::free() {
+        pool->free(*this);
     }
 
 }
