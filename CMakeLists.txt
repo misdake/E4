@@ -57,6 +57,7 @@ add_executable(app
         src/systems/render/opengl/DataType.cpp src/systems/render/opengl/DataType.h
         src/systems/script/ScriptRunner.cpp src/systems/script/ScriptRunner.h
         src/systems/script/ScriptFile.cpp src/systems/script/ScriptFile.h
+        src/systems/recycler/Recycler.cpp src/systems/recycler/Recycler.h
 
         src/util/File.cpp src/util/File.h
         src/util/Window.cpp src/util/Window.h

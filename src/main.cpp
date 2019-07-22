@@ -16,15 +16,6 @@ int main(int argc, char* argv[]) {
         app.scene.createTransform(e);
         app.scene.createScript(e, "main.lua");
 
-
-//        E4::Entity& e2 = app.scene.newEntity();
-//        E4::Transform& transform = app.scene.createTransform(e2);
-//        transform.z = 3;
-//        auto& env = app.ecs.create<E4::Env>(e2);
-//        env.camera.init();
-//        env.camera.type = E4::CameraType::PROJ;
-//        env.camera.fov = M_PI / 4;
-
 //        app.scriptRunner.run(R"(
 //            local e = newEntity()
 //            createTransform(e)
@@ -34,7 +25,7 @@ int main(int argc, char* argv[]) {
 
     app.enterLoop([](E4::App& app, const E4::FrameState& frameState) {
         if (!frameState.inputStatePrev.keys[SDL_SCANCODE_F5] && frameState.inputStateCurr.keys[SDL_SCANCODE_F5]) {
-            app.ecs.fortype<E4::Script>([](E4::Entity& entity, E4::Script& script) {
+            app.ecs.fortypes<E4::Script>([](E4::Entity& entity, E4::Script& script) {
                 script.file->scriptLoaded = false;
             });
         }

@@ -16,6 +16,7 @@ namespace E4 {
         static constexpr uint32_t LINE_MASK = LINE_SIZE - 1;
         std::vector<uint32_t> empty;
         std::vector<T*> lists;
+        std::vector<bool> valid;
         uint32_t next;
         uint32_t max;
 
@@ -37,6 +38,7 @@ namespace E4 {
             uint32_t i = next;
             if (!empty.empty()) {
                 i = empty.back();
+                valid[i] = true;
                 empty.pop_back();
             } else {
                 if (next >= max) {
@@ -45,9 +47,19 @@ namespace E4 {
                     memset(list, 0, sizeof(T[LINE_SIZE]));
                     max += LINE_SIZE;
                 }
+                valid.emplace_back(true);
                 next++;
             }
             return i;
+        }
+
+        void foreach(const std::function<void(T&)>& func) {
+            for (uint32_t i = 1; i < next; i++) {
+                if (valid[i]) {
+                    T& t = get(i);
+                    func(t);
+                }
+            }
         }
 
         T& get(uint32_t index) {
@@ -60,6 +72,7 @@ namespace E4 {
             if (index > 0) {
                 empty.push_back(index);
                 T& t = get(index);
+                valid[index] = false;
                 memset(&t, 0, sizeof(T));
             }
         }
@@ -107,6 +120,10 @@ namespace E4 {
     private:
         Line<T> line;
     protected:
+        template<typename... TYPES>
+        friend
+        class EcsBase;
+
         T& createComponent(uint32_t& index) {
             if (index > 0) return line.get(index);
             index = line.alloc();
@@ -158,6 +175,10 @@ namespace E4 {
             return this->EcsComponent<T>::getComponent(entityCore.getVal());
         }
         template<class T>
+        void fortype(const std::function<void(T&)>& func) {
+            return this->EcsComponent<T>::line.foreach(func);
+        }
+        template<class T>
         void remove(ComponentMember<T>& entityCore) {
             this->EcsComponent<T>::removeComponent(entityCore.getRef());
         }
@@ -203,7 +224,7 @@ namespace E4 {
             }
         }
         template<typename ...PARAMS, typename FUNC>
-        void fortype(FUNC&& func) {
+        void fortypes(FUNC&& func) {
             for (auto[id, index] : entityIds) {
                 auto& entity = entities.get(index);
                 if ((entity.template has<PARAMS>() && ...)) {

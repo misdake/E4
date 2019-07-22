@@ -38,8 +38,8 @@ void E4::App::enterLoop(const std::function<void(E4::App&, const E4::FrameState&
         ScriptBridge::update(*this, *scriptRunner.state, ecs, frameState);
 
         onFrame(*this, frameState);
-
         scriptRunner.run(ecs, frameState);
+        recycler.run(ecs, frameState);
 
         envBuilder.run(ecs, frameState);
         transform.run(ecs, frameState, envBuilder.environment);

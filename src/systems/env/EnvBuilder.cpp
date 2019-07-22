@@ -5,7 +5,7 @@ void E4::EnvBuilder::run(E4::Ecs& ecs, const E4::FrameState& state) {
     environment.camera.second = nullptr;
     environment.lights.clear();
 
-    ecs.fortype<E4::Transform, E4::Env>([&](Entity& entity, Transform& transform, Env& env) {
+    ecs.fortypes<E4::Transform, E4::Env>([&](Entity& entity, Transform& transform, Env& env) {
         if (env.camera.enabled) {
             environment.camera.first = &transform;
             environment.camera.second = &env.camera;

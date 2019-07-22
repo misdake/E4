@@ -32,7 +32,7 @@ void E4::Transformer::run(Ecs& ecs, const FrameState& frameState, const E4::Envi
         environment.camera.second->action(environment.camera.first->world.mat4.get(), frameState.width, frameState.height);
     }
 
-    ecs.fortype<Transform>([&](Entity& entity, Transform& position) {
+    ecs.fortypes<Transform>([&](Entity& entity, Transform& position) {
         update(ecs, position, frameState.frameIndex, environment);
     });
 }

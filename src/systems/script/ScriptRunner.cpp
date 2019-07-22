@@ -24,7 +24,7 @@ void E4::ScriptRunner::run(const char* script) {
 void E4::ScriptRunner::run(Ecs& ecs, const E4::FrameState& frameState) {
     sol::state& lua = *state;
 
-    ecs.fortype<Script>([&](Entity& entity, Script& script) {
+    ecs.fortypes<Script>([&](Entity& entity, Script& script) {
         lua["prepareEntity"](entity.index);
 
         //if script functions are not loaded => load script and extract functions

@@ -15,6 +15,7 @@
 #include "../assets/MeshLoader_builtin.h"
 #include "../assets/MeshLoader_obj.h"
 #include "../systems/env/EnvBuilder.h"
+#include "../systems/recycler/Recycler.h"
 
 namespace E4 {
 
@@ -31,6 +32,7 @@ namespace E4 {
         std::string folder;
 
         //systems
+        Recycler recycler;
         EnvBuilder envBuilder;
         Transformer transform;
         Renderer renderer;
