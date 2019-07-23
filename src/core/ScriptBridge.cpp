@@ -5,34 +5,37 @@
 #include "../util/File.h"
 
 void E4::ScriptBridge::load(App& app, sol::state& lua, Ecs& ecs) {
-    lua.set_function("newEntity", [&app]() {
+    lua.set_function("newEntity", [&]() {
         return app.scene.newEntity().index;
+    });
+    lua.set_function("deleteEntity", [&](uint32_t index) {
+        return app.scene.deleteEntity(ecs.getEntityByIndex(index));
     });
     lua.set_function("newEntityFromFile", [&](std::string modelName) {
         return app.scene.newEntityFromFile(modelName).index;
     });
 
     lua.set_function("createTransform", [&](uint32_t index) {
-        return app.scene.createTransform(index);
+        return app.scene.createTransform(ecs.getEntityByIndex(index));
     });
     lua.set_function("createDrawable", [&](uint32_t index) {
-        return app.scene.createDrawable(index);
+        return app.scene.createDrawable(ecs.getEntityByIndex(index));
     });
     lua.set_function("createScript", [&](uint32_t index, std::string scriptName) {
-        return app.scene.createScript(index, scriptName);
+        return app.scene.createScript(ecs.getEntityByIndex(index), scriptName);
     });
 
     lua.set_function("enableLight", [&](uint32_t index, LightType lightType, std::string ambient, std::string diffuse, std::string specular) {
-        return app.scene.enableLight(index, lightType, ambient, diffuse, specular);
+        return app.scene.enableLight(ecs.getEntityByIndex(index), lightType, ambient, diffuse, specular);
     });
     lua.set_function("disableLight", [&](uint32_t index) {
-        return app.scene.disableLight(index);
+        return app.scene.disableLight(ecs.getEntityByIndex(index));
     });
     lua.set_function("enableCamera", [&](uint32_t index, CameraType type, float fov) {
-        return app.scene.enableCamera(index, type, fov);
+        return app.scene.enableCamera(ecs.getEntityByIndex(index), type, fov);
     });
     lua.set_function("disableCamera", [&](uint32_t index) {
-        return app.scene.disableCamera(index);
+        return app.scene.disableCamera(ecs.getEntityByIndex(index));
     });
 
     lua.set_function("newMaterialTexture", [&](std::string textureName) {

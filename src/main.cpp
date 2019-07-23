@@ -29,12 +29,6 @@ int main(int argc, char* argv[]) {
                 script.file->scriptLoaded = false;
             });
         }
-
-        //static float t = 0;
-        //t += 0.001f * frameState.deltatime;
-        //auto& env = app.ecs.get<E4::Env>(app.ecs.getEntityByIndex(1));
-        //env.camera.target.x = 0.3*std::sin(t);
-        //env.camera.target.y = 0.3*std::cos(t);
     });
 
     return 0;

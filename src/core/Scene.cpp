@@ -23,6 +23,11 @@ E4::Entity& E4::Scene::newEntity() {
     lua["entities"][e.index] = lua.create_table_with("index", e.index);
     return e;
 }
+void E4::Scene::deleteEntity(E4::Entity& entity) {
+    sol::state& lua = *state;
+    lua["entities"][entity.index] = lua.create_table_with("index", entity.index);
+    ecs->deleteEntity(entity);
+}
 E4::Entity& E4::Scene::newEntityFromFile(const std::string& modelName) {
     if (endsWith(modelName, ".obj")) {
         uint64_t entityId = app->meshLoader_obj.create(app->folder, modelName, *app);
@@ -41,18 +46,12 @@ std::reference_wrapper<E4::Transform> E4::Scene::createTransform(E4::Entity& ent
     lua["entities"][entity.index]["transform"] = std::ref<Transform>(transform);
     return std::ref<Transform>(transform);
 }
-std::reference_wrapper<E4::Transform> E4::Scene::createTransform(uint32_t index) {
-    return createTransform(ecs->getEntityByIndex(index));
-}
 
 std::reference_wrapper<E4::Drawable> E4::Scene::createDrawable(Entity& entity) {
     sol::state& lua = *state;
     auto& drawable = ecs->create<Drawable>(entity);
     lua["entities"][entity.index]["drawable"] = std::ref<Drawable>(drawable);
     return std::ref<Drawable>(drawable);
-}
-std::reference_wrapper<E4::Drawable> E4::Scene::createDrawable(uint32_t index) {
-    return createDrawable(ecs->getEntityByIndex(index));
 }
 
 std::reference_wrapper<E4::Script> E4::Scene::createScript(Entity& entity, const std::string& scriptName) {
@@ -62,9 +61,6 @@ std::reference_wrapper<E4::Script> E4::Scene::createScript(Entity& entity, const
     script.file = app->scripts.get(scriptName);
     lua["entities"][entity.index]["script"] = std::ref<Script>(script);
     return std::ref<Script>(script);
-}
-std::reference_wrapper<E4::Script> E4::Scene::createScript(uint32_t index, const std::string& scriptName) {
-    return createScript(ecs->getEntityByIndex(index), scriptName);
 }
 
 std::reference_wrapper<E4::Env> E4::Scene::enableLight(E4::Entity& entity, LightType lightType, const std::string& ambient, const std::string& diffuse, const std::string& specular) {
@@ -79,18 +75,12 @@ std::reference_wrapper<E4::Env> E4::Scene::enableLight(E4::Entity& entity, Light
     env.light.specular.color.set(specular);
     return std::ref<Env>(env);
 }
-std::reference_wrapper<E4::Env> E4::Scene::enableLight(uint32_t index, LightType lightType, const std::string& ambient, const std::string& diffuse, const std::string& specular) {
-    return enableLight(ecs->getEntityByIndex(index), lightType, ambient, diffuse, specular);
-}
 
 void E4::Scene::disableLight(E4::Entity& entity) {
     sol::state& lua = *state;
     if (ecs->has<Env>(entity)) {
         ecs->get<Env>(entity).light.enabled = false;
     }
-}
-void E4::Scene::disableLight(uint32_t index) {
-    return disableLight(ecs->getEntityByIndex(index));
 }
 
 std::reference_wrapper<E4::Env> E4::Scene::enableCamera(E4::Entity& entity, CameraType cameraType, float fov) {
@@ -104,18 +94,12 @@ std::reference_wrapper<E4::Env> E4::Scene::enableCamera(E4::Entity& entity, Came
     env.camera.fov = fov;
     return std::ref<Env>(env);
 }
-std::reference_wrapper<E4::Env> E4::Scene::enableCamera(uint32_t index, CameraType cameraType, float fov) {
-    return enableCamera(ecs->getEntityByIndex(index), cameraType, fov);
-}
 
 void E4::Scene::disableCamera(E4::Entity& entity) {
     sol::state& lua = *state;
     if (ecs->has<Env>(entity)) {
         ecs->get<Env>(entity).camera.enabled = false;
     }
-}
-void E4::Scene::disableCamera(uint32_t index) {
-    return disableCamera(ecs->getEntityByIndex(index));
 }
 
 E4::Asset<E4::Material> E4::Scene::newMaterialTexture(const std::string& textureName) {
