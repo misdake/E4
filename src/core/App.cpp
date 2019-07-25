@@ -39,7 +39,7 @@ void E4::App::enterLoop(const std::function<void(E4::App&, const E4::FrameState&
 
         onFrame(*this, frameState);
         scriptRunner.run(ecs, frameState);
-        recycler.run(ecs, frameState);
+        recycler.run(*this, ecs, frameState);
 
         envBuilder.run(ecs, frameState);
         transform.run(ecs, frameState, envBuilder.environment);

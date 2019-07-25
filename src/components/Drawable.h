@@ -16,6 +16,8 @@ namespace E4 {
         ShaderData diffuse;
         ShaderData specular;
         ShaderData specularExp;
+
+        void unload();
     };
 
     struct Mesh {
@@ -25,6 +27,8 @@ namespace E4 {
 
         int vertexCount;
         ShortBuffer index;
+
+        void unload();
     };
 
     struct Drawable {

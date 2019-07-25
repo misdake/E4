@@ -1,8 +1,10 @@
 #include "Texture.h"
 
 #define STB_IMAGE_IMPLEMENTATION
+
 #include <stb/stb_image.h>
 #include <glbinding/gl/gl.h>
+
 using namespace gl;
 
 E4::Texture& E4::Texture::load(std::string nfolder, std::string nname) {
@@ -10,6 +12,7 @@ E4::Texture& E4::Texture::load(std::string nfolder, std::string nname) {
     this->loading = true;
     this->folder = std::move(nfolder);
     this->name = std::move(nname);
+    Log::debug("load texture %s", name.c_str());
 
     std::string filepath = this->folder + "/" + this->name;
 
@@ -40,6 +43,11 @@ E4::Texture& E4::Texture::load(std::string nfolder, std::string nname) {
 
 void E4::Texture::unload() {
     if (this->loading) {
+        Log::debug("unload texture %s", name.c_str());
         glDeleteTextures(1, &shaderData.textureId);
+        folder = "";
+        name = "";
+        loading = false;
+        loaded = false;
     }
 }

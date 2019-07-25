@@ -24,8 +24,11 @@ namespace E4 {
         void deleteEntity(Entity& entity);
         Entity& newEntityFromFile(const std::string& modelName);
         std::reference_wrapper<Transform> createTransform(Entity& entity);
+        void removeTransform(Entity& entity);
         std::reference_wrapper<Drawable> createDrawable(Entity& entity);
+        void removeDrawable(Entity& entity);
         std::reference_wrapper<Script> createScript(Entity& entity, const std::string& scriptName);
+        void removeScript(Entity& entity);
         std::reference_wrapper<Env> enableLight(Entity& entity, LightType lightType, const std::string& ambient, const std::string& diffuse, const std::string& specular);
         void disableLight(Entity& entity);
         std::reference_wrapper<Env> enableCamera(Entity& entity, CameraType type, float fov);

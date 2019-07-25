@@ -25,6 +25,7 @@ E4::Entity& E4::Scene::newEntity() {
 }
 void E4::Scene::deleteEntity(E4::Entity& entity) {
     sol::state& lua = *state;
+    //TODO delete components
     lua["entities"][entity.index] = lua.create_table_with("index", entity.index);
     ecs->deleteEntity(entity);
 }
@@ -46,12 +47,30 @@ std::reference_wrapper<E4::Transform> E4::Scene::createTransform(E4::Entity& ent
     lua["entities"][entity.index]["transform"] = std::ref<Transform>(transform);
     return std::ref<Transform>(transform);
 }
+void E4::Scene::removeTransform(E4::Entity& entity) {
+    sol::state& lua = *state;
+    if (ecs->has<Transform>(entity)) {
+        auto& transform = ecs->get<Transform>(entity);
+        transform.world.mat4.free();
+        transform.wvp.mat4.free();
+        lua["entities"][entity.index]["transform"] = sol::nil;
+    }
+    //TODO test
+}
 
 std::reference_wrapper<E4::Drawable> E4::Scene::createDrawable(Entity& entity) {
     sol::state& lua = *state;
     auto& drawable = ecs->create<Drawable>(entity);
     lua["entities"][entity.index]["drawable"] = std::ref<Drawable>(drawable);
     return std::ref<Drawable>(drawable);
+}
+void E4::Scene::removeDrawable(E4::Entity& entity) {
+    sol::state& lua = *state;
+    if (ecs->has<Drawable>(entity)) {
+        auto& drawable = ecs->get<Drawable>(entity);
+        //TODO delete drawable content? by recycler
+        lua["entities"][entity.index]["drawable"] = sol::nil;
+    }
 }
 
 std::reference_wrapper<E4::Script> E4::Scene::createScript(Entity& entity, const std::string& scriptName) {
@@ -61,6 +80,13 @@ std::reference_wrapper<E4::Script> E4::Scene::createScript(Entity& entity, const
     script.file = app->scripts.get(scriptName);
     lua["entities"][entity.index]["script"] = std::ref<Script>(script);
     return std::ref<Script>(script);
+}
+void E4::Scene::removeScript(E4::Entity& entity) {
+    sol::state& lua = *state;
+    if (ecs->has<Script>(entity)) {
+        auto& script = ecs->get<Script>(entity);
+        lua["entities"][entity.index]["script"] = sol::nil;
+    }
 }
 
 std::reference_wrapper<E4::Env> E4::Scene::enableLight(E4::Entity& entity, LightType lightType, const std::string& ambient, const std::string& diffuse, const std::string& specular) {
@@ -103,19 +129,19 @@ void E4::Scene::disableCamera(E4::Entity& entity) {
 }
 
 E4::Asset<E4::Material> E4::Scene::newMaterialTexture(const std::string& textureName) {
-    Asset<Material> material = app->materials.alloc();
+    Asset <Material> material = app->materials.alloc();
     material->texture = app->textures.get(textureName);
     material->shader = &app->renderer.shaderTexture;
     return material;
 }
 E4::Asset<E4::Material> E4::Scene::newMaterialColor(const std::string& color) {
-    Asset<Material> material = app->materials.alloc();
+    Asset <Material> material = app->materials.alloc();
     material->ambient.color.set(color);
     material->shader = &app->renderer.shaderBasic;
     return material;
 }
 E4::Asset<E4::Material> E4::Scene::newMaterialLight(const std::string& ambient, const std::string& diffuse) {
-    Asset<Material> material = app->materials.alloc();
+    Asset <Material> material = app->materials.alloc();
     material->ambient.color.set(ambient);
     material->diffuse.color.set(diffuse);
     material->specular.color.set(diffuse); //TODO

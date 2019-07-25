@@ -44,10 +44,6 @@ function update()
                 local dx = transform.x - mouseX
                 local dy = transform.y - mouseY
                 if math.abs(dx) < sx and math.abs(dy) < sy then
-                    transform.sx = 0.4
-                    transform.sy = 0.4
-                    transform.sz = 0.4
-
                     --remove entity
                     deleteEntity(e)
                 end

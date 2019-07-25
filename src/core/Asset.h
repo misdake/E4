@@ -125,6 +125,7 @@ namespace E4 {
             uint32_t index = 0;
             if (AssetPool<T>::empty.empty()) {
                 AssetPool<T>::array.emplace_back();
+                AssetPool<T>::bitmap.emplace_back(false);
                 names.emplace_back(name);
                 index = AssetPool<T>::array.size() - 1;
             } else {
@@ -139,7 +140,9 @@ namespace E4 {
         }
     public:
         explicit AssetLoader(std::string folder) :
+            AssetPool<T>(),
             folder(std::move(folder)) {
+            names.emplace_back("");
         }
 
         Asset<T> get(const std::string& name) {
@@ -160,11 +163,20 @@ namespace E4 {
                 Asset<T> p(*this, index);
                 p->unload();
                 AssetPool<T>::empty.push_back(p.index);
-                map.erase(names[p.index]);
+                map.erase(name);
                 names[p.index] = "";
             } else {
                 Log::error("asset not found");
             }
+        }
+        void checkBegin() {
+            AssetPool<T>::checkBegin();
+        }
+        void check(const Asset<T>& p) {
+            AssetPool<T>::check(p);
+        }
+        void checkEnd(std::function<void(Asset<T>&)>&& garbageCallback) {
+            AssetPool<T>::checkEnd(std::move(garbageCallback));
         }
     };
 
