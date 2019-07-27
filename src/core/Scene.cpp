@@ -21,15 +21,21 @@ E4::Entity& E4::Scene::newEntity() {
     sol::state& lua = *state;
     Entity& e = ecs->newEntity();
     lua["entities"][e.index] = lua.create_table_with("index", e.index);
+    Log::debug("scene: newEntity %d", e.index);
     return e;
 }
 void E4::Scene::deleteEntity(E4::Entity& entity) {
+    Log::debug("scene: deleteEntity %d", entity.index);
     sol::state& lua = *state;
-    //TODO delete components
+    removeTransform(entity);
+    removeDrawable(entity);
+    removeScript(entity);
+    removeEnv(entity);
     lua["entities"][entity.index] = lua.create_table_with("index", entity.index);
     ecs->deleteEntity(entity);
 }
 E4::Entity& E4::Scene::newEntityFromFile(const std::string& modelName) {
+    Log::debug("scene: newEntityFromFile %s", modelName.c_str());
     if (endsWith(modelName, ".obj")) {
         uint64_t entityId = app->meshLoader_obj.create(app->folder, modelName, *app);
         return ecs->getEntityById(entityId);
@@ -39,6 +45,7 @@ E4::Entity& E4::Scene::newEntityFromFile(const std::string& modelName) {
 }
 
 std::reference_wrapper<E4::Transform> E4::Scene::createTransform(E4::Entity& entity) {
+    Log::debug("scene: createTransform %d", entity.index);
     sol::state& lua = *state;
     auto& transform = ecs->create<Transform>(entity);
     transform.sx = transform.sy = transform.sz = 1;
@@ -48,32 +55,34 @@ std::reference_wrapper<E4::Transform> E4::Scene::createTransform(E4::Entity& ent
     return std::ref<Transform>(transform);
 }
 void E4::Scene::removeTransform(E4::Entity& entity) {
-    sol::state& lua = *state;
     if (ecs->has<Transform>(entity)) {
+        Log::debug("scene: removeTransform %d", entity.index);
         auto& transform = ecs->get<Transform>(entity);
         transform.world.mat4.free();
         transform.wvp.mat4.free();
+        sol::state& lua = *state;
         lua["entities"][entity.index]["transform"] = sol::nil;
     }
-    //TODO test
 }
 
 std::reference_wrapper<E4::Drawable> E4::Scene::createDrawable(Entity& entity) {
+    Log::debug("scene: createDrawable %d", entity.index);
     sol::state& lua = *state;
     auto& drawable = ecs->create<Drawable>(entity);
     lua["entities"][entity.index]["drawable"] = std::ref<Drawable>(drawable);
     return std::ref<Drawable>(drawable);
 }
 void E4::Scene::removeDrawable(E4::Entity& entity) {
-    sol::state& lua = *state;
     if (ecs->has<Drawable>(entity)) {
+        Log::debug("scene: removeDrawable %d", entity.index);
         auto& drawable = ecs->get<Drawable>(entity);
-        //TODO delete drawable content? by recycler
+        sol::state& lua = *state;
         lua["entities"][entity.index]["drawable"] = sol::nil;
     }
 }
 
 std::reference_wrapper<E4::Script> E4::Scene::createScript(Entity& entity, const std::string& scriptName) {
+    Log::debug("scene: createScript %d %s", entity.index, scriptName.c_str());
     sol::state& lua = *state;
     auto& script = ecs->create<Script>(entity);
     script.loaded = false;
@@ -82,14 +91,16 @@ std::reference_wrapper<E4::Script> E4::Scene::createScript(Entity& entity, const
     return std::ref<Script>(script);
 }
 void E4::Scene::removeScript(E4::Entity& entity) {
-    sol::state& lua = *state;
     if (ecs->has<Script>(entity)) {
+        Log::debug("scene: removeScript %d", entity.index);
         auto& script = ecs->get<Script>(entity);
+        sol::state& lua = *state;
         lua["entities"][entity.index]["script"] = sol::nil;
     }
 }
 
 std::reference_wrapper<E4::Env> E4::Scene::enableLight(E4::Entity& entity, LightType lightType, const std::string& ambient, const std::string& diffuse, const std::string& specular) {
+    Log::debug("scene: enableLight %d", entity.index);
     sol::state& lua = *state;
     bool created = false;
     auto& env = ecs->getOrCreate<Env>(entity, created);
@@ -101,15 +112,15 @@ std::reference_wrapper<E4::Env> E4::Scene::enableLight(E4::Entity& entity, Light
     env.light.specular.color.set(specular);
     return std::ref<Env>(env);
 }
-
 void E4::Scene::disableLight(E4::Entity& entity) {
+    Log::debug("scene: disableLight %d", entity.index);
     sol::state& lua = *state;
     if (ecs->has<Env>(entity)) {
         ecs->get<Env>(entity).light.enabled = false;
     }
 }
-
 std::reference_wrapper<E4::Env> E4::Scene::enableCamera(E4::Entity& entity, CameraType cameraType, float fov) {
+    Log::debug("scene: enableCamera %d", entity.index);
     sol::state& lua = *state;
     bool created = false;
     auto& env = ecs->getOrCreate<Env>(entity, created);
@@ -120,27 +131,38 @@ std::reference_wrapper<E4::Env> E4::Scene::enableCamera(E4::Entity& entity, Came
     env.camera.fov = fov;
     return std::ref<Env>(env);
 }
-
 void E4::Scene::disableCamera(E4::Entity& entity) {
+    Log::debug("scene: disableCamera %d", entity.index);
     sol::state& lua = *state;
     if (ecs->has<Env>(entity)) {
         ecs->get<Env>(entity).camera.enabled = false;
     }
 }
+void E4::Scene::removeEnv(E4::Entity& entity) {
+    Log::debug("scene: removeEnv %d", entity.index);
+    if (ecs->has<Env>(entity)) {
+        auto& env = ecs->get<Env>(entity);
+        sol::state& lua = *state;
+        lua["entities"][entity.index]["env"] = sol::nil;
+    }
+}
 
 E4::Asset<E4::Material> E4::Scene::newMaterialTexture(const std::string& textureName) {
+    Log::debug("scene: newMaterialTexture %s", textureName.c_str());
     Asset <Material> material = app->materials.alloc();
     material->texture = app->textures.get(textureName);
     material->shader = &app->renderer.shaderTexture;
     return material;
 }
 E4::Asset<E4::Material> E4::Scene::newMaterialColor(const std::string& color) {
+    Log::debug("scene: newMaterialColor %s", color.c_str());
     Asset <Material> material = app->materials.alloc();
     material->ambient.color.set(color);
     material->shader = &app->renderer.shaderBasic;
     return material;
 }
 E4::Asset<E4::Material> E4::Scene::newMaterialLight(const std::string& ambient, const std::string& diffuse) {
+    Log::debug("scene: newMaterialLight %s %s", ambient.c_str(), diffuse.c_str());
     Asset <Material> material = app->materials.alloc();
     material->ambient.color.set(ambient);
     material->diffuse.color.set(diffuse);
@@ -151,6 +173,7 @@ E4::Asset<E4::Material> E4::Scene::newMaterialLight(const std::string& ambient, 
 }
 
 E4::Asset<E4::Mesh> E4::Scene::newMesh(const std::string& meshName) {
+    Log::debug("scene: newMesh %s", meshName.c_str());
     static const std::string prefix_builtin = "builtin:";
     static const uint64_t prefix_builtin_len = prefix_builtin.length();
     if (startsWith(meshName, prefix_builtin)) {

@@ -5,11 +5,10 @@
 #include <iostream>
 
 void E4::Material::unload() {
-    Log::debug("Material::unload");
+
 }
 
 void E4::Mesh::unload() {
-    Log::debug("Mesh::unload");
     position.unload();
     texcoord.unload();
     normal.unload();
@@ -43,7 +42,6 @@ void E4::Recycler::run(E4::App& app, E4::Ecs& ecs, const E4::FrameState& state) 
         material.free();
     });
     textures.checkEnd([&](Asset<E4::Texture>& texture) {
-        std::string name = texture->name;
-        textures.freeLoaded(name);
+        textures.freeLoaded(texture->name);
     });
 }

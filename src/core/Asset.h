@@ -156,7 +156,7 @@ namespace E4 {
                 return Asset<T>(*this, index);
             }
         }
-        void freeLoaded(const std::string& name) {
+        void freeLoaded(std::string name) {
             auto iter = map.find(name);
             if (iter != map.end()) {
                 uint32_t index = iter->second;

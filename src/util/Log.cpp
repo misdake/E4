@@ -1,7 +1,7 @@
 #include "Log.h"
 
-#include <stdio.h>
-#include <stdarg.h>
+#include <cstdio>
+#include <cstdarg>
 
 void E4::Log::debug(const char* format, ...) {
 #ifdef DEBUG

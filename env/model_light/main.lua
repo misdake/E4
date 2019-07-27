@@ -10,6 +10,7 @@ function load()
     local cameraEntity = newEntity()
     entity.cameraEntity = cameraEntity
     entity.cameraFov = math.pi / 4
+    entity.lastWheel = 0
     local cameraTransform = createTransform(cameraEntity)
     cameraTransform.z = 3
     enableCamera(cameraEntity, CameraType.PROJ, entity.cameraFov)
@@ -42,19 +43,19 @@ function load()
 end
 
 function mouse1()
-	return (not inputStatePrev.mouseButton1) and inputStateCurr.mouseButton1
+    return (not inputStatePrev.mouseButton1) and inputStateCurr.mouseButton1
 end
 function mouse2()
-	return (not inputStatePrev.mouseButton2) and inputStateCurr.mouseButton2
+    return (not inputStatePrev.mouseButton2) and inputStateCurr.mouseButton2
 end
 function mouse3()
-	return (not inputStatePrev.mouseButton3) and inputStateCurr.mouseButton3
+    return (not inputStatePrev.mouseButton3) and inputStateCurr.mouseButton3
 end
 
 function update()
     entity.time = entity.time + dt;
     local rad = math.fmod(entity.time, math.pi * 2);
-    if  (not inputStatePrev.mouseButton1) and inputStateCurr.mouseButton1 then
+    if (not inputStatePrev.mouseButton1) and inputStateCurr.mouseButton1 then
         entity.mouseX = inputStateCurr.mouseX
         entity.mouseY = inputStateCurr.mouseY
     end
@@ -66,7 +67,10 @@ function update()
         entity.mouseY = inputStateCurr.mouseY
     end
 
-    enableCamera(entity.cameraEntity, CameraType.PROJ, entity.cameraFov + inputStateCurr.wheelY * 0.1);
+    if entity.lastWheel ~= inputStateCurr.wheelY then
+        enableCamera(entity.cameraEntity, CameraType.PROJ, entity.cameraFov + inputStateCurr.wheelY * 0.1);
+        entity.lastWheel =inputStateCurr.wheelY
+    end
 
     entities[entity.l].transform.x = math.sin(rad) * 0.8
     entities[entity.l].transform.z = math.cos(rad) * 0.8
