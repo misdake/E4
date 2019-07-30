@@ -72,6 +72,10 @@ namespace E4 {
             return Asset<T>(*this, index);
         }
 
+        uint32_t size() {
+            return array.size() - 1 - empty.size();
+        }
+
         void free(const Asset<T>& p) {
             if (p.pool != this) {
                 Log::error("it's not my pointer");
@@ -82,6 +86,14 @@ namespace E4 {
             } else {
                 Log::error("free an invalid pointer");
             }
+        }
+
+        void clear() {
+            array.clear();
+            bitmap.clear();
+            empty.clear();
+            array.emplace_back();
+            bitmap.emplace_back(false);
         }
 
         void checkBegin() {

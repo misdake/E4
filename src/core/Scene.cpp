@@ -17,6 +17,23 @@ void E4::Scene::init(E4::App* _app, sol::state* _lua, E4::Ecs* _ecs) {
     ecs = _ecs;
 }
 
+void E4::Scene::start() {
+    E4::Entity& e = newEntity();
+    createTransform(e);
+    createScript(e, "main.lua");
+}
+void E4::Scene::reloadAll() {
+    clearEntity();
+    clearAsset();
+    reloadScript();
+    start();
+}
+void E4::Scene::reloadScript() {
+    ecs->fortype<E4::Script>([](E4::Script& script) {
+        script.file->scriptLoaded = false;
+    });
+}
+
 E4::Entity& E4::Scene::newEntity() {
     sol::state& lua = *state;
     Entity& e = ecs->newEntity();
@@ -33,6 +50,25 @@ void E4::Scene::deleteEntity(E4::Entity& entity) {
     removeEnv(entity);
     lua["entities"][entity.index] = lua.create_table_with("index", entity.index);
     ecs->deleteEntity(entity);
+}
+void E4::Scene::clearEntity() {
+    std::vector<uint32_t> indices{};
+    ecs->foreach([&](E4::Entity& entity) {
+        indices.push_back(entity.index);
+        removeTransform(entity);
+        removeDrawable(entity);
+        removeScript(entity);
+        removeEnv(entity);
+    });
+    for (uint32_t index : indices) {
+        ecs->deleteEntity(ecs->getEntityByIndex(index));
+    }
+}
+void E4::Scene::clearAsset() {
+//    Log::debug("clearAsset mat4.size() => %d", app->mat4.size());
+//    app->mat4.clear(); //Mat4 should have been fully recycled.
+    //Mesh, Material, Texture will be dealt by Recycler. (and possibly)
+    //Script will be reloaded.
 }
 E4::Entity& E4::Scene::newEntityFromFile(const std::string& modelName) {
     Log::debug("scene: newEntityFromFile %s", modelName.c_str());
@@ -113,9 +149,9 @@ std::reference_wrapper<E4::Env> E4::Scene::enableLight(E4::Entity& entity, Light
     return std::ref<Env>(env);
 }
 void E4::Scene::disableLight(E4::Entity& entity) {
-    Log::debug("scene: disableLight %d", entity.index);
     sol::state& lua = *state;
     if (ecs->has<Env>(entity)) {
+        Log::debug("scene: disableLight %d", entity.index);
         ecs->get<Env>(entity).light.enabled = false;
     }
 }
@@ -132,15 +168,15 @@ std::reference_wrapper<E4::Env> E4::Scene::enableCamera(E4::Entity& entity, Came
     return std::ref<Env>(env);
 }
 void E4::Scene::disableCamera(E4::Entity& entity) {
-    Log::debug("scene: disableCamera %d", entity.index);
     sol::state& lua = *state;
     if (ecs->has<Env>(entity)) {
+        Log::debug("scene: disableCamera %d", entity.index);
         ecs->get<Env>(entity).camera.enabled = false;
     }
 }
 void E4::Scene::removeEnv(E4::Entity& entity) {
-    Log::debug("scene: removeEnv %d", entity.index);
     if (ecs->has<Env>(entity)) {
+        Log::debug("scene: removeEnv %d", entity.index);
         auto& env = ecs->get<Env>(entity);
         sol::state& lua = *state;
         lua["entities"][entity.index]["env"] = sol::nil;

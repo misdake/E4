@@ -1,6 +1,4 @@
 function load()
-    print(readFile("main.lua"))
-
     entity.time = 0
     entity.transform.sx = 0.3
     entity.transform.sy = 0.3

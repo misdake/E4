@@ -31,6 +31,7 @@ void E4::ScriptRunner::run(Ecs& ecs, const E4::FrameState& frameState) {
         if (!script.file->scriptLoaded) {
             script.file->scriptLoaded = true;
             std::string content = readFile(script.file->folder, script.file->name);
+            Log::debug("script load %s", script.file->name.c_str());
             state->script(content);
             uint32_t index = script.file->scriptIndex = (script.file->scriptIndex > 0) ? script.file->scriptIndex : ++scriptIndex;
             lua["scripts"][index] = lua.create_table();

@@ -13,6 +13,31 @@ namespace E4 {
         uint16_t deltatime;
         InputState inputStateCurr;
         InputState inputStatePrev;
+
+        bool mouse1down() const {
+            return inputStateCurr.mouseButton1 && !inputStatePrev.mouseButton1;
+        }
+        bool mouse1up() const {
+            return !inputStateCurr.mouseButton1 && inputStatePrev.mouseButton1;
+        }
+        bool mouse2down() const {
+            return inputStateCurr.mouseButton2 && !inputStatePrev.mouseButton2;
+        }
+        bool mouse2up() const {
+            return !inputStateCurr.mouseButton2 && inputStatePrev.mouseButton2;
+        }
+        bool mouse3down() const {
+            return inputStateCurr.mouseButton3 && !inputStatePrev.mouseButton3;
+        }
+        bool mouse3up() const {
+            return !inputStateCurr.mouseButton3 && inputStatePrev.mouseButton3;
+        }
+        bool keydown(uint16_t key) const {
+            return inputStateCurr.keys[key] && !inputStatePrev.keys[key];
+        }
+        bool keyup(uint16_t key) const {
+            return !inputStateCurr.keys[key] && inputStatePrev.keys[key];
+        }
     };
 
 }

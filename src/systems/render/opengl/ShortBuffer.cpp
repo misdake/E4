@@ -39,6 +39,10 @@ void E4::ShortBuffer::bind() const {
 }
 
 void E4::ShortBuffer::unload() {
-    glDeleteBuffers(1, &bufferId);
+    if (bufferId > 0) {
+        glDeleteBuffers(1, &bufferId);
+    }
     bufferId = 0;
+    countIndices = 0;
+    array.clear();
 }

@@ -20,9 +20,16 @@ namespace E4 {
     public:
         void init(App* app, sol::state* lua, Ecs* ecs);
 
+        void start();
+        void reloadAll();
+        void reloadScript();
+        void clearEntity();
+        void clearAsset();
+
         Entity& newEntity();
         void deleteEntity(Entity& entity);
         Entity& newEntityFromFile(const std::string& modelName);
+
         std::reference_wrapper<Transform> createTransform(Entity& entity);
         void removeTransform(Entity& entity);
         std::reference_wrapper<Drawable> createDrawable(Entity& entity);

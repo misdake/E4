@@ -217,6 +217,13 @@ namespace E4 {
             entities.free(entity.index);
         }
 
+        void clear() {
+            for (auto[id, index] : entityIds) {
+                EntityCore<TYPES...>& entity = entities.get(index);
+                (this->EcsBase<TYPES...>::template remove<TYPES>(entity), ...);
+                entities.free(entity.index);
+            }
+        }
         void foreach(std::function<void(EntityCore<TYPES...>&)>&& func) {
             for (auto[id, index] : entityIds) {
                 EntityCore<TYPES...>& entity = entities.get(index);
@@ -225,7 +232,7 @@ namespace E4 {
         }
         template<typename ...PARAMS, typename FUNC>
         void fortypes(FUNC&& func) {
-            for (auto[id, index] : entityIds) {
+            for (auto[id, index] : entityIds) { //std::map supports insertion (no restriction), and deletion (not the current one) while iterating
                 auto& entity = entities.get(index);
                 if ((entity.template has<PARAMS>() && ...)) {
                     func(entity, (this->EcsBase<TYPES...>::template get<PARAMS>(entity))...);

@@ -51,6 +51,11 @@ void E4::FloatBuffer::bind(uint32_t attributeIndex) const {
 }
 
 void E4::FloatBuffer::unload() {
-    glDeleteBuffers(1, &bufferId);
+    if (bufferId > 0) {
+        glDeleteBuffers(1, &bufferId);
+    }
     bufferId = 0;
+    floatPerVertex = 0;
+    countVertex = 0;
+    array.clear();
 }
