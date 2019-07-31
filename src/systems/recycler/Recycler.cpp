@@ -27,9 +27,11 @@ void E4::Recycler::run(E4::App& app, E4::Ecs& ecs, const E4::FrameState& state) 
     ecs.fortype<E4::Drawable>([&](E4::Drawable& drawable) {
         meshes.check(drawable.mesh);
         materials.check(drawable.material);
-        Asset<Texture>& texture = drawable.material->texture;
-        if (texture.valid()) {
-            textures.check(texture);
+        if (drawable.material.valid()) {
+            Asset<Texture>& texture = drawable.material->texture;
+            if (texture.valid()) {
+                textures.check(texture);
+            }
         }
     });
 

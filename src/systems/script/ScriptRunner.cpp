@@ -3,13 +3,19 @@
 #include "ScriptFile.h"
 #include "../../core/Lua.h"
 #include "../../util/FrameState.h"
-#include "../../components/Transform.h"
 #include "../../components/Script.h"
 #include "../../util/File.h"
 
 E4::ScriptRunner::ScriptRunner() {
     state = new sol::state;
-    state->open_libraries(sol::lib::base, sol::lib::math);
+    state->open_libraries(
+        sol::lib::base,
+        sol::lib::math,
+        sol::lib::bit32,
+        sol::lib::table,
+//        sol::lib::debug,
+        sol::lib::string
+    );
     scriptIndex = 0;
 }
 

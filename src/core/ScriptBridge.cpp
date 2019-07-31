@@ -11,7 +11,7 @@ void E4::ScriptBridge::load(App& app, sol::state& lua, Ecs& ecs) {
     lua.set_function("deleteEntity", [&](uint32_t index) {
         return app.scene.deleteEntity(ecs.getEntityByIndex(index));
     });
-    lua.set_function("newEntityFromFile", [&](std::string modelName) {
+    lua.set_function("newEntityFromFile", [&](const std::string& modelName) {
         return app.scene.newEntityFromFile(modelName).index;
     });
 
@@ -21,11 +21,11 @@ void E4::ScriptBridge::load(App& app, sol::state& lua, Ecs& ecs) {
     lua.set_function("createDrawable", [&](uint32_t index) {
         return app.scene.createDrawable(ecs.getEntityByIndex(index));
     });
-    lua.set_function("createScript", [&](uint32_t index, std::string scriptName) {
+    lua.set_function("createScript", [&](uint32_t index, const std::string& scriptName) {
         return app.scene.createScript(ecs.getEntityByIndex(index), scriptName);
     });
 
-    lua.set_function("enableLight", [&](uint32_t index, LightType lightType, std::string ambient, std::string diffuse, std::string specular) {
+    lua.set_function("enableLight", [&](uint32_t index, LightType lightType, const std::string& ambient, const std::string& diffuse, const std::string& specular) {
         return app.scene.enableLight(ecs.getEntityByIndex(index), lightType, ambient, diffuse, specular);
     });
     lua.set_function("disableLight", [&](uint32_t index) {
@@ -38,20 +38,20 @@ void E4::ScriptBridge::load(App& app, sol::state& lua, Ecs& ecs) {
         return app.scene.disableCamera(ecs.getEntityByIndex(index));
     });
 
-    lua.set_function("newMaterialTexture", [&](std::string textureName) {
+    lua.set_function("newMaterialTexture", [&](const std::string& textureName) {
         return app.scene.newMaterialTexture(textureName);
     });
-    lua.set_function("newMaterialColor", [&](std::string color) {
+    lua.set_function("newMaterialColor", [&](const std::string& color) {
         return app.scene.newMaterialColor(color);
     });
-    lua.set_function("newMaterialLight", [&](std::string ambient, std::string diffuse) {
+    lua.set_function("newMaterialLight", [&](const std::string& ambient, const std::string& diffuse) {
         return app.scene.newMaterialLight(ambient, diffuse);
     });
-    lua.set_function("newMesh", [&](std::string meshName) {
+    lua.set_function("newMesh", [&](const std::string& meshName) {
         return app.scene.newMesh(meshName);
     });
 
-    lua.set_function("readFile", [&](std::string fileName) {
+    lua.set_function("readFile", [&](const std::string& fileName) {
         return readFile(app.folder, fileName);
     });
     lua.script(R"(
@@ -142,7 +142,7 @@ void E4::ScriptBridge::update(App& app, sol::state& lua, Ecs& ecs, const E4::Fra
     lua["screenWidth"] = app.window.getWidth();
     lua["screenHeight"] = app.window.getHeight();
 
-    lua["dt"] = frameState.deltatime * 0.001f;
+    lua["dt"] = static_cast<float>(frameState.deltatime) * 0.001f;
     lua["frameIndex"] = frameState.frameIndex;
     lua["inputStatePrev"]["wheelX"] = frameState.inputStatePrev.wheelX;
     lua["inputStatePrev"]["wheelY"] = frameState.inputStatePrev.wheelY;

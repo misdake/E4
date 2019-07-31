@@ -104,14 +104,12 @@ namespace E4 {
             }
         }
         void check(const Asset<T>& p) {
-            if (p.pool != this) {
+            if (p.index != 0 && p.pool != this) {
                 Log::error("it's not my pointer");
                 return;
             }
             if (p.index != 0 && p.index < array.size()) {
                 bitmap[p.index] = true;
-            } else {
-                Log::error("free an invalid pointer");
             }
         }
         void checkEnd(std::function<void(Asset<T>&)>&& garbageCallback) {
