@@ -51,6 +51,9 @@ void E4::ScriptBridge::load(App& app, sol::state& lua, Ecs& ecs) {
         return app.scene.newMesh(meshName);
     });
 
+    lua.set_function("setWindowTitle", [&](const std::string& title) {
+        app.window.setTitle(title);
+    });
     lua.set_function("readFile", [&](const std::string& fileName) {
         return readFile(app.folder, fileName);
     });

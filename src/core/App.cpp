@@ -15,7 +15,7 @@ E4::App::App(uint16_t width, uint16_t height, const std::string& folder) :
 void E4::App::load(const std::function<void(App&)>& onLoaded) {
     window.create(
         {
-            .title = std::string("abc"),
+            .title = std::string("E4"),
             .width = width,
             .height = height,
             .borderless = false,

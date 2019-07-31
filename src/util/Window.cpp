@@ -130,17 +130,6 @@ void E4::Window::getInputState() {
         inputStateCurr.mouseY = mouseY - getHeight() / 2;
         SDL_WarpMouseInWindow(gWindow, getWidth() / 2, getHeight() / 2);
     }
-
-    std::stringstream ss;
-    ss << "X: " << mouseX << " Y: " << mouseY << " buttons: " << buttons << " keys:";
-
-    for (int i = 0; i < SDL_NUM_SCANCODES; i++) {
-        if (inputStateCurr.keys[i]) {
-            ss << i << ' ';
-        }
-    }
-
-    setTitle(ss.str());
 }
 
 void E4::Window::enterEventLoop(const std::function<void(const FrameState&)>& onFrame) {

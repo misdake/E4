@@ -5,6 +5,8 @@
 --entity.target[].xy
 --entity.player.xy
 
+setWindowTitle("Sokoban")
+
 wallMask = 1
 crateMask = 2
 targetMask = 4
@@ -198,6 +200,7 @@ function startMap(mapindex)
         end
         entity.map = mapindex
         print("load map " .. entity.maps[mapindex])
+        setWindowTitle("Sokoban " .. entity.maps[mapindex])
 
         loadMapFile(entity.maps[mapindex])
         printState()
@@ -313,6 +316,11 @@ function checkWin()
 end
 
 function update()
+
+    if not (inputStatePrev.keys[21 + 1] > 0) and (inputStateCurr.keys[21 + 1] > 0) then
+        startMap(entity.map)
+    end
+
     --printState()
     if (checkWin()) then
         startMap(entity.map + 1)

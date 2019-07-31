@@ -1,6 +1,7 @@
 #include <SDL.h>
 
 #include "core/App.h"
+#include <sstream>
 
 int main(int argc, char* argv[]) {
     std::string folder = ".";
@@ -19,6 +20,21 @@ int main(int argc, char* argv[]) {
         }
         if (frameState.keyup(SDL_SCANCODE_F6)) {
             app.scene.reloadAll();
+        }
+
+        static bool showInput = false;
+        if (frameState.keyup(SDL_SCANCODE_F4)) {
+            showInput = !showInput;
+        }
+        if (showInput) {
+            std::stringstream ss;
+            ss << "X: " << frameState.inputStateCurr.mouseX << " Y: " << frameState.inputStateCurr.mouseY << " keys: ";
+            for (int i = 0; i < SDL_NUM_SCANCODES; i++) {
+                if (frameState.inputStateCurr.keys[i]) {
+                    ss << i << ' ';
+                }
+            }
+            app.window.setTitle(ss.str());
         }
     });
 
