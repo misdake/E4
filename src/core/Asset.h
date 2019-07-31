@@ -6,12 +6,14 @@
 #include <limits>
 #include <map>
 #include <string>
+#include <functional>
 #include "../util/Log.h"
 
 namespace E4 {
 
     template<typename T>
     class AssetPool;
+
     template<typename T>
     class AssetLoader;
 
@@ -28,16 +30,18 @@ namespace E4 {
         Asset(AssetPool<T>& pool, uint32_t index) : pool(&pool), index(index) {}
 
     public:
-        static const uint32_t MAX_INDEX = std::numeric_limits<uint32_t>::max(); //TODO use 0 as invalid index
-
-        Asset() : pool(nullptr), index(MAX_INDEX) {}
+        Asset() : pool(nullptr), index(0) {}
 
         T* operator->() { return &get(); }
         const T* operator->() const { return &get(); }
+        T& operator*() { return get(); }
+        const T& operator*() const { return get(); }
 
         bool valid() const;
         T& get();
         const T& get() const;
+
+        void free();
     };
 
     template<typename T>
@@ -46,13 +50,20 @@ namespace E4 {
         friend class Asset<T>;
 
         std::vector<T> array;
+        std::vector<bool> bitmap;
         std::deque<uint32_t> empty;
 
     public:
+        AssetPool() {
+            array.emplace_back();
+            bitmap.emplace_back(false);
+        }
+
         Asset<T> alloc() {
             uint32_t index = 0;
             if (empty.empty()) {
                 array.emplace_back();
+                bitmap.emplace_back(false);
                 index = array.size() - 1;
             } else {
                 index = empty.back();
@@ -61,12 +72,52 @@ namespace E4 {
             return Asset<T>(*this, index);
         }
 
+        uint32_t size() {
+            return array.size() - 1 - empty.size();
+        }
+
         void free(const Asset<T>& p) {
-            if (p.index < Asset<T>::MAX_INDEX && p.index < array.size()) {
+            if (p.pool != this) {
+                Log::error("it's not my pointer");
+                return;
+            }
+            if (p.index != 0 && p.index < array.size()) {
                 empty.push_back(p.index);
-                p.index = Asset<T>::MAX_INDEX;
             } else {
                 Log::error("free an invalid pointer");
+            }
+        }
+
+        void clear() {
+            array.clear();
+            bitmap.clear();
+            empty.clear();
+            array.emplace_back();
+            bitmap.emplace_back(false);
+        }
+
+        void checkBegin() {
+            std::fill(bitmap.begin(), bitmap.end(), false);
+            bitmap[0] = true;
+            for (auto& e : empty) {
+                bitmap[e] = true;
+            }
+        }
+        void check(const Asset<T>& p) {
+            if (p.index != 0 && p.pool != this) {
+                Log::error("it's not my pointer");
+                return;
+            }
+            if (p.index != 0 && p.index < array.size()) {
+                bitmap[p.index] = true;
+            }
+        }
+        void checkEnd(std::function<void(Asset<T>&)>&& garbageCallback) {
+            for (int i = 0; i < array.size(); i++) {
+                if (!bitmap[i]) {
+                    Asset<T> asset(*this, i);
+                    garbageCallback(asset);
+                }
             }
         }
     };
@@ -84,6 +135,7 @@ namespace E4 {
             uint32_t index = 0;
             if (AssetPool<T>::empty.empty()) {
                 AssetPool<T>::array.emplace_back();
+                AssetPool<T>::bitmap.emplace_back(false);
                 names.emplace_back(name);
                 index = AssetPool<T>::array.size() - 1;
             } else {
@@ -97,8 +149,10 @@ namespace E4 {
             return Asset<T>(*this, index);
         }
     public:
-        AssetLoader(std::string folder) :
+        explicit AssetLoader(std::string folder) :
+            AssetPool<T>(),
             folder(std::move(folder)) {
+            names.emplace_back("");
         }
 
         Asset<T> get(const std::string& name) {
@@ -112,44 +166,58 @@ namespace E4 {
                 return Asset<T>(*this, index);
             }
         }
-        void freeLoaded(const std::string& name) {
+        void freeLoaded(std::string name) {
             auto iter = map.find(name);
             if (iter != map.end()) {
                 uint32_t index = iter->second;
                 Asset<T> p(*this, index);
                 p->unload();
                 AssetPool<T>::empty.push_back(p.index);
-                map.erase(names[p.index]);
+                map.erase(name);
                 names[p.index] = "";
             } else {
                 Log::error("asset not found");
             }
         }
+        void checkBegin() {
+            AssetPool<T>::checkBegin();
+        }
+        void check(const Asset<T>& p) {
+            AssetPool<T>::check(p);
+        }
+        void checkEnd(std::function<void(Asset<T>&)>&& garbageCallback) {
+            AssetPool<T>::checkEnd(std::move(garbageCallback));
+        }
     };
 
     template<typename T>
     bool Asset<T>::valid() const {
-        return index < MAX_INDEX && index < pool->array.size();
+        return 0 < index && index < pool->array.size();
     }
 
     template<typename T>
     T& Asset<T>::get() {
-        if (index < MAX_INDEX && index < pool->array.size()) {
+        if (0 < index && index < pool->array.size()) {
             return pool->array[index];
         } else {
-            Log::error("free an invalid pointer");
+            Log::error("invalid pointer");
             return pool->array[index];
         }
     }
 
     template<typename T>
     const T& Asset<T>::get() const {
-        if (index < MAX_INDEX && index < pool->array.size()) {
+        if (0 < index && index < pool->array.size()) {
             return pool->array[index];
         } else {
-            Log::error("free an invalid pointer");
+            Log::error("invalid pointer");
             return pool->array[index];
         }
+    }
+
+    template<typename T>
+    void Asset<T>::free() {
+        pool->free(*this);
     }
 
 }

@@ -6,14 +6,14 @@ function mouse3()
 end
 
 function createChild(x, y, size, textureName)
-    local e = createEntity()
+    local e = newEntity()
     local transform = createTransform(e)
     transform.x = x;
     transform.y = y;
     transform.z = 0;
     transform.sx = size;
     transform.sy = size;
-    transform.parent = entity.id;
+    transform.parent = entity.index;
     local drawable = createDrawable(e)
     drawable.mesh = newMesh("builtin:plane")
     drawable.material = newMaterialTexture(textureName)
@@ -60,8 +60,6 @@ end
 
 function updatePipe(index)
     local pipe = entity.pipes[index]
-    requestTransform(pipe.pipe1)
-    requestTransform(pipe.pipe2)
     local t1 = entities[pipe.pipe1].transform
     local t2 = entities[pipe.pipe2].transform
     t1.x = pipe.x
@@ -77,7 +75,7 @@ function updatePipe(index)
         pipe.x = pipe.x - dt * 1
     end
 
-    if (pipe.x < -screenHeight / screenWidth - 0.5) then
+    if (pipe.x < -screenWidth /screenHeight - 0.5) then
         pipe.x = pipe.x + 3 * entity.pipeinterval
         pipe.y = newY()
     end
@@ -85,7 +83,6 @@ end
 
 function load()
     gameLoad()
-    requestTransform(entity.id)
     entity.transform.sx = screenHeight / screenWidth
     entity.bird = createChild(-0.5, 0.5, 0.25, "flappybird.png")
 
@@ -104,7 +101,7 @@ function checkDead()
 
     local x = entity.x
     local y = entity.y
-    for i = 0,3 do
+    for i = 0,2 do
     	local pipe = entity.pipes[i]
     	local left = pipe.x - 0.25
     	local right = pipe.x + 0.25
@@ -129,8 +126,6 @@ function checkDead()
 end
 
 function update()
-    requestTransform(entity.bird)
-
     updatePipe(0)
     updatePipe(1)
     updatePipe(2)

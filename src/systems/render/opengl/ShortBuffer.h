@@ -16,6 +16,7 @@ namespace E4 {
         ShortBuffer& set(std::vector<uint16_t> array, uint32_t countIndices);
         void upload();
         void bind() const;
+        void unload();
     };
 
 }

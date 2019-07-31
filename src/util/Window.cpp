@@ -167,6 +167,8 @@ void E4::Window::enterEventLoop(const std::function<void(const FrameState&)>& on
             }
         }
 
+        frameState.width = getWidth();
+        frameState.height = getHeight();
         frameState.frameIndex++;
         long currTime = SDL_GetTicks();
         if (prevTime < 0) prevTime = currTime;

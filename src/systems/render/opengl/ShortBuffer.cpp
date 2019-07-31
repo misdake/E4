@@ -37,3 +37,12 @@ void E4::ShortBuffer::upload() {
 void E4::ShortBuffer::bind() const {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferId);
 }
+
+void E4::ShortBuffer::unload() {
+    if (bufferId > 0) {
+        glDeleteBuffers(1, &bufferId);
+    }
+    bufferId = 0;
+    countIndices = 0;
+    array.clear();
+}

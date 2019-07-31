@@ -12,26 +12,29 @@ namespace E4 {
     struct Material {
         Shader* shader;
         Asset<Texture> texture;
-        ShaderData color;
+        ShaderData ambient;
+        ShaderData diffuse;
+        ShaderData specular;
+        ShaderData specularExp;
+
+        void unload();
     };
 
     struct Mesh {
         FloatBuffer position;
         FloatBuffer texcoord;
+        FloatBuffer normal;
 
         int vertexCount;
         ShortBuffer index;
+
+        void unload();
     };
 
     struct Drawable {
     public:
         Asset<Mesh> mesh;
         Asset<Material> material;
-
-        Drawable() :
-            mesh(),
-            material() {
-        }
     };
 
 }

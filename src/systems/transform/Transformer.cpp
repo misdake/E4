@@ -1,27 +1,38 @@
 #include "Transformer.h"
 
-#include "../../core/ECS.h"
 #include "../../components/Transform.h"
+#include "../env/Environment.h"
 
-void update(E4::EcsCore& ecs, E4::Transform& transform, uint64_t frameIndex) {
+void update(E4::Ecs& ecs, E4::Transform& transform, uint64_t frameIndex, const E4::Environment& environment) {
     if (transform.lastFrame == frameIndex) return;
 
-    E4::Mat4& mat4 = transform.worldTransform.mat4.get();
-    transform.worldTransform.mat4->setTRS(
+    E4::Mat4& mat4 = transform.world.mat4.get();
+    mat4.setTRS(
         transform.x, transform.y, transform.z,
         transform.rx, transform.ry, transform.rz,
         transform.sx, transform.sy, transform.sz
     );
     if (transform.parent > 0) {
-        auto& parentTransform = ecs.getComponent<E4::Transform>(transform.parent);
-        update(ecs, parentTransform, frameIndex); //TODO check resursion
-        E4::Mat4::multiply(parentTransform.worldTransform.mat4.get(), mat4, mat4);
+        auto& parentTransform = ecs.get<E4::Transform>(ecs.getEntityByIndex(transform.parent));
+        update(ecs, parentTransform, frameIndex, E4::Environment()); //TODO check resursion
+        E4::Mat4::multiply(parentTransform.world.mat4.get(), mat4, mat4);
+    }
+    if (environment.camera.second != nullptr) {
+        E4::Mat4& vp = environment.camera.second->vp;
+        E4::Mat4::multiply(vp, mat4, transform.wvp.mat4.get());
+    } else {
+        transform.wvp.mat4.get().set(mat4);
     }
     transform.lastFrame = frameIndex;
 }
 
-void E4::Transformer::run(E4::EcsCore& ecs, E4::FrameState frameState) {
-    ecs.view<Transform>().each([&](Transform& position) {
-        update(ecs, position, frameState.frameIndex);
+void E4::Transformer::run(Ecs& ecs, const FrameState& frameState, const E4::Environment& environment) {
+    if (environment.camera.second != nullptr) {
+        update(ecs, *environment.camera.first, frameState.frameIndex, environment);
+        environment.camera.second->action(environment.camera.first->world.mat4.get(), frameState.width, frameState.height);
+    }
+
+    ecs.fortypes<Transform>([&](Entity& entity, Transform& position) {
+        update(ecs, position, frameState.frameIndex, environment);
     });
 }

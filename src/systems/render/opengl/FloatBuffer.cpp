@@ -1,6 +1,7 @@
 #include "FloatBuffer.h"
 
 #include <glbinding/gl/gl.h>
+
 using namespace gl;
 
 #include "../../../util/Log.h"
@@ -47,4 +48,14 @@ void E4::FloatBuffer::bind(uint32_t attributeIndex) const {
         floatPerVertex * 4, // stride
         nullptr // array buffer offset
     );
+}
+
+void E4::FloatBuffer::unload() {
+    if (bufferId > 0) {
+        glDeleteBuffers(1, &bufferId);
+    }
+    bufferId = 0;
+    floatPerVertex = 0;
+    countVertex = 0;
+    array.clear();
 }

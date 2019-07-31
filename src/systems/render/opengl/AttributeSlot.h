@@ -23,6 +23,7 @@ namespace E4 {
     public:
         AttributeSlot position = AttributeSlot("aPosition", ShaderDataType::VEC3);
         AttributeSlot texcoord = AttributeSlot("aTexcoord", ShaderDataType::VEC2);
+        AttributeSlot normal = AttributeSlot("aNormal", ShaderDataType::VEC3);
         AttributeSlot color = AttributeSlot("aColor", ShaderDataType::VEC4);
     };
 

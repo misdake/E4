@@ -3,6 +3,9 @@
 #include <fstream>
 #include <sstream>
 
+std::string E4::readFile(const std::string& folder, const std::string& fileName) {
+    return std::move(readFile(folder + "/" + fileName));
+}
 std::string E4::readFile(const std::string& fileName) {
     std::string content;
     std::ifstream input(fileName, std::ios::in);

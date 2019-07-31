@@ -4,13 +4,13 @@ project(e4)
 set(CMAKE_CXX_STANDARD 17)
 
 #SDL2
-set(SDL2_FLAGS "-lmingw32 -lSDL2main -lSDL2 -mwindows -ldinput8 -ldxguid -ldxerr8 -luser32 -lgdi32 -lwinmm -limm32 -lole32 -loleaut32 -lshell32 -lversion -luuid -lsetupapi -lhid")
+set(SDL2_FLAGS "-lmingw32 -lSDL2main -lSDL2 -lwinmm -limm32 -lversion -lsetupapi")
 set(CMAKE_CXX_FLAGS " ${CMAKE_CXX_FLAGS} ${SDL2_FLAGS}")
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 find_package(SDL2 REQUIRED)
 include_directories(${SDL2_INCLUDE_DIR})
 
-#Lua,CNtity
+#Lua
 include_directories(include)
 link_directories(library)
 
@@ -28,15 +28,22 @@ add_executable(app
         src/core/App.cpp src/core/App.h
         src/core/Asset.cpp src/core/Asset.h
         src/core/ECS.cpp  src/core/ECS.h
+        src/core/Scene.cpp src/core/Scene.h
         src/core/Lua.h
         src/core/ScriptBridge.cpp src/core/ScriptBridge.h
-        src/core/assets/BuiltinMesh.cpp src/core/assets/BuiltinMesh.h
+
+        src/assets/MeshLoader_builtin.cpp src/assets/MeshLoader_builtin.h
+        src/assets/MeshLoader_obj.cpp src/assets/MeshLoader_obj.h
+        src/assets/ObjFileLoader.cpp src/assets/ObjFileLoader.h
 
         src/components/Components.h
         src/components/Transform.h
         src/components/Drawable.h
         src/components/Script.h
+        src/components/Env.h
 
+        src/systems/env/Environment.cpp src/systems/env/Environment.h
+        src/systems/env/EnvBuilder.cpp src/systems/env/EnvBuilder.h
         src/systems/transform/Transformer.cpp src/systems/transform/Transformer.h
         src/systems/render/Renderer.cpp src/systems/render/Renderer.h
         src/systems/render/opengl/Texture.cpp src/systems/render/opengl/Texture.h
@@ -50,6 +57,7 @@ add_executable(app
         src/systems/render/opengl/DataType.cpp src/systems/render/opengl/DataType.h
         src/systems/script/ScriptRunner.cpp src/systems/script/ScriptRunner.h
         src/systems/script/ScriptFile.cpp src/systems/script/ScriptFile.h
+        src/systems/recycler/Recycler.cpp src/systems/recycler/Recycler.h
 
         src/util/File.cpp src/util/File.h
         src/util/Window.cpp src/util/Window.h

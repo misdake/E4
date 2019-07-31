@@ -9,13 +9,19 @@ namespace E4 {
     class ShaderBasic : public Shader {
     public:
         explicit ShaderBasic(GlRenderer& renderer);
-        void bind(GlRenderer& renderer, const Transform& Transform, const Drawable& drawable) override;
+        void bind(GlRenderer& renderer, const Transform& Transform, const Drawable& drawable, const E4::Environment& environment) override;
     };
 
     class ShaderTexture : public Shader {
     public:
         explicit ShaderTexture(GlRenderer& renderer);
-        void bind(GlRenderer& renderer, const Transform& Transform, const Drawable& drawable) override;
+        void bind(GlRenderer& renderer, const Transform& Transform, const Drawable& drawable, const E4::Environment& environment) override;
+    };
+
+    class ShaderLight : public Shader {
+    public:
+        explicit ShaderLight(GlRenderer& renderer);
+        void bind(GlRenderer& renderer, const Transform& Transform, const Drawable& drawable, const E4::Environment& environment) override;
     };
 
 }

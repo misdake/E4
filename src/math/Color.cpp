@@ -3,7 +3,7 @@
 #include <regex>
 
 void E4::Color::set(const std::string& argb) {
-    std::regex pattern("#?([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})");
+    static const std::regex pattern("#?([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})");
 
     std::smatch match;
     if (std::regex_match(argb, match, pattern)) {

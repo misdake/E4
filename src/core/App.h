@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ECS.h"
+#include "Scene.h"
 
 #include "Asset.h"
 #include "../components/Drawable.h"
@@ -11,7 +12,10 @@
 #include "../systems/script/ScriptRunner.h"
 
 #include "../util/Window.h"
-#include "assets/BuiltinMesh.h"
+#include "../assets/MeshLoader_builtin.h"
+#include "../assets/MeshLoader_obj.h"
+#include "../systems/env/EnvBuilder.h"
+#include "../systems/recycler/Recycler.h"
 
 namespace E4 {
 
@@ -20,23 +24,28 @@ namespace E4 {
         Window window;
 
         //ecs
-        EcsCore ecs;
+        Ecs ecs;
+        Scene scene;
+
+        uint16_t width;
+        uint16_t height;
+        std::string folder;
 
         //systems
+        Recycler recycler;
+        EnvBuilder envBuilder;
         Transformer transform;
         Renderer renderer;
         ScriptRunner scriptRunner;
 
         //resources
+        AssetPool<Mat4> mat4;
         AssetPool<Mesh> meshes;
         AssetPool<Material> materials;
         AssetLoader<Texture> textures;
         AssetLoader<ScriptFile> scripts;
-        BuiltinMeshLoader meshLoader;
-
-        uint16_t width;
-        uint16_t height;
-        std::string folder;
+        MeshLoader_builtin meshLoader_builtin;
+        MeshLoader_obj meshLoader_obj;
 
         explicit App(uint16_t width, uint16_t height, const std::string& folder);
 

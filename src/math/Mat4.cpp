@@ -265,7 +265,7 @@ E4::Mat4 E4::Mat4::operator*(const Mat4& right) const {
     return result;
 }
 
-E4::Vec3 E4::Mat4::operator*(const Vec3& src) const {
+E4::Vec3 E4::Mat4::transformPoint(const E4::Vec3& src) const {
     Vec3 dst{};
     dst.x = m00 * src.x + m10 * src.y + m20 * src.z + m30;
     dst.y = m01 * src.x + m11 * src.y + m21 * src.z + m31;
@@ -276,4 +276,55 @@ E4::Vec3 E4::Mat4::operator*(const Vec3& src) const {
     dst.y *= iw;
     dst.z *= iw;
     return dst;
+}
+
+E4::Vec3 E4::Mat4::transformNormal(const E4::Vec3& src) const {
+    Mat4 m{};
+    invert(m);
+    m.transpose();
+
+    Vec3 dst{};
+    dst.x = m00 * src.x + m10 * src.y + m20 * src.z;
+    dst.y = m01 * src.x + m11 * src.y + m21 * src.z;
+    dst.z = m02 * src.x + m12 * src.y + m22 * src.z;
+    dst.normalize();
+    return dst;
+}
+
+void E4::Mat4::setPerspective(float fovy, float aspect, float zNear, float zFar) {
+    float ymax = zNear * std::tan(fovy);
+    float ymin = -ymax;
+    float xmin = ymin * aspect;
+    float xmax = ymax * aspect;
+
+    setIdentity();
+    m00 = (2.0 * zNear) / (xmax - xmin);
+    m11 = (2.0 * zNear) / (ymax - ymin);
+    m22 = -(zFar + zNear) / (zFar - zNear);
+    m20 = (xmax + xmin) / (xmax - xmin);
+    m21 = (ymax + ymin) / (ymax - ymin);
+    m23 = -1.0;
+    m32 = -(2.0 * zFar * zNear) / (zFar - zNear);
+}
+
+void E4::Mat4::setOrtho(float l, float r, float t, float b, float n, float f) {
+    m00 = 2 / (r - l);
+    m01 = 0;
+    m02 = 0;
+    m03 = 0;
+
+    m10 = 0;
+    m11 = 2 / (t - b);
+    m12 = 0;
+    m13 = 0;
+
+    m20 = 0;
+    m21 = 0;
+    m22 = -2 / (f - n);
+    m23 = 0;
+
+    m30 = -(r + l) / (r - l);
+    m31 = -(t + b) / (t - b);
+    m32 = -(f + n) / (f - n);
+    m33 = 1;
 }

@@ -17,7 +17,8 @@ namespace E4 {
     public:
         ScriptRunner();
         ~ScriptRunner();
-        void run(EcsCore& ecs, const E4::FrameState& frameState);
+        void run(const char* script);
+        void run(Ecs& ecs, const E4::FrameState& frameState);
     };
 
 }

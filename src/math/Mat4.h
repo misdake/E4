@@ -26,9 +26,9 @@ namespace E4 {
         void setScale(float s);
         void setScale(float x, float y, float z);
         void setTRS(float x, float y, float z, float rx, float ry, float rz, float sx, float sy, float sz);
+        void setPerspective(float fovy, float aspect, float zNear, float zFar);
+        void setOrtho(float left, float right, float top, float bottom, float zNear, float zFar);
         //TODO
-//    void setPerspective(float fovy, float aspect, float zNear, float zFar);
-//    void setOrtho(float left, float right, float top, float bottom, float zNear, float zFar);
 //    void setLookAt(float fx, float fy, float fz, float tx, float ty, float tz, float ux, float uy, float uz);
 
         //get
@@ -47,7 +47,8 @@ namespace E4 {
         static void multiply(const Mat4& left, const Mat4& right, Mat4& dest);
         Mat4 operator*(const Mat4& right) const;
 
-        Vec3 operator*(const Vec3& src) const;
+        Vec3 transformPoint(const Vec3& src) const;
+        Vec3 transformNormal(const Vec3& src) const;
 
     };
 
