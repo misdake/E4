@@ -19,7 +19,9 @@ void E4::Renderer::run(Ecs& ecs, const E4::FrameState& state, const E4::Environm
 
     glRenderer.clear();
     ecs.fortypes<E4::Transform, E4::Drawable>([&](Entity& entity, Transform& transform, Drawable& drawable) {
-        glRenderer.draw(transform, drawable, environment);
+        if (drawable.visible) {
+            glRenderer.draw(transform, drawable, environment);
+        }
     });
     glRenderer.checkError();
 }

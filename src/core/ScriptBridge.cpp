@@ -91,6 +91,7 @@ void E4::ScriptBridge::load(App& app, sol::state& lua, Ecs& ecs) {
     );
     lua.new_usertype<E4::Drawable>(
         "Drawable",
+        "visible", &E4::Drawable::visible,
         "mesh", &E4::Drawable::mesh,
         "material", &E4::Drawable::material
     );

@@ -96,6 +96,7 @@ void E4::Scene::removeTransform(E4::Entity& entity) {
         auto& transform = ecs->get<Transform>(entity);
         transform.world.mat4.free();
         transform.wvp.mat4.free();
+        ecs->remove<Transform>(entity);
         sol::state& lua = *state;
         lua["entities"][entity.index]["transform"] = sol::nil;
     }
@@ -105,13 +106,14 @@ std::reference_wrapper<E4::Drawable> E4::Scene::createDrawable(Entity& entity) {
     Log::debug("scene: createDrawable %d", entity.index);
     sol::state& lua = *state;
     auto& drawable = ecs->create<Drawable>(entity);
+    drawable.visible = true;
     lua["entities"][entity.index]["drawable"] = std::ref<Drawable>(drawable);
     return std::ref<Drawable>(drawable);
 }
 void E4::Scene::removeDrawable(E4::Entity& entity) {
     if (ecs->has<Drawable>(entity)) {
         Log::debug("scene: removeDrawable %d", entity.index);
-        auto& drawable = ecs->get<Drawable>(entity);
+        ecs->remove<Drawable>(entity);
         sol::state& lua = *state;
         lua["entities"][entity.index]["drawable"] = sol::nil;
     }
@@ -129,7 +131,7 @@ std::reference_wrapper<E4::Script> E4::Scene::createScript(Entity& entity, const
 void E4::Scene::removeScript(E4::Entity& entity) {
     if (ecs->has<Script>(entity)) {
         Log::debug("scene: removeScript %d", entity.index);
-        auto& script = ecs->get<Script>(entity);
+        ecs->remove<Script>(entity);
         sol::state& lua = *state;
         lua["entities"][entity.index]["script"] = sol::nil;
     }
@@ -177,7 +179,7 @@ void E4::Scene::disableCamera(E4::Entity& entity) {
 void E4::Scene::removeEnv(E4::Entity& entity) {
     if (ecs->has<Env>(entity)) {
         Log::debug("scene: removeEnv %d", entity.index);
-        auto& env = ecs->get<Env>(entity);
+        ecs->remove<Env>(entity);
         sol::state& lua = *state;
         lua["entities"][entity.index]["env"] = sol::nil;
     }

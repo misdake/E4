@@ -165,7 +165,7 @@ end
 
 function loadPlayer()
     local e = newEntity()
-    local transform = createTransform(e)
+    createTransform(e)
     local drawable = createDrawable(e)
     drawable.mesh = entity.meshPlane
     drawable.material = entity.matPlayer
@@ -244,13 +244,14 @@ function updateTiles()
         end
     end
 
-    for _, value in pairs(entity.target) do
-        local e = entities[entity.tileEntities[value.x][value.y]]
+    for index, value in pairs(entity.target) do
+        local tile = entities[entity.tileEntities[value.x][value.y]]
+        local target = entities[entity.targetEntities[index]]
         if entity.crate[value.x][value.y] then
-            e.transform.z = -0.3
-            e.drawable.material = entity.matCratePoint
+            target.drawable.visible = false
+            tile.drawable.material = entity.matCratePoint
         else
-            e.transform.z = 0
+            target.drawable.visible = true
         end
     end
 end
@@ -306,7 +307,6 @@ end
 function checkWin()
     local allset = true
     for _, value in pairs(entity.target) do
-        local e = entities[entity.tileEntities[value.x][value.y]]
         if not entity.crate[value.x][value.y] then
             allset = false
             break

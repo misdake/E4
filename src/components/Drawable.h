@@ -33,6 +33,7 @@ namespace E4 {
 
     struct Drawable {
     public:
+        bool visible;
         Asset<Mesh> mesh;
         Asset<Material> material;
     };

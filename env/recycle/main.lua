@@ -31,6 +31,25 @@ function update()
         entity.list[entity.count] = e
         entity.count = entity.count + 1
     end
+    if mouse2() then
+        --test intersection
+        local mouseX = (inputStateCurr.mouseX / screenWidth * 2.0 - 1.0) * screenWidth / screenHeight
+        local mouseY = 1.0 - inputStateCurr.mouseY / screenHeight * 2.0
+        local sx = 0.1
+        local sy = 0.1
+        for i = 0, entity.count - 1 do
+            local e = entity.list[i]
+            if entities[e].transform then
+                local transform = entities[e].transform
+                local dx = transform.x - mouseX
+                local dy = transform.y - mouseY
+                if math.abs(dx) < sx and math.abs(dy) < sy then
+                    --toggle visibility
+                    entities[e].drawable.visible = not entities[e].drawable.visible
+                end
+            end
+        end
+    end
     if mouse3() then
         --test intersection
         local mouseX = (inputStateCurr.mouseX / screenWidth * 2.0 - 1.0) * screenWidth / screenHeight
