@@ -38,7 +38,7 @@ void E4::ScriptRunner::run(Ecs& ecs, const E4::FrameState& frameState) {
             script.file->scriptLoaded = true;
             std::string content = readFile(script.file->folder, script.file->name);
             Log::debug("script load %s", script.file->name.c_str());
-            state->script(content);
+            state->script(content, script.file->name);
             uint32_t index = script.file->scriptIndex = (script.file->scriptIndex > 0) ? script.file->scriptIndex : ++scriptIndex;
             lua["scripts"][index] = lua.create_table();
             lua["scripts"][index]["load"] = lua["load"];
@@ -53,4 +53,9 @@ void E4::ScriptRunner::run(Ecs& ecs, const E4::FrameState& frameState) {
 
         lua["runUpdate"](script.file->scriptIndex);
     });
+
+//    size_t m1 = lua.memory_used();
+//    lua.collect_garbage();
+//    size_t m2 = lua.memory_used();
+//    Log::debug("memory: %d bytes => %d bytes", m1, m2);
 }
