@@ -95,10 +95,11 @@ end
 function setTransform(transform, x, y, sx, sy)
     local w = entity.mapwidth
     local h = entity.mapheight
-    local s = 2 / math.max(w, h)
+    local m = math.max(w, h)
+    local s = 2 / m
 
-    transform.x = ((x - 0.5) / w - 0.5) * 2;
-    transform.y = (0.5 - (y - 0.5) / h) * 2;
+    transform.x = (x - 0.5) / m * 2 - 1 + (m - w) / m;
+    transform.y = 1 - (y - 0.5) / m * 2 - (m - h) / m;
     transform.z = 0;
     transform.sx = s * sx;
     transform.sy = s * sy;

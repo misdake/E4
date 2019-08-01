@@ -23,9 +23,9 @@ void E4::Scene::start() {
     createScript(e, "main.lua");
 }
 void E4::Scene::reloadAll() {
+    reloadScript();
     clearEntity();
     clearAsset();
-    reloadScript();
     start();
 }
 void E4::Scene::reloadScript() {
