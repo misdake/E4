@@ -29,8 +29,8 @@ void E4::Scene::reloadAll() {
     start();
 }
 void E4::Scene::reloadScript() {
-    ecs->fortype<E4::Script>([](E4::Script& script) {
-        script.file->scriptLoaded = false;
+    app->scripts.foreach([](ScriptFile& scriptFile) {
+        scriptFile.scriptLoaded = false;
     });
 }
 

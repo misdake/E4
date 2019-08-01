@@ -155,6 +155,12 @@ namespace E4 {
             names.emplace_back("");
         }
 
+        void foreach(std::function<void(T&)>&& func) {
+            for (auto&[name, index] : map) {
+                func(AssetPool<T>::array[index]);
+            }
+        }
+
         Asset<T> get(const std::string& name) {
             auto iter = map.find(name);
             if (iter == map.end()) {
