@@ -1,9 +1,9 @@
 #include "Renderer.h"
 
-#include "../../core/ECS.h"
 #include "../../components/Transform.h"
 #include "../../components/Drawable.h"
 #include "../env/Environment.h"
+#include "../../core/ECS.h"
 
 void E4::Renderer::init() {
     glRenderer.init();

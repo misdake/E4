@@ -3,7 +3,6 @@
 #include <map>
 #include <string>
 
-#include "../util/Log.h"
 #include "ObjFileLoader.h"
 #include "../core/App.h"
 

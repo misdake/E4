@@ -2,8 +2,6 @@
 
 #include "../../core/App.h"
 
-#include <iostream>
-
 void E4::Material::unload() {
 
 }

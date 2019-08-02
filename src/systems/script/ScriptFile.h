@@ -4,8 +4,6 @@
 
 namespace E4 {
 
-    class ScriptFunctions;
-
     class ScriptFile {
     public:
         std::string folder;

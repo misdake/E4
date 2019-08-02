@@ -37,7 +37,7 @@ namespace E4 {
         T& operator*() { return get(); }
         const T& operator*() const { return get(); }
 
-        bool valid() const;
+        [[nodiscard]] bool valid() const;
         T& get();
         const T& get() const;
 

@@ -298,13 +298,13 @@ void E4::Mat4::setPerspective(float fovy, float aspect, float zNear, float zFar)
     float xmax = ymax * aspect;
 
     setIdentity();
-    m00 = (2.0 * zNear) / (xmax - xmin);
-    m11 = (2.0 * zNear) / (ymax - ymin);
+    m00 = (2.0f * zNear) / (xmax - xmin);
+    m11 = (2.0f * zNear) / (ymax - ymin);
     m22 = -(zFar + zNear) / (zFar - zNear);
     m20 = (xmax + xmin) / (xmax - xmin);
     m21 = (ymax + ymin) / (ymax - ymin);
     m23 = -1.0;
-    m32 = -(2.0 * zFar * zNear) / (zFar - zNear);
+    m32 = -(2.0f * zFar * zNear) / (zFar - zNear);
 }
 
 void E4::Mat4::setOrtho(float l, float r, float t, float b, float n, float f) {
