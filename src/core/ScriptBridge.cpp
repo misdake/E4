@@ -8,11 +8,17 @@ void E4::ScriptBridge::load(App& app, sol::state& lua, Ecs& ecs) {
     lua.set_function("newEntity", [&]() {
         return app.scene.newEntity().index;
     });
+    lua.set_function("newEntityWithName", [&](const char* name) {
+        return app.scene.newEntity(name).index;
+    });
     lua.set_function("deleteEntity", [&](uint32_t index) {
         return app.scene.deleteEntity(ecs.getEntityByIndex(index));
     });
     lua.set_function("newEntityFromFile", [&](const std::string& modelName) {
         return app.scene.newEntityFromFile(modelName).index;
+    });
+    lua.set_function("findEntityByName", [&](const char* name) {
+        return app.scene.findEntityByName(name).index;
     });
 
     lua.set_function("createTransform", [&](uint32_t index) {

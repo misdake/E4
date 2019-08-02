@@ -4,6 +4,7 @@
 #include <vector>
 #include <memory.h>
 #include <functional>
+#include <string>
 
 #include "../components/Components.h"
 
@@ -111,6 +112,7 @@ namespace E4 {
 
     template<>
     struct EntityCore<> {
+        uint32_t name; // index of app.stringPool
         uint64_t id;
         uint32_t index;
     };

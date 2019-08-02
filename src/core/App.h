@@ -16,6 +16,7 @@
 #include "../assets/MeshLoader_obj.h"
 #include "../systems/env/EnvBuilder.h"
 #include "../systems/recycler/Recycler.h"
+#include "../util/StringPool.h"
 
 namespace E4 {
 
@@ -39,6 +40,7 @@ namespace E4 {
         ScriptRunner scriptRunner;
 
         //resources
+        StringPool stringPool;
         AssetPool<Mat4> mat4;
         AssetPool<Mesh> meshes;
         AssetPool<Material> materials;

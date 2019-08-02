@@ -27,8 +27,10 @@ namespace E4 {
         void clearAsset();
 
         Entity& newEntity();
+        Entity& newEntity(const char* name);
         void deleteEntity(Entity& entity);
         Entity& newEntityFromFile(const std::string& modelName);
+        Entity& findEntityByName(const char* name);
 
         std::reference_wrapper<Transform> createTransform(Entity& entity);
         void removeTransform(Entity& entity);

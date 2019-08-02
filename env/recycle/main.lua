@@ -15,10 +15,13 @@ end
 function mouse3()
     return (not inputStatePrev.mouseButton3) and inputStateCurr.mouseButton3
 end
+function keydown(key)
+    return not (inputStatePrev.keys[key+1]>0) and inputStateCurr.keys[key+1]>0
+end
 
 function update()
     if mouse1() then
-        local e = newEntity()
+        local e = newEntityWithName("name_" .. entity.count)
         local transform = createTransform(e)
         transform.parent = entity.index
         transform.x = (inputStateCurr.mouseX / screenWidth * 2.0 - 1.0) * screenWidth / screenHeight
@@ -46,6 +49,7 @@ function update()
                 local dx = transform.x - mouseX
                 local dy = transform.y - mouseY
                 if math.abs(dx) < sx and math.abs(dy) < sy then
+                    print(entities[e].name)
                     --toggle visibility
                     entities[e].drawable.visible = not entities[e].drawable.visible
                 end
@@ -70,5 +74,12 @@ function update()
                 end
             end
         end
+    end
+    if keydown(30) then
+    	local e = findEntityByName("name_"..1)
+    	if(e>0)then
+    	print(e)
+            entities[e].drawable.visible = not entities[e].drawable.visible
+    	end
     end
 end

@@ -35,11 +35,16 @@ void E4::Scene::reloadScript() {
 }
 
 E4::Entity& E4::Scene::newEntity() {
+    return newEntity("");
+}
+E4::Entity& E4::Scene::newEntity(const char* name) {
     sol::state& lua = *state;
-    Entity& e = ecs->newEntity();
-    lua["entities"][e.index] = lua.create_table_with("index", e.index);
-    Log::debug("scene: newEntity %d", e.index);
-    return e;
+    Entity& entity = ecs->newEntity();
+    entity.name = app->stringPool.indexFor(name);
+    const std::string& ref = app->stringPool.get(entity.name);
+    lua["entities"][entity.index] = lua.create_table_with("name", name, "index", entity.index);
+    Log::debug("scene: newEntity %d", entity.index);
+    return entity;
 }
 void E4::Scene::deleteEntity(E4::Entity& entity) {
     Log::debug("scene: deleteEntity %d", entity.index);
@@ -78,6 +83,18 @@ E4::Entity& E4::Scene::newEntityFromFile(const std::string& modelName) {
     }
     Log::error("newEntityFromFile: unknown model format, %s", modelName.c_str());
     return ecs->getEntityById(0);
+}
+E4::Entity& E4::Scene::findEntityByName(const char* name) {
+    uint32_t nameIndex = app->stringPool.indexOf(name);
+    if (nameIndex == 0) return ecs->getEntityByIndex(0);
+
+    uint32_t entityIndex = 0;
+    ecs->foreach([&](Entity& entity) {
+        if (entity.name == nameIndex) {
+            entityIndex = entity.index;
+        }
+    });
+    return ecs->getEntityByIndex(entityIndex);
 }
 
 std::reference_wrapper<E4::Transform> E4::Scene::createTransform(E4::Entity& entity) {
