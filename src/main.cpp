@@ -10,9 +10,13 @@ int main(int argc, char* argv[]) {
     }
     E4::App app(800, 500, folder);
 
+    E4::Log::setFilter("before load");
+
     app.load([](E4::App& app) {
         app.scene.start();
     });
+
+    E4::Log::setFilter("");
 
     app.enterLoop([](E4::App& app, const E4::FrameState& frameState) {
         if (frameState.keyup(SDL_SCANCODE_F5)) {

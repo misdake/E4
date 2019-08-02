@@ -4,6 +4,8 @@ function load()
     entity.transform.sx = screenHeight / screenWidth
 end
 
+setLogFilter("texture")
+
 function mouse1()
     return (not inputStatePrev.mouseButton1) and inputStateCurr.mouseButton1
 end

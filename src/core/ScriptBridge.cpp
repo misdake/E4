@@ -51,6 +51,9 @@ void E4::ScriptBridge::load(App& app, sol::state& lua, Ecs& ecs) {
         return app.scene.newMesh(meshName);
     });
 
+    lua.set_function("setLogFilter", [&](const std::string& filter) {
+        Log::setFilter(filter.c_str());
+    });
     lua.set_function("setWindowTitle", [&](const std::string& title) {
         app.window.setTitle(title);
     });
