@@ -5,11 +5,8 @@ set(CMAKE_CXX_STANDARD 17)
 
 #SDL2
 set(SDL2_FLAGS "-lmingw32 -lSDL2main -lSDL2 -lwinmm -limm32 -lversion -lsetupapi")
-set(CMAKE_CXX_FLAGS " ${CMAKE_CXX_FLAGS} ${SDL2_FLAGS} -flto -fno-exceptions")
+set(CMAKE_CXX_FLAGS " ${CMAKE_CXX_FLAGS} ${SDL2_FLAGS} -fno-exceptions")
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
-SET(CMAKE_AR "gcc-ar")
-SET(CMAKE_C_ARCHIVE_CREATE "<CMAKE_AR> qcs <TARGET> <LINK_FLAGS> <OBJECTS>")
-SET(CMAKE_C_ARCHIVE_FINISH true)
 find_package(SDL2 REQUIRED)
 include_directories(${SDL2_INCLUDE_DIR})
 
