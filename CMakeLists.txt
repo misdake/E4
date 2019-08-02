@@ -5,7 +5,7 @@ set(CMAKE_CXX_STANDARD 17)
 
 #SDL2
 set(SDL2_FLAGS "-lmingw32 -lSDL2main -lSDL2 -lwinmm -limm32 -lversion -lsetupapi")
-set(CMAKE_CXX_FLAGS " ${CMAKE_CXX_FLAGS} ${SDL2_FLAGS} -fno-exceptions")
+set(CMAKE_CXX_FLAGS " ${CMAKE_CXX_FLAGS} ${SDL2_FLAGS}")
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 find_package(SDL2 REQUIRED)
 include_directories(${SDL2_INCLUDE_DIR})
@@ -64,6 +64,7 @@ add_executable(app
         src/util/InputState.cpp src/util/InputState.h
         src/util/FrameState.h
         src/util/Log.cpp src/util/Log.h
+        src/util/StringPool.cpp src/util/StringPool.h
 
         src/math/Mat4.cpp src/math/Mat4.h
         src/math/Vec3.cpp src/math/Vec3.h
