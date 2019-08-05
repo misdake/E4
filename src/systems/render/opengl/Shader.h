@@ -13,6 +13,10 @@ namespace E4 {
     class Transform;
     class Drawable;
 
+    typedef std::vector<std::reference_wrapper<AttributeSlot>> AttributeSlotList;
+    typedef std::vector<std::reference_wrapper<UniformSlot>> UniformSlotList;
+    typedef std::vector<std::pair<std::string, ShaderDataType>> VaryingSlotList;
+
     class Shader {
     public:
         std::vector<std::pair<AttributeSlot*, uint32_t>> vertexAttributes;
@@ -20,20 +24,13 @@ namespace E4 {
         std::vector<std::pair<std::string, ShaderDataType>> varyings;
         std::vector<std::pair<UniformSlot*, uint32_t>> pixelUniforms;
 
-        void addVertexAttribute(AttributeSlot& slot) {
-            vertexAttributes.emplace_back(&slot, 0);
-        }
-        void addVertexUniform(UniformSlot& slot) {
-            vertexUniforms.emplace_back(&slot, 0);
-        }
-        void addVarying(const std::string& name, ShaderDataType type) {
-            varyings.emplace_back(name, type);
-        }
-        void addPixelUniform(UniformSlot& slot) {
-            pixelUniforms.emplace_back(&slot, 0);
-        }
-
-        Shader(std::string vsMain, std::string psMain);
+        Shader(
+            std::string vsMain, std::string psMain,
+            const AttributeSlotList& attributeSlots,
+            const UniformSlotList& vertexUniformSlots,
+            const VaryingSlotList& varyingSlots,
+            const UniformSlotList& pixelUniformSlots
+        );
         void use();
         virtual void bind(GlRenderer& renderer, const Transform& transform, const Drawable& drawable, const E4::Environment& environment) = 0;
 

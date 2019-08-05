@@ -104,9 +104,9 @@ void E4::ScriptBridge::load(App& app, sol::state& lua, Ecs& ecs) {
         "mesh", &E4::Drawable::mesh,
         "material", &E4::Drawable::material
     );
-    lua.new_usertype<E4::Script>(
-        "Script"
-    );
+//    lua.new_usertype<E4::Script>(
+//        "Script"
+//    );
 //    lua.new_usertype<E4::Env>(
 //        "Env",
 //        "camera", &E4::Env::camera,

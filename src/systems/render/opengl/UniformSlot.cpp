@@ -5,8 +5,14 @@ using namespace gl;
 
 E4::UniformSlot::UniformSlot(const char* name, E4::ShaderDataType dataType) :
     name(name),
-    dataType(dataType) {
+    dataType(dataType),
+    location(0) {
 
+}
+
+E4::UniformSlot& E4::UniformSlot::operator<<(const E4::ShaderData& shaderData) {
+    bind(shaderData);
+    return *this;
 }
 
 void E4::UniformSlot::bind(const ShaderData& shaderData) {

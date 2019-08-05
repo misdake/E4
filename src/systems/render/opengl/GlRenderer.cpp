@@ -7,8 +7,6 @@ using namespace gl;
 #include "../../../components/Drawable.h"
 
 void E4::GlRenderer::resize(int w, int h) {
-    width = w;
-    height = h;
     glViewport(0, 0, w, h);
 }
 

@@ -13,22 +13,31 @@ const char* ShaderBasic_PS = "out vec4 outputColor;\n"
                              "   outputColor = uAmbient;\n"
                              "}";
 
-E4::ShaderBasic::ShaderBasic(GlRenderer& renderer) : Shader(ShaderBasic_VS, ShaderBasic_PS) {
-    addVertexAttribute(renderer.attributeSlots.position);
-    addVertexAttribute(renderer.attributeSlots.color);
-    addVertexUniform(renderer.uniformSlots.world);
-    addVertexUniform(renderer.uniformSlots.wvp);
-    addPixelUniform(renderer.uniformSlots.ambient);
+E4::ShaderBasic::ShaderBasic(GlRenderer& renderer) : Shader(
+    ShaderBasic_VS, ShaderBasic_PS,
+    {
+        renderer.attributeSlots.position,
+        renderer.attributeSlots.color,
+    },
+    {
+        renderer.uniformSlots.world,
+        renderer.uniformSlots.wvp,
+    },
+    {},
+    {
+        renderer.uniformSlots.ambient,
+    }
+) {
 }
 
 void E4::ShaderBasic::bind(GlRenderer& renderer, const Transform& transform, const Drawable& drawable, const E4::Environment& environment) {
     const Mesh& mesh = drawable.mesh.get();
     const Material& material = drawable.material.get();
 
-    renderer.attributeSlots.position.bind(mesh.position);
-    renderer.uniformSlots.world.bind(transform.world);
-    renderer.uniformSlots.wvp.bind(transform.wvp);
-    renderer.uniformSlots.ambient.bind(material.ambient);
+    renderer.attributeSlots.position << mesh.position;
+    renderer.uniformSlots.world << transform.world;
+    renderer.uniformSlots.wvp << transform.wvp;
+    renderer.uniformSlots.ambient << material.ambient;
 }
 
 const char* ShaderTexture_VS = "void main() {\n"
@@ -41,24 +50,34 @@ const char* ShaderTexture_PS = "out vec4 outputColor;\n"
                                "   outputColor = texture(uTexture, vTexcoord);\n"
                                "}";
 
-E4::ShaderTexture::ShaderTexture(GlRenderer& renderer) : Shader(ShaderTexture_VS, ShaderTexture_PS) {
-    addVertexAttribute(renderer.attributeSlots.position);
-    addVertexAttribute(renderer.attributeSlots.texcoord);
-    addVertexUniform(renderer.uniformSlots.world);
-    addVertexUniform(renderer.uniformSlots.wvp);
-    addPixelUniform(renderer.uniformSlots.texture);
-    addVarying("vTexcoord", E4::ShaderDataType::VEC2);
+E4::ShaderTexture::ShaderTexture(GlRenderer& renderer) : Shader(
+    ShaderTexture_VS, ShaderTexture_PS,
+    {
+        renderer.attributeSlots.position,
+        renderer.attributeSlots.texcoord,
+    },
+    {
+        renderer.uniformSlots.world,
+        renderer.uniformSlots.wvp,
+    },
+    {
+        {"vTexcoord", E4::ShaderDataType::VEC2},
+    },
+    {
+        renderer.uniformSlots.texture,
+    }
+) {
 }
 
 void E4::ShaderTexture::bind(GlRenderer& renderer, const Transform& transform, const Drawable& drawable, const E4::Environment& environment) {
     const Mesh& mesh = drawable.mesh.get();
     const Material& material = drawable.material.get();
 
-    renderer.attributeSlots.position.bind(mesh.position);
-    renderer.attributeSlots.texcoord.bind(mesh.texcoord);
-    renderer.uniformSlots.world.bind(transform.world);
-    renderer.uniformSlots.wvp.bind(transform.wvp);
-    renderer.uniformSlots.texture.bind(material.texture->shaderData);
+    renderer.attributeSlots.position << mesh.position;
+    renderer.attributeSlots.texcoord << mesh.texcoord;
+    renderer.uniformSlots.world << transform.world;
+    renderer.uniformSlots.wvp << transform.wvp;
+    renderer.uniformSlots.texture << material.texture->shaderData;
 }
 
 const char* ShaderLight_VS = "void main() {\n"
@@ -80,22 +99,32 @@ const char* ShaderLight_PS = "out vec4 outputColor;\n"
                              "   outputColor = vec4(diffuse + specular + uAmbient.rgb * uLightAmbient.rgb, 1);\n"
                              "}";
 
-E4::ShaderLight::ShaderLight(GlRenderer& renderer) : Shader(ShaderLight_VS, ShaderLight_PS) {
-    addVertexAttribute(renderer.attributeSlots.position);
-    addVertexAttribute(renderer.attributeSlots.normal);
-    addVertexUniform(renderer.uniformSlots.world);
-    addVertexUniform(renderer.uniformSlots.wvp);
-    addPixelUniform(renderer.uniformSlots.cameraPos);
-    addPixelUniform(renderer.uniformSlots.ambient);
-    addPixelUniform(renderer.uniformSlots.diffuse);
-    addPixelUniform(renderer.uniformSlots.specular);
-    addPixelUniform(renderer.uniformSlots.specularExp);
-    addPixelUniform(renderer.uniformSlots.light);
-    addPixelUniform(renderer.uniformSlots.lightAmbient);
-    addPixelUniform(renderer.uniformSlots.lightDiffuse);
-    addPixelUniform(renderer.uniformSlots.lightSpecular);
-    addVarying("vNormal", E4::ShaderDataType::VEC3);
-    addVarying("vWorldPos", E4::ShaderDataType::VEC4);
+E4::ShaderLight::ShaderLight(GlRenderer& renderer) : Shader(
+    ShaderLight_VS, ShaderLight_PS,
+    {
+        renderer.attributeSlots.position,
+        renderer.attributeSlots.normal,
+    },
+    {
+        renderer.uniformSlots.world,
+        renderer.uniformSlots.wvp,
+    },
+    {
+        {"vNormal",   E4::ShaderDataType::VEC3},
+        {"vWorldPos", E4::ShaderDataType::VEC4},
+    },
+    {
+        renderer.uniformSlots.cameraPos,
+        renderer.uniformSlots.ambient,
+        renderer.uniformSlots.diffuse,
+        renderer.uniformSlots.specular,
+        renderer.uniformSlots.specularExp,
+        renderer.uniformSlots.light,
+        renderer.uniformSlots.lightAmbient,
+        renderer.uniformSlots.lightDiffuse,
+        renderer.uniformSlots.lightSpecular,
+    }
+) {
 }
 
 void E4::ShaderLight::bind(GlRenderer& renderer, const Transform& transform, const Drawable& drawable, const E4::Environment& environment) {
@@ -106,17 +135,17 @@ void E4::ShaderLight::bind(GlRenderer& renderer, const Transform& transform, con
     Light& light = *pair.second;
     Camera& camera = *environment.camera.second;
 
-    renderer.attributeSlots.position.bind(mesh.position);
-    renderer.attributeSlots.normal.bind(mesh.normal);
-    renderer.uniformSlots.world.bind(transform.world);
-    renderer.uniformSlots.wvp.bind(transform.wvp);
-    renderer.uniformSlots.cameraPos.bind(camera.pos);
-    renderer.uniformSlots.ambient.bind(material.ambient);
-    renderer.uniformSlots.diffuse.bind(material.diffuse);
-    renderer.uniformSlots.specular.bind(material.specular);
-    renderer.uniformSlots.specularExp.bind(material.specularExp);
-    renderer.uniformSlots.light.bind(light.world);
-    renderer.uniformSlots.lightAmbient.bind(light.ambient);
-    renderer.uniformSlots.lightDiffuse.bind(light.diffuse);
-    renderer.uniformSlots.lightSpecular.bind(light.specular);
+    renderer.attributeSlots.position << mesh.position;
+    renderer.attributeSlots.normal << mesh.normal;
+    renderer.uniformSlots.world << transform.world;
+    renderer.uniformSlots.wvp << transform.wvp;
+    renderer.uniformSlots.cameraPos << camera.pos;
+    renderer.uniformSlots.ambient << material.ambient;
+    renderer.uniformSlots.diffuse << material.diffuse;
+    renderer.uniformSlots.specular << material.specular;
+    renderer.uniformSlots.specularExp << material.specularExp;
+    renderer.uniformSlots.light << light.world;
+    renderer.uniformSlots.lightAmbient << light.ambient;
+    renderer.uniformSlots.lightDiffuse << light.diffuse;
+    renderer.uniformSlots.lightSpecular << light.specular;
 }

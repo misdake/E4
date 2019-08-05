@@ -101,9 +101,27 @@ std::string composePs(
     return stream.str();
 }
 
-E4::Shader::Shader(std::string vsMain, std::string psMain) :
+E4::Shader::Shader(
+    std::string vsMain, std::string psMain,
+    const AttributeSlotList& attributeSlots,
+    const UniformSlotList& vertexUniformSlots,
+    const VaryingSlotList& varyingSlots,
+    const UniformSlotList& pixelUniformSlots
+) :
     vsMain(std::move(vsMain)),
     psMain(std::move(psMain)) {
+    for (AttributeSlot& slot: attributeSlots) {
+        vertexAttributes.emplace_back(&slot, 0);
+    }
+    for (UniformSlot& slot: vertexUniformSlots) {
+        vertexUniforms.emplace_back(&slot, 0);
+    }
+    for (auto& slot: varyingSlots) {
+        varyings.emplace_back(slot.first, slot.second);
+    }
+    for (UniformSlot& slot: pixelUniformSlots) {
+        pixelUniforms.emplace_back(&slot, 0);
+    }
 }
 
 void E4::Shader::compile() {

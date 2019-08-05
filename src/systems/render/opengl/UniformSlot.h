@@ -13,6 +13,7 @@ namespace E4 {
 
         uint32_t location;
 
+        UniformSlot& operator<<(const ShaderData& shaderData);
         void bind(const ShaderData& shaderData);
     };
 

@@ -14,9 +14,6 @@ namespace E4 {
         UniformSlots uniformSlots;
         AttributeSlots attributeSlots;
 
-        int width = 0;
-        int height = 0;
-
         void resize(int w, int h);
 
         void init();
