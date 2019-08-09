@@ -4,6 +4,8 @@
 #include <sstream>
 
 void E4::ObjFileLoader::loadObjFile(const std::string& folder, const std::string& filename, E4::ObjFile& objFile) {
+    Log::debug("model objfile load %s %s", folder.c_str(), filename.c_str());
+
     std::string fileContent = readFile(folder, filename);
 
     std::istringstream fileInput(fileContent);
@@ -168,6 +170,8 @@ void E4::ObjFileLoader::loadObjFile(const std::string& folder, const std::string
 }
 
 void E4::ObjFileLoader::loadMtlFile(const std::string& folder, const std::string& filename, E4::MtlFile& mtlFile) {
+    Log::debug("model mtlfile load %s %s", folder.c_str(), filename.c_str());
+
     std::string fileContent = readFile(folder, filename);
 
     std::istringstream fileInput(fileContent);

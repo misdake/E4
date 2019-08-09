@@ -6,22 +6,43 @@
 #include "ObjFileLoader.h"
 #include "../core/App.h"
 
+const E4::ObjFile& E4::MeshLoader_obj::getObjFile(const std::string& folder, const std::string& name) {
+    auto iter = objCache.find(name);
+    if (iter == objCache.end()) {
+        objCache[name] = ObjFile();
+        ObjFile& objFile = objCache[name];
+        ObjFileLoader::loadObjFile(folder, name, objFile);
+        return objFile;
+    } else {
+        return iter->second;
+    }
+}
+const E4::MtlFile& E4::MeshLoader_obj::getMtlFile(const std::string& folder, const std::string& name) {
+    auto iter = mtlCache.find(name);
+    if (iter == mtlCache.end()) {
+        mtlCache[name] = MtlFile();
+        MtlFile& mtlFile = mtlCache[name];
+        ObjFileLoader::loadMtlFile(folder, name, mtlFile);
+        return mtlFile;
+    } else {
+        return iter->second;
+    }
+}
+
 uint64_t E4::MeshLoader_obj::create(const std::string& folder, const std::string& filename, App& app) {
     Entity& root = app.scene.newEntity();
     app.scene.createTransform(root);
 
-    ObjFile objFile;
-    MtlFile mtlFile;
-    ObjFileLoader::loadObjFile(folder, filename, objFile);
-    ObjFileLoader::loadMtlFile(folder, objFile.mtlFileName, mtlFile);
+    const ObjFile& objFile = getObjFile(folder, filename);
+    const MtlFile& mtlFile = getMtlFile(folder, objFile.mtlFileName);
 
-    std::map<std::string, Mtl*> mtlMap;
-    for (Mtl& mtl : mtlFile.mtls) {
+    std::map<std::string, const Mtl*> mtlMap;
+    for (const Mtl& mtl : mtlFile.mtls) {
         mtlMap.insert(std::make_pair(mtl.name, &mtl));
     }
 
-    for (Obj& obj : objFile.objs) {
-        Mtl& mtl = *mtlMap[obj.mtlName];
+    for (const Obj& obj : objFile.objs) {
+        const Mtl& mtl = *mtlMap[obj.mtlName];
 
         Asset<Mesh> mesh = app.meshes.alloc();
         uint64_t vertexCount = obj.position.size() / 3;

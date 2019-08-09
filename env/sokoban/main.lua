@@ -1,3 +1,5 @@
+setLogFilter("file")
+
 --entity.mapwidth
 --entity.mapheight
 --entity.wall[][]

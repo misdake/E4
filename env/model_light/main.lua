@@ -1,3 +1,5 @@
+setLogFilter("model")
+
 function load()
     entity.time = 0
     entity.transform.sx = 0.3
