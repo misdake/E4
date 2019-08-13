@@ -24,11 +24,22 @@ void E4::ScriptBridge::load(App& app, sol::state& lua, Ecs& ecs) {
     lua.set_function("createTransform", [&](uint32_t index) {
         return app.scene.createTransform(ecs.getEntityByIndex(index));
     });
+    lua.set_function("deleteTransform", [&](uint32_t index) {
+        app.scene.removeTransform(ecs.getEntityByIndex(index));
+    });
+
     lua.set_function("createDrawable", [&](uint32_t index) {
         return app.scene.createDrawable(ecs.getEntityByIndex(index));
     });
+    lua.set_function("deleteDrawable", [&](uint32_t index) {
+        app.scene.removeDrawable(ecs.getEntityByIndex(index));
+    });
+
     lua.set_function("createScript", [&](uint32_t index, const std::string& scriptName) {
         return app.scene.createScript(ecs.getEntityByIndex(index), scriptName);
+    });
+    lua.set_function("deleteScript", [&](uint32_t index) {
+        app.scene.removeScript(ecs.getEntityByIndex(index));
     });
 
     lua.set_function("enableLight", [&](uint32_t index, LightType lightType, const std::string& ambient, const std::string& diffuse, const std::string& specular) {
@@ -127,22 +138,8 @@ void E4::ScriptBridge::load(App& app, sol::state& lua, Ecs& ecs) {
 }
 
 void firstFrame(sol::state& lua, const E4::FrameState& frameState, E4::Ecs& ecs) {
-    lua["inputStatePrev"] = lua.create_table_with(
-        "mouseX", 0,
-        "mouseY", 0,
-        "mouseButton1", false,
-        "mouseButton2", false,
-        "mouseButton3", false,
-        "keys", &frameState.inputStatePrev.keys
-    );
-    lua["inputStateCurr"] = lua.create_table_with(
-        "mouseX", 0,
-        "mouseY", 0,
-        "mouseButton1", false,
-        "mouseButton2", false,
-        "mouseButton3", false,
-        "keys", &frameState.inputStateCurr.keys
-    );
+    lua["inputStatePrev"] = lua.create_table();
+    lua["inputStateCurr"] = lua.create_table();
 }
 
 void E4::ScriptBridge::update(App& app, sol::state& lua, Ecs& ecs, const E4::FrameState& frameState) {
