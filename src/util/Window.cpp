@@ -3,11 +3,9 @@
 
 #include <SDL.h>
 #include <glbinding/glbinding.h>
-#include <sstream>
 
-E4::Window::Window() : frameState{} {
+E4::Window::Window(FrameState& _frameState) : frameState(_frameState) {
     frameState.frameIndex = 0;
-    memset(&frameState, 0, sizeof(frameState));
     prevTime = -1;
 
     gWindow = nullptr;

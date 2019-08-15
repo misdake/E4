@@ -28,13 +28,13 @@ namespace E4 {
         WindowConfig config;
 
         long prevTime;
-        FrameState frameState;
+        FrameState& frameState;
 
     private:
         void getInputState();
 
     public:
-        Window();
+        explicit Window(FrameState& frameState);
 
         bool create(const WindowConfig& inConfig);
 

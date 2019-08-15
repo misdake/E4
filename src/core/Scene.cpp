@@ -15,6 +15,8 @@ void E4::Scene::init(E4::App* _app, sol::state* _lua, E4::Ecs* _ecs) {
     app = _app;
     state = _lua;
     ecs = _ecs;
+
+    app->frameState.activeCamera = 0;
 }
 
 void E4::Scene::start() {
@@ -95,6 +97,13 @@ E4::Entity& E4::Scene::findEntityByName(const char* name) {
         }
     });
     return ecs->getEntityByIndex(entityIndex);
+}
+
+void E4::Scene::setActiveCamera(E4::Entity& entity) {
+    app->frameState.activeCamera = entity.index;
+}
+E4::Entity& E4::Scene::getActiveCamera() {
+    return ecs->getEntityByIndex(app->frameState.activeCamera);
 }
 
 std::reference_wrapper<E4::Transform> E4::Scene::createTransform(E4::Entity& entity) {

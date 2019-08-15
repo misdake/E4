@@ -7,13 +7,24 @@ function load()
     entity.transform.sz = 0.3
     entity.transform.y = -0.5
 
-    local cameraEntity = newEntity()
-    entity.cameraEntity = cameraEntity
     entity.cameraFov = math.pi / 4
     entity.lastWheel = 0
-    local cameraTransform = createTransform(cameraEntity)
-    cameraTransform.z = 3
-    enableCamera(cameraEntity, CameraType.PROJ, entity.cameraFov)
+
+    local cameraEntity1 = newEntity()
+    local cameraTransform1 = createTransform(cameraEntity1)
+    cameraTransform1.x = 2
+    cameraTransform1.y = 0
+    cameraTransform1.z = 3
+    enableCamera(cameraEntity1, CameraType.PROJ, entity.cameraFov)
+    local cameraEntity2 = newEntity()
+    local cameraTransform2 = createTransform(cameraEntity2)
+    cameraTransform2.x = -2
+    cameraTransform2.y = 0
+    cameraTransform2.z = 3
+    enableCamera(cameraEntity2, CameraType.PROJ, entity.cameraFov)
+
+    entity.cameraEntity1 = cameraEntity1
+    entity.cameraEntity2 = cameraEntity2
 
     local e1 = newEntityFromFile("Male_LookingUp.obj")
     entities[e1].transform.x = -3
@@ -60,15 +71,26 @@ function update()
         entity.mouseY = inputStateCurr.mouseY
     end
     if inputStatePrev.mouseButton1 and inputStateCurr.mouseButton1 then
-        local t = entities[entity.cameraEntity].transform
-        t.ry = t.ry + (inputStateCurr.mouseX - inputStatePrev.mouseX) * math.pi / 1000
-        t.rx = t.rx + (inputStateCurr.mouseY - inputStatePrev.mouseY) * math.pi / 1000
+        local t1 = entities[entity.cameraEntity1].transform
+        local t2 = entities[entity.cameraEntity2].transform
+        t1.ry = t1.ry + (inputStateCurr.mouseX - inputStatePrev.mouseX) * math.pi / 1000
+        t1.rx = t1.rx + (inputStateCurr.mouseY - inputStatePrev.mouseY) * math.pi / 1000
+        t2.ry = t1.ry
+        t2.rx = t1.rx
         entity.mouseX = inputStateCurr.mouseX
         entity.mouseY = inputStateCurr.mouseY
     end
 
+    if keydown(30) then
+        setActiveCamera(entity.cameraEntity1)
+    end
+    if keydown(31) then
+        setActiveCamera(entity.cameraEntity2)
+    end
+
     if entity.lastWheel ~= inputStateCurr.wheelY then
-        enableCamera(entity.cameraEntity, CameraType.PROJ, entity.cameraFov + inputStateCurr.wheelY * 0.1);
+        enableCamera(entity.cameraEntity1, CameraType.PROJ, entity.cameraFov + inputStateCurr.wheelY * 0.1);
+        enableCamera(entity.cameraEntity2, CameraType.PROJ, entity.cameraFov + inputStateCurr.wheelY * 0.1);
         entity.lastWheel =inputStateCurr.wheelY
     end
 

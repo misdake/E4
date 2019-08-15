@@ -21,24 +21,31 @@ void E4::ScriptBridge::load(App& app, sol::state& lua, Ecs& ecs) {
         return app.scene.findEntityByName(name).index;
     });
 
+    lua.set_function("setActiveCamera", [&](uint32_t index) {
+        return app.scene.setActiveCamera(ecs.getEntityByIndex(index));
+    });
+    lua.set_function("getActiveCamera", [&]() {
+        return app.scene.getActiveCamera().index;
+    });
+
     lua.set_function("createTransform", [&](uint32_t index) {
         return app.scene.createTransform(ecs.getEntityByIndex(index));
     });
-    lua.set_function("deleteTransform", [&](uint32_t index) {
+    lua.set_function("removeTransform", [&](uint32_t index) {
         app.scene.removeTransform(ecs.getEntityByIndex(index));
     });
 
     lua.set_function("createDrawable", [&](uint32_t index) {
         return app.scene.createDrawable(ecs.getEntityByIndex(index));
     });
-    lua.set_function("deleteDrawable", [&](uint32_t index) {
+    lua.set_function("removeDrawable", [&](uint32_t index) {
         app.scene.removeDrawable(ecs.getEntityByIndex(index));
     });
 
     lua.set_function("createScript", [&](uint32_t index, const std::string& scriptName) {
         return app.scene.createScript(ecs.getEntityByIndex(index), scriptName);
     });
-    lua.set_function("deleteScript", [&](uint32_t index) {
+    lua.set_function("removeScript", [&](uint32_t index) {
         app.scene.removeScript(ecs.getEntityByIndex(index));
     });
 
@@ -78,6 +85,19 @@ void E4::ScriptBridge::load(App& app, sol::state& lua, Ecs& ecs) {
         return readFile(app.folder, fileName);
     });
     lua.script(R"(
+        function mouse1down()
+            return (not inputStatePrev.mouseButton1) and inputStateCurr.mouseButton1
+        end
+        function mouse2down()
+            return (not inputStatePrev.mouseButton2) and inputStateCurr.mouseButton2
+        end
+        function mouse3down()
+            return (not inputStatePrev.mouseButton3) and inputStateCurr.mouseButton3
+        end
+        function keydown(key)
+            return not (inputStatePrev.keys[key + 1] > 0) and (inputStateCurr.keys[key + 1] > 0)
+        end
+
         function prepareEntity(id)
             entity = entities[id]
         end

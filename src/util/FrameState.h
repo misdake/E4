@@ -7,6 +7,11 @@ namespace E4 {
 
     struct FrameState {
         FrameState() = default;
+
+        //scene managed
+        uint32_t activeCamera;
+
+        //window managed
         uint16_t width;
         uint16_t height;
         uint64_t frameIndex;

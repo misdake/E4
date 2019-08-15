@@ -32,6 +32,9 @@ namespace E4 {
         Entity& newEntityFromFile(const std::string& modelName);
         Entity& findEntityByName(const char* name);
 
+        void setActiveCamera(Entity& entity);
+        Entity& getActiveCamera();
+
         std::reference_wrapper<Transform> createTransform(Entity& entity);
         void removeTransform(Entity& entity);
         std::reference_wrapper<Drawable> createDrawable(Entity& entity);

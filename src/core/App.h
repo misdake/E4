@@ -22,6 +22,7 @@ namespace E4 {
 
     class App {
     public:
+        FrameState frameState;
         Window window;
 
         //ecs
