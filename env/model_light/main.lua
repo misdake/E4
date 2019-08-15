@@ -66,7 +66,7 @@ end
 function update()
     entity.time = entity.time + dt;
     local rad = math.fmod(entity.time, math.pi * 2);
-    if (not inputStatePrev.mouseButton1) and inputStateCurr.mouseButton1 then
+    if mouse1down() then
         entity.mouseX = inputStateCurr.mouseX
         entity.mouseY = inputStateCurr.mouseY
     end
@@ -91,7 +91,7 @@ function update()
     if entity.lastWheel ~= inputStateCurr.wheelY then
         enableCamera(entity.cameraEntity1, CameraType.PROJ, entity.cameraFov + inputStateCurr.wheelY * 0.1);
         enableCamera(entity.cameraEntity2, CameraType.PROJ, entity.cameraFov + inputStateCurr.wheelY * 0.1);
-        entity.lastWheel =inputStateCurr.wheelY
+        entity.lastWheel = inputStateCurr.wheelY
     end
 
     entities[entity.l].transform.x = math.sin(rad) * 0.8

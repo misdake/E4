@@ -286,7 +286,7 @@ directions = { { x = 1, y = 0 }, { x = 0, y = -1 }, { x = -1, y = 0 }, { x = 0, 
 
 function move()
     for index, value in pairs(keys) do
-        if not (inputStatePrev.keys[value + 1] > 0) and (inputStateCurr.keys[value + 1] > 0) then
+        if keydown(value) then
             local direction = directions[index]
             local nx = entity.player.x + direction.x
             local ny = entity.player.y + direction.y
@@ -319,8 +319,7 @@ function checkWin()
 end
 
 function update()
-
-    if not (inputStatePrev.keys[21 + 1] > 0) and (inputStateCurr.keys[21 + 1] > 0) then
+    if keydown(21) then
         startMap(entity.map)
     end
 

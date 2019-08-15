@@ -6,21 +6,8 @@ end
 
 setLogFilter("texture")
 
-function mouse1()
-    return (not inputStatePrev.mouseButton1) and inputStateCurr.mouseButton1
-end
-function mouse2()
-    return (not inputStatePrev.mouseButton2) and inputStateCurr.mouseButton2
-end
-function mouse3()
-    return (not inputStatePrev.mouseButton3) and inputStateCurr.mouseButton3
-end
-function keydown(key)
-    return not (inputStatePrev.keys[key+1]>0) and inputStateCurr.keys[key+1]>0
-end
-
 function update()
-    if mouse1() then
+    if mouse1down() then
         local e = newEntityWithName("name_" .. entity.count)
         local transform = createTransform(e)
         transform.parent = entity.index
@@ -36,7 +23,7 @@ function update()
         entity.list[entity.count] = e
         entity.count = entity.count + 1
     end
-    if mouse2() then
+    if mouse2down() then
         --test intersection
         local mouseX = (inputStateCurr.mouseX / screenWidth * 2.0 - 1.0) * screenWidth / screenHeight
         local mouseY = 1.0 - inputStateCurr.mouseY / screenHeight * 2.0
@@ -56,7 +43,7 @@ function update()
             end
         end
     end
-    if mouse3() then
+    if mouse3down() then
         --test intersection
         local mouseX = (inputStateCurr.mouseX / screenWidth * 2.0 - 1.0) * screenWidth / screenHeight
         local mouseY = 1.0 - inputStateCurr.mouseY / screenHeight * 2.0
@@ -76,10 +63,10 @@ function update()
         end
     end
     if keydown(30) then
-    	local e = findEntityByName("name_"..1)
-    	if(e>0)then
-    	print(e)
+        local e = findEntityByName("name_" .. 1)
+        if (e > 0) then
+            print(e)
             entities[e].drawable.visible = not entities[e].drawable.visible
-    	end
+        end
     end
 end

@@ -1,10 +1,3 @@
-function mouse1()
-	return (not inputStatePrev.mouseButton1) and inputStateCurr.mouseButton1
-end
-function mouse3()
-	return (not inputStatePrev.mouseButton3) and inputStateCurr.mouseButton3
-end
-
 function createChild(x, y, size, textureName)
     local e = newEntity()
     local transform = createTransform(e)
@@ -28,7 +21,7 @@ function gameLoad()
 end
 
 function newY()
-	return math.random() - 0.5
+    return math.random() - 0.5
 end
 
 function createPipe(index)
@@ -71,11 +64,11 @@ function updatePipe(index)
     t1.sy = 2
     t2.sy = -2
 
-    if(entity.running) then
+    if (entity.running) then
         pipe.x = pipe.x - dt * 1
     end
 
-    if (pipe.x < -screenWidth /screenHeight - 0.5) then
+    if (pipe.x < -screenWidth / screenHeight - 0.5) then
         pipe.x = pipe.x + 3 * entity.pipeinterval
         pipe.y = newY()
     end
@@ -101,26 +94,26 @@ function checkDead()
 
     local x = entity.x
     local y = entity.y
-    for i = 0,2 do
-    	local pipe = entity.pipes[i]
-    	local left = pipe.x - 0.25
-    	local right = pipe.x + 0.25
-    	local dy = entity.birdsize
-    	if (x <= left) and (x > left - entity.birdsize) then
-    		local dx = left - x
-    		dy = math.sqrt(entity.birdsize * entity.birdsize - dx * dx)
-    	end
-    	if (x >= right) and (x < right + entity.birdsize) then
-    		local dx = x - right
-    		dy = math.sqrt(entity.birdsize * entity.birdsize - dx * dx)
-    	end
-    	if ((x > left - entity.birdsize) and (x < right + entity.birdsize)) then
-    		local up = pipe.y + entity.pipegap - dy
-    		local down = pipe.y - entity.pipegap + dy
-    		if (y < down) or (y > up) then
-        		gameEnd()
-    		end
-    	end
+    for i = 0, 2 do
+        local pipe = entity.pipes[i]
+        local left = pipe.x - 0.25
+        local right = pipe.x + 0.25
+        local dy = entity.birdsize
+        if (x <= left) and (x > left - entity.birdsize) then
+            local dx = left - x
+            dy = math.sqrt(entity.birdsize * entity.birdsize - dx * dx)
+        end
+        if (x >= right) and (x < right + entity.birdsize) then
+            local dx = x - right
+            dy = math.sqrt(entity.birdsize * entity.birdsize - dx * dx)
+        end
+        if ((x > left - entity.birdsize) and (x < right + entity.birdsize)) then
+            local up = pipe.y + entity.pipegap - dy
+            local down = pipe.y - entity.pipegap + dy
+            if (y < down) or (y > up) then
+                gameEnd()
+            end
+        end
     end
 
 end
@@ -133,21 +126,21 @@ function update()
     local birdTransform = entities[entity.bird].transform
 
     if (entity.running) then
-	    if mouse1() then
-	        math.randomseed(math.random() + entity.speed)
-	        entity.speed = 2
-	    end
-	    entity.speed = entity.speed + dt * entity.acc
-	    entity.y = entity.y + entity.speed * dt
-	    birdTransform.x = entity.x
-	    birdTransform.y = entity.y
+        if mouse1down() then
+            math.randomseed(math.random() + entity.speed)
+            entity.speed = 2
+        end
+        entity.speed = entity.speed + dt * entity.acc
+        entity.y = entity.y + entity.speed * dt
+        birdTransform.x = entity.x
+        birdTransform.y = entity.y
 
-	    birdTransform.rz = math.atan(entity.speed / 3)
+        birdTransform.rz = math.atan(entity.speed / 3)
 
-	    checkDead()
-	end
+        checkDead()
+    end
 
-    if (not entity.running) and mouse3() then
+    if (not entity.running) and mouse3down() then
         gameStart()
     end
 end
