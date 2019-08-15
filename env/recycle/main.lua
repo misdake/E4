@@ -1,10 +1,14 @@
+tiles = { { x = 0, y = 0 }, { x = 0, y = 1 }, { x =1, y = 0 }, { x = 1, y = 1 } }
+tileCount = 4
+
+setLogFilter("texture")
+
 function load()
     entity.list = {}
     entity.count = 0
     entity.transform.sx = screenHeight / screenWidth
+    entity.tileIndex = 0
 end
-
-setLogFilter("texture")
 
 function update()
     if mouse1down() then
@@ -18,7 +22,10 @@ function update()
         transform.sz = 0.2
         local drawable = createDrawable(e)
         drawable.mesh = newMesh("builtin:plane")
-        drawable.material = newMaterialTexture("footprint.png")
+        drawable.material = newMaterialTexture("sprites.png")
+        local tile = tiles[entity.tileIndex + 1]
+        entity.tileIndex = math.fmod(entity.tileIndex + 1, tileCount)
+        setMaterialTextureTiling(drawable.material, tile.x, tile.y, 0.5, 0.5)
 
         entity.list[entity.count] = e
         entity.count = entity.count + 1

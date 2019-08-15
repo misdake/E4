@@ -26,6 +26,13 @@ namespace E4 {
             float w;
         } numbers;
 
+        struct Tiling {
+            float xoffset;
+            float yoffset;
+            float xscale;
+            float yscale;
+        } tiling;
+
         Color color;
 
         uint32_t textureId;

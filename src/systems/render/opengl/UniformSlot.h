@@ -23,6 +23,7 @@ namespace E4 {
         UniformSlot wvp = UniformSlot("uWVP", ShaderDataType::MAT4);
         UniformSlot cameraPos = UniformSlot("uCameraPos", ShaderDataType::VEC3);
         UniformSlot texture = UniformSlot("uTexture", ShaderDataType::TEXTURE);
+        UniformSlot tiling = UniformSlot("uTiling", ShaderDataType::VEC4);
         UniformSlot ambient = UniformSlot("uAmbient", ShaderDataType::VEC4);
         UniformSlot diffuse = UniformSlot("uDiffuse", ShaderDataType::VEC4);
         UniformSlot specular = UniformSlot("uSpecular", ShaderDataType::VEC4);

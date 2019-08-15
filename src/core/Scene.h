@@ -46,10 +46,12 @@ namespace E4 {
         std::reference_wrapper<Env> enableCamera(Entity& entity, CameraType type, float fov);
         void disableCamera(Entity& entity);
         void removeEnv(Entity& entity);
+
         Asset<Material> newMaterialTexture(const std::string& textureName);
         Asset<Material> newMaterialColor(const std::string& color);
         Asset<Material> newMaterialLight(const std::string& ambient, const std::string& diffuse);
         Asset<Mesh> newMesh(const std::string& meshName);
+        void setMaterialTextureTiling(Asset<Material>& material, float xoffset, float yoffset, float xscale, float yscale);
     };
 
 }

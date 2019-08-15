@@ -16,6 +16,7 @@ namespace E4 {
         ShaderData diffuse;
         ShaderData specular;
         ShaderData specularExp;
+        ShaderData tiling;
 
         void unload();
     };

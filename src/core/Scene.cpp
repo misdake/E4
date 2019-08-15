@@ -214,6 +214,7 @@ void E4::Scene::removeEnv(E4::Entity& entity) {
 E4::Asset<E4::Material> E4::Scene::newMaterialTexture(const std::string& textureName) {
     Log::debug("scene: newMaterialTexture %s", textureName.c_str());
     Asset <Material> material = app->materials.alloc();
+    material->tiling.set(0, 0, 1, 1);
     material->texture = app->textures.get(textureName);
     material->shader = &app->renderer.shaderTexture;
     return material;
@@ -234,6 +235,13 @@ E4::Asset<E4::Material> E4::Scene::newMaterialLight(const std::string& ambient, 
     material->specularExp.set(10); //TODO
     material->shader = &app->renderer.shaderLight;
     return material;
+}
+void E4::Scene::setMaterialTextureTiling(E4::Asset<E4::Material>& material, float xoffset, float yoffset, float xscale, float yscale) {
+    ShaderData& data = material->tiling;
+    data.tiling.xoffset = xoffset;
+    data.tiling.yoffset = yoffset;
+    data.tiling.xscale = xscale;
+    data.tiling.yscale = yscale;
 }
 
 E4::Asset<E4::Mesh> E4::Scene::newMesh(const std::string& meshName) {

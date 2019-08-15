@@ -74,6 +74,9 @@ void E4::ScriptBridge::load(App& app, sol::state& lua, Ecs& ecs) {
     lua.set_function("newMesh", [&](const std::string& meshName) {
         return app.scene.newMesh(meshName);
     });
+    lua.set_function("setMaterialTextureTiling", [&](Asset<Material>& material, float xoffset, float yoffset, float xscale, float yscale) {
+        app.scene.setMaterialTextureTiling(material, xoffset, yoffset, xscale, yscale);
+    });
 
     lua.set_function("setLogFilter", [&](const std::string& filter) {
         Log::setFilter(filter.c_str());

@@ -47,7 +47,8 @@ const char* ShaderTexture_VS = "void main() {\n"
 
 const char* ShaderTexture_PS = "out vec4 outputColor;\n"
                                "void main() {\n"
-                               "   outputColor = texture(uTexture, vTexcoord);\n"
+                               "   vec2 texcoord = (vTexcoord.xy + uTiling.xy) * uTiling.zw;\n"
+                               "   outputColor = texture(uTexture, texcoord);\n"
                                "}";
 
 E4::ShaderTexture::ShaderTexture(GlRenderer& renderer) : Shader(
@@ -65,6 +66,7 @@ E4::ShaderTexture::ShaderTexture(GlRenderer& renderer) : Shader(
     },
     {
         renderer.uniformSlots.texture,
+        renderer.uniformSlots.tiling,
     }
 ) {
 }
@@ -78,6 +80,7 @@ void E4::ShaderTexture::bind(GlRenderer& renderer, const Transform& transform, c
     renderer.uniformSlots.world << transform.world;
     renderer.uniformSlots.wvp << transform.wvp;
     renderer.uniformSlots.texture << material.texture->shaderData;
+    renderer.uniformSlots.tiling << material.tiling;
 }
 
 const char* ShaderLight_VS = "void main() {\n"
