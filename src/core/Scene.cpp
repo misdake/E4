@@ -236,12 +236,9 @@ E4::Asset<E4::Material> E4::Scene::newMaterialLight(const std::string& ambient, 
     material->shader = &app->renderer.shaderLight;
     return material;
 }
-void E4::Scene::setMaterialTextureTiling(E4::Asset<E4::Material>& material, float xoffset, float yoffset, float xscale, float yscale) {
+void E4::Scene::setMaterialTextureTile(E4::Asset<E4::Material>& material, const std::string& tilename) {
     ShaderData& data = material->tiling;
-    data.tiling.xoffset = xoffset;
-    data.tiling.yoffset = yoffset;
-    data.tiling.xscale = xscale;
-    data.tiling.yscale = yscale;
+    material->texture->setTile(tilename, data);
 }
 
 E4::Asset<E4::Mesh> E4::Scene::newMesh(const std::string& meshName) {

@@ -51,7 +51,7 @@ namespace E4 {
         Asset<Material> newMaterialColor(const std::string& color);
         Asset<Material> newMaterialLight(const std::string& ambient, const std::string& diffuse);
         Asset<Mesh> newMesh(const std::string& meshName);
-        void setMaterialTextureTiling(Asset<Material>& material, float xoffset, float yoffset, float xscale, float yscale);
+        void setMaterialTextureTile(Asset<Material>& material, const std::string& tilename);
     };
 
 }

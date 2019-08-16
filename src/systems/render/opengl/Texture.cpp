@@ -1,4 +1,6 @@
 #include "Texture.h"
+#include "../../../util/TileFile.h"
+#include "../../../util/File.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 
@@ -13,6 +15,12 @@ E4::Texture& E4::Texture::load(std::string nfolder, std::string nname) {
     this->folder = std::move(nfolder);
     this->name = std::move(nname);
     Log::debug("texture: load %s", name.c_str());
+
+    if (name.rfind(".txt") != std::string::npos) {
+        TileFile tileFile(readFile(folder, name));
+        tileFile.write(tiles);
+        name = tileFile.texture;
+    }
 
     std::string filepath = this->folder + "/" + this->name;
 
@@ -39,6 +47,17 @@ E4::Texture& E4::Texture::load(std::string nfolder, std::string nname) {
     stbi_image_free(data);
 
     return *this;
+}
+
+bool E4::Texture::setTile(const std::string& tile, ShaderData& tiling) {
+    auto iterator = tiles.find(tile);
+    if (iterator != tiles.end()) {
+        ShaderData& data = iterator->second;
+        tiling = data;
+        return true;
+    } else {
+        return false;
+    }
 }
 
 void E4::Texture::unload() {

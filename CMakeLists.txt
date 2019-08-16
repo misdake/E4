@@ -65,6 +65,7 @@ add_executable(app
         src/util/FrameState.h
         src/util/Log.cpp src/util/Log.h
         src/util/StringPool.cpp src/util/StringPool.h
+        src/util/TileFile.cpp src/util/TileFile.h
 
         src/math/Mat4.cpp src/math/Mat4.h
         src/math/Vec3.cpp src/math/Vec3.h
