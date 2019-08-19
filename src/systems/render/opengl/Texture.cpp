@@ -15,14 +15,13 @@ E4::Texture& E4::Texture::load(std::string nfolder, std::string nname) {
     this->folder = std::move(nfolder);
     this->name = std::move(nname);
     Log::debug("texture: load %s", name.c_str());
+    std::string filepath = this->folder + "/" + this->name;
 
     if (name.rfind(".txt") != std::string::npos) {
         TileFile tileFile(readFile(folder, name));
         tileFile.write(tiles);
-        name = tileFile.texture;
+        filepath = this->folder + "/" + tileFile.texture;
     }
-
-    std::string filepath = this->folder + "/" + this->name;
 
     stbi_set_flip_vertically_on_load(true);
     uint32_t& textureId = shaderData.textureId;
