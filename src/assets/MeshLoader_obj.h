@@ -18,7 +18,7 @@ namespace E4 {
         const MtlFile& getMtlFile(const std::string& folder, const std::string& name);
 
     public:
-        uint64_t create(const std::string& folder, const std::string& filename, App& app); //TODO add param to enable/disable cache
+        uint64_t create(const std::string& folder, const std::string& filename, App& app, uint32_t parent); //TODO add param to enable/disable cache
     };
 
 }

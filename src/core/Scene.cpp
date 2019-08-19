@@ -36,14 +36,11 @@ void E4::Scene::reloadScript() {
     });
 }
 
-E4::Entity& E4::Scene::newEntity() {
-    return newEntity("");
-}
-E4::Entity& E4::Scene::newEntity(const char* name) {
+E4::Entity& E4::Scene::newEntity(const char* name, uint32_t parent) {
     sol::state& lua = *state;
     Entity& entity = ecs->newEntity();
+    entity.parent = parent;
     entity.name = app->stringPool.indexFor(name);
-    const std::string& ref = app->stringPool.get(entity.name);
     lua["entities"][entity.index] = lua.create_table_with("name", name, "index", entity.index);
     Log::debug("scene: newEntity %d", entity.index);
     return entity;
@@ -77,10 +74,10 @@ void E4::Scene::clearAsset() {
     //Mesh, Material, Texture will be dealt by Recycler. (and possibly)
     //Script will be reloaded.
 }
-E4::Entity& E4::Scene::newEntityFromFile(const std::string& modelName) {
+E4::Entity& E4::Scene::newEntityFromFile(const std::string& modelName, uint32_t parent) {
     Log::debug("scene: newEntityFromFile %s", modelName.c_str());
     if (endsWith(modelName, ".obj")) {
-        uint64_t entityId = app->meshLoader_obj.create(app->folder, modelName, *app);
+        uint64_t entityId = app->meshLoader_obj.create(app->folder, modelName, *app, parent);
         return ecs->getEntityById(entityId);
     }
     Log::error("newEntityFromFile: unknown model format, %s", modelName.c_str());
@@ -163,7 +160,7 @@ void E4::Scene::removeScript(E4::Entity& entity) {
     }
 }
 
-std::reference_wrapper<E4::Env> E4::Scene::enableLight(E4::Entity& entity, LightType lightType, const std::string& ambient, const std::string& diffuse, const std::string& specular) {
+void E4::Scene::enableLight(E4::Entity& entity, LightType lightType, const std::string& ambient, const std::string& diffuse, const std::string& specular) {
     Log::debug("scene: enableLight %d", entity.index);
     sol::state& lua = *state;
     bool created = false;
@@ -174,7 +171,6 @@ std::reference_wrapper<E4::Env> E4::Scene::enableLight(E4::Entity& entity, Light
     env.light.ambient.color.set(ambient);
     env.light.diffuse.color.set(diffuse);
     env.light.specular.color.set(specular);
-    return std::ref<Env>(env);
 }
 void E4::Scene::disableLight(E4::Entity& entity) {
     sol::state& lua = *state;
@@ -183,7 +179,7 @@ void E4::Scene::disableLight(E4::Entity& entity) {
         ecs->get<Env>(entity).light.enabled = false;
     }
 }
-std::reference_wrapper<E4::Env> E4::Scene::enableCamera(E4::Entity& entity, CameraType cameraType, float fov) {
+void E4::Scene::enableCamera(E4::Entity& entity, CameraType cameraType, float fov) {
     Log::debug("scene: enableCamera %d", entity.index);
     sol::state& lua = *state;
     bool created = false;
@@ -193,7 +189,6 @@ std::reference_wrapper<E4::Env> E4::Scene::enableCamera(E4::Entity& entity, Came
     env.camera.init();
     env.camera.type = cameraType;
     env.camera.fov = fov;
-    return std::ref<Env>(env);
 }
 void E4::Scene::disableCamera(E4::Entity& entity) {
     sol::state& lua = *state;

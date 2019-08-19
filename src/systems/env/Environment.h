@@ -7,7 +7,7 @@
 namespace E4 {
 
     struct Environment {
-        std::pair<Transform*, Camera*> camera;
+        std::pair<uint32_t, Camera*> camera;
         std::vector<std::pair<Transform*, Light*>> lights;
     };
 

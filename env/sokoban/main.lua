@@ -105,7 +105,6 @@ function setTransform(transform, x, y, sx, sy)
     transform.z = 0;
     transform.sx = s * sx;
     transform.sy = s * sy;
-    transform.parent = entity.index;
 end
 
 function loadMesh()
@@ -133,7 +132,7 @@ function loadResources()
 end
 
 function loadTile(x, y)
-    local e = newEntity()
+    local e = newEntityParent(entity.index)
     local transform = createTransform(e)
     setTransform(transform, x, y, 1, 1)
     local drawable = createDrawable(e)
@@ -155,7 +154,7 @@ function loadTargets()
     entity.targetEntities = {}
 
     for _, value in pairs(entity.target) do
-        local e = newEntity()
+        local e = newEntityParent(entity.index)
         local transform = createTransform(e)
         setTransform(transform, value.x, value.y, 0.5, 0.5)
         transform.z = -0.2;
@@ -167,7 +166,7 @@ function loadTargets()
 end
 
 function loadPlayer()
-    local e = newEntity()
+    local e = newEntityParent(entity.index)
     createTransform(e)
     local drawable = createDrawable(e)
     drawable.mesh = entity.meshPlane

@@ -26,18 +26,15 @@ function load()
     entity.cameraEntity1 = cameraEntity1
     entity.cameraEntity2 = cameraEntity2
 
-    local e1 = newEntityFromFile("Male_LookingUp.obj")
+    local e1 = newEntityFromFileParent("Male_LookingUp.obj", entity.index)
     entities[e1].transform.x = -3
     entities[e1].transform.ry = 1
-    entities[e1].transform.parent = entity.index
-    local e2 = newEntityFromFile("Male_LookingUp.obj")
+    local e2 = newEntityFromFileParent("Male_LookingUp.obj", entity.index)
     entities[e2].transform.x = 0
     entities[e2].transform.ry = 2
-    entities[e2].transform.parent = entity.index
-    local e3 = newEntityFromFile("Male_LookingUp.obj")
+    local e3 = newEntityFromFileParent("Male_LookingUp.obj", entity.index)
     entities[e3].transform.x = 3
     entities[e3].transform.ry = 3
-    entities[e3].transform.parent = entity.index
 
     local lightEntity = newEntity()
     createTransform(lightEntity)

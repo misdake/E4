@@ -29,8 +29,8 @@ const E4::MtlFile& E4::MeshLoader_obj::getMtlFile(const std::string& folder, con
     }
 }
 
-uint64_t E4::MeshLoader_obj::create(const std::string& folder, const std::string& filename, App& app) {
-    Entity& root = app.scene.newEntity();
+uint64_t E4::MeshLoader_obj::create(const std::string& folder, const std::string& filename, App& app, uint32_t parent) {
+    Entity& root = app.scene.newEntity(filename.c_str(), parent);
     app.scene.createTransform(root);
 
     const ObjFile& objFile = getObjFile(folder, filename);
@@ -51,9 +51,8 @@ uint64_t E4::MeshLoader_obj::create(const std::string& folder, const std::string
         if (!obj.normal.empty()) mesh->normal.set(obj.normal, 3, obj.normal.size() / 3).upload();
         mesh->vertexCount = vertexCount;
 
-        Entity& child = app.scene.newEntity();
+        Entity& child = app.scene.newEntity("", root.index); //TODO name
         Transform& transform = app.scene.createTransform(child);
-        transform.parent = root.index;
         Drawable& drawable = app.scene.createDrawable(child);
         drawable.mesh = mesh;
         drawable.material = app.scene.newMaterialLight("FF000000", "FFFFFFFF");

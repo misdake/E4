@@ -5,21 +5,32 @@
 #include "../util/File.h"
 
 void E4::ScriptBridge::load(App& app, sol::state& lua, Ecs& ecs) {
-    lua.set_function("newEntity", [&]() {
-        return app.scene.newEntity().index;
-    });
-    lua.set_function("newEntityWithName", [&](const char* name) {
-        return app.scene.newEntity(name).index;
+    lua.set_function("newEntityNameParent", [&](const char* name, uint32_t parent) {
+        return app.scene.newEntity(name, parent).index;
     });
     lua.set_function("deleteEntity", [&](uint32_t index) {
         return app.scene.deleteEntity(ecs.getEntityByIndex(index));
     });
-    lua.set_function("newEntityFromFile", [&](const std::string& modelName) {
-        return app.scene.newEntityFromFile(modelName).index;
+    lua.set_function("newEntityFromFileParent", [&](const std::string& modelName, uint32_t parent) {
+        return app.scene.newEntityFromFile(modelName, parent).index;
     });
     lua.set_function("findEntityByName", [&](const char* name) {
         return app.scene.findEntityByName(name).index;
     });
+    lua.script(R"(
+        function newEntity()
+            return newEntityNameParent("", 0)
+        end
+        function newEntityName(name)
+            return newEntityNameParent(name, 0)
+        end
+        function newEntityParent(parent)
+            return newEntityNameParent("", parent)
+        end
+        function newEntityFromFile(modelName)
+            return newEntityFromFileParent(modelName, parent)
+        end
+    )");
 
     lua.set_function("setActiveCamera", [&](uint32_t index) {
         return app.scene.setActiveCamera(ecs.getEntityByIndex(index));
@@ -129,8 +140,7 @@ void E4::ScriptBridge::load(App& app, sol::state& lua, Ecs& ecs) {
         "rz", &E4::Transform::rz,
         "sx", &E4::Transform::sx,
         "sy", &E4::Transform::sy,
-        "sz", &E4::Transform::sz,
-        "parent", &E4::Transform::parent
+        "sz", &E4::Transform::sz
     );
     lua.new_usertype<E4::Drawable>(
         "Drawable",

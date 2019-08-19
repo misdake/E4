@@ -12,9 +12,8 @@ end
 
 function update()
     if mouse1down() then
-        local e = newEntityWithName("name_" .. entity.count)
+        local e = newEntityNameParent("name_" .. entity.count, entity.index)
         local transform = createTransform(e)
-        transform.parent = entity.index
         transform.x = (inputStateCurr.mouseX / screenWidth * 2.0 - 1.0) * screenWidth / screenHeight
         transform.y = 1.0 - inputStateCurr.mouseY / screenHeight * 2.0
         transform.sx = 0.2

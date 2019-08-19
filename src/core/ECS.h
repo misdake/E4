@@ -115,6 +115,7 @@ namespace E4 {
         uint32_t name; // index of app.stringPool
         uint64_t id;
         uint32_t index;
+        uint32_t parent;
     };
 
     template<typename T>
