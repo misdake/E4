@@ -98,6 +98,9 @@ void E4::ScriptBridge::load(App& app, sol::state& lua, Ecs& ecs) {
     lua.set_function("readFile", [&](const std::string& fileName) {
         return readFile(app.folder, fileName);
     });
+    lua.set_function("writeFile", [&](const std::string& fileName, const std::string& content) {
+        writeFile(app.folder, fileName, content);
+    });
     lua.script(R"(
         function mouse1down()
             return (not inputStatePrev.mouseButton1) and inputStateCurr.mouseButton1
