@@ -5,6 +5,12 @@
 #include "../util/File.h"
 
 void E4::ScriptBridge::load(App& app, sol::state& lua, Ecs& ecs) {
+    lua.set_function("loadScriptFile", [&](const std::string& filename) {
+        std::string content = readFile(app.folder, filename);
+        Log::debug("script load %s", filename.c_str());
+        lua.script(content, filename);
+    });
+
     lua.set_function("newEntityNameParent", [&](const char* name, uint32_t parent) {
         return app.scene.newEntity(name, parent).index;
     });
@@ -115,20 +121,24 @@ void E4::ScriptBridge::load(App& app, sol::state& lua, Ecs& ecs) {
             return not (inputStatePrev.keys[key + 1] > 0) and (inputStateCurr.keys[key + 1] > 0)
         end
 
+        function saveScriptFunctions(index)
+            scripts[index] = {}
+            scripts[index].load = load
+            scripts[index].update = update
+            load = nil
+            update = nil
+        end
+
         function prepareEntity(id)
             entity = entities[id]
         end
         function runLoad(index)
-            if scripts[index].load ~= nil then
-                scripts[index].load()
-            end
+            scripts[index].load()
         end
         function runUpdate(index)
-            if scripts[index].update ~= nil then
-                scripts[index].update()
-            end
+            scripts[index].update()
         end
-    )");
+    )", "ScriptBridge");
 
     lua["entities"] = lua.create_table();
     lua["scripts"] = lua.create_table();

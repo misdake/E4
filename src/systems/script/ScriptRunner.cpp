@@ -38,11 +38,13 @@ void E4::ScriptRunner::run(Ecs& ecs, const E4::FrameState& frameState) {
             script.file->scriptLoaded = true;
             std::string content = readFile(script.file->folder, script.file->name);
             Log::debug("script load %s", script.file->name.c_str());
+            lua.script(R"(
+                function load() end
+                function update() end
+            )", "ScriptRunner_dummyLoadUpdate");
             state->script(content, script.file->name);
-            uint32_t index = script.file->scriptIndex = (script.file->scriptIndex > 0) ? script.file->scriptIndex : ++scriptIndex;
-            lua["scripts"][index] = lua.create_table();
-            lua["scripts"][index]["load"] = lua["load"];
-            lua["scripts"][index]["update"] = lua["update"];
+            script.file->scriptIndex = (script.file->scriptIndex > 0) ? script.file->scriptIndex : ++scriptIndex;
+            lua["saveScriptFunctions"](script.file->scriptIndex);
         }
 
         if (!script.loaded) {
