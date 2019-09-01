@@ -19,6 +19,7 @@ E4::TileFile::TileFile(const std::string& content) {
 
     for (std::vector<std::string>::size_type i = 2; i < lines.size(); i++) {
         auto line = lines[i];
+        if (line.empty()) continue;
         std::vector<std::string>::size_type f = line.find(' ');
         Tile tile;
         tile.name = line.substr(0, f);

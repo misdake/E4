@@ -24,7 +24,7 @@ void E4::writeFile(const std::string& folder, const std::string& fileName, const
     writeFile(folder + "/" + fileName, content);
 }
 void E4::writeFile(const std::string& fileName, const std::string& content) {
-    Log::debug("file read %s", fileName.c_str());
+    Log::debug("file write %s", fileName.c_str());
     std::ofstream output(fileName);
     output << content;
     output.close();
