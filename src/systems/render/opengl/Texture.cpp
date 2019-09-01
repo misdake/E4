@@ -17,10 +17,12 @@ E4::Texture& E4::Texture::load(std::string nfolder, std::string nname) {
     Log::debug("texture: load %s", name.c_str());
     std::string filepath = this->folder + "/" + this->name;
 
+    bool mipmap = true;
     if (name.rfind(".txt") != std::string::npos) {
         TileFile tileFile(readFile(folder, name));
         tileFile.write(tiles);
         filepath = this->folder + "/" + tileFile.texture;
+        mipmap = false;
     }
 
     stbi_set_flip_vertically_on_load(true);
@@ -30,14 +32,14 @@ E4::Texture& E4::Texture::load(std::string nfolder, std::string nname) {
     // 为当前绑定的纹理对象设置环绕、过滤方式
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, mipmap ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     // 加载并生成纹理
     int nrChannels;
     stbi_uc* data = stbi_load(filepath.c_str(), &this->w, &this->h, &nrChannels, 0);
     if (data) {
         glTexImage2D(GL_TEXTURE_2D, 0, nrChannels == 4 ? GL_RGBA : GL_RGB, this->w, this->h, 0, nrChannels == 4 ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE, data);
-        glGenerateMipmap(GL_TEXTURE_2D);
+        if (mipmap) glGenerateMipmap(GL_TEXTURE_2D);
         this->loaded = true;
     } else {
         Log::error("Failed to load texture %s", filepath.c_str());
