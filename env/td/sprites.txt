@@ -1,0 +1,76 @@
+sprites.png
+8 8
+
+0 0 0
+1 1 0
+2 2 0
+3 3 0
+4 0 1
+5 1 1
+6 2 1
+7 3 1
+8 0 2
+9 1 2
+% 2 2
+$ 3 2
+
+enemy_5a 0 3
+enemy_6a 1 3
+enemy_7a 2 3
+enemy_8a 3 3
+enemy_5b 0 4
+enemy_6b 1 4
+enemy_7b 2 4
+enemy_8b 3 4
+enemy_1 0 5
+enemy_2 1 5
+enemy_3 2 5
+enemy_4 3 5
+
+tool_1 0 6
+tool_2 1 6
+tool_3 2 6
+tool_4 3 6
+terrain_1 0 7
+terrain_2 1 7
+terrain_3 2 7
+terrain_4 3 7
+
+fire_1 4 0
+fire_2 5 0
+fire_3 6 0
+fire_4 7 0
+
+bullet_1 4 1
+bullet_2 5 1
+bullet_3 6 1
+bullet_4 7 1
+
+turret_1 4 2
+turret_2 5 2
+missile_1 6 2
+missile_2 7 2
+
+turret_3 4 3
+turret_4 5 3
+turret_5 6 3
+turret_6 7 3
+
+base_1 4 4
+base_2 5 4
+base_3 6 4
+base_4 7 4
+
+ash_1 4 5
+ash_2 5 5
+ash_3 6 5
+ash_4 7 5
+
+decoration_1 4 6
+decoration_2 5 6
+decoration_3 6 6
+decoration_4 7 6
+decoration_5 4 7
+decoration_6 5 7
+decoration_7 6 7
+decoration_8 7 7
