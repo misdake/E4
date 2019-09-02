@@ -1,37 +1,40 @@
-List = {}
-function List.new ()
-    return { first = 0, last = -1 }
+List = { first = 0, last = -1 }
+function List:new()
+    local o = {}
+    setmetatable(o, self)
+    self.__index = self
+    return o
 end
-function List.isEmpty (queue)
-    return queue.first > queue.last
+function List:isEmpty()
+    return self.first > self.last
 end
-function List.pushleft (queue, value)
-    local first = queue.first - 1
-    queue.first = first
-    queue[first] = value
+function List:pushleft (value)
+    local first = self.first - 1
+    self.first = first
+    self[first] = value
 end
-function List.pushright (queue, value)
-    local last = queue.last + 1
-    queue.last = last
-    queue[last] = value
+function List:pushright(value)
+    local last = self.last + 1
+    self.last = last
+    self[last] = value
 end
-function List.popleft (queue)
-    local first = queue.first
-    if first > queue.last then
-        error("queue is empty")
+function List:popleft()
+    local first = self.first
+    if first > self.last then
+        error("self is empty")
     end
-    local value = queue[first]
-    queue[first] = nil        -- to allow garbage collection
-    queue.first = first + 1
+    local value = self[first]
+    self[first] = nil        -- to allow garbage collection
+    self.first = first + 1
     return value
 end
-function List.popright (queue)
-    local last = queue.last
-    if queue.first > last then
-        error("queue is empty")
+function List:popright()
+    local last = self.last
+    if self.first > last then
+        error("self is empty")
     end
-    local value = queue[last]
-    queue[last] = nil         -- to allow garbage collection
-    queue.last = last - 1
+    local value = self[last]
+    self[last] = nil         -- to allow garbage collection
+    self.last = last - 1
     return value
 end

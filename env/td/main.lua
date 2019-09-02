@@ -26,7 +26,7 @@ function load()
     local roadTiles = {}
     roadTiles["2"] = true
     entity.gamemap = GameMap.init(entity.tilemap, roadTiles, {})
-    GameMap.calcPath(entity.gamemap, { { x = 1, y = 2 } })
+    GameMap.calcPath(entity.gamemap, { { x = 10, y = 9, dir = GameMap.PathDirections.right } })
 end
 
 function update()

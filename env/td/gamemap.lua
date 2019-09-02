@@ -94,11 +94,11 @@ function GameMap.calcPath(gamemap, dest)
     end)
     local direction = gamemap.directiondata
 
-    local queue = List.new()
+    local queue = List:new()
 
     --initialize destinations
     for _, value in pairs(dest) do
-        List.pushright(queue, value)
+        queue:pushright(value)
         distance[value.x][value.y] = 0
         direction[value.x][value.y] = GameMap.PathDirections.unknown
     end
@@ -106,7 +106,7 @@ function GameMap.calcPath(gamemap, dest)
     function go(x, y, value, dir)
         if (distance[x][y] == MAX_PATH) then
             distance[x][y] = value
-            List.pushright(queue, { x = x, y = y })
+            queue:pushright({ x = x, y = y })
             direction[x][y] = dir
         end
     end
@@ -115,8 +115,8 @@ function GameMap.calcPath(gamemap, dest)
     local y_up = height - 1;
 
     --flood fill with queue
-    while (not List.isEmpty(queue)) do
-        local curr = List.popleft(queue)
+    while (not queue:isEmpty()) do
+        local curr = queue:popleft()
         local x = curr.x
         local y = curr.y
         local value = distance[x][y] + 1
@@ -133,6 +133,11 @@ function GameMap.calcPath(gamemap, dest)
         if (y <= y_up) then
             go(x, y + 1, value, GameMap.PathDirections.up)
         end
+    end
+
+    --fill destination directions
+    for _, value in pairs(dest) do
+        direction[value.x][value.y] = value.dir
     end
 
     local out = ""
