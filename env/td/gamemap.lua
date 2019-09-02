@@ -3,11 +3,11 @@ loadScriptFile("list.lua")
 GameMap = {}
 
 GameMap.PathDirections = {
-    unknown = { char = "X", x = 0, y = 0 },
-    up = { char = "↑", x = 0, y = 1 },
-    down = { char = "↓", x = 0, y = -1 },
-    left = { char = "←", x = -1, y = 0 },
-    right = { char = "→", x = 1, y = 0 }
+    unknown = { char = "X", x = 0, y = 0, r = 0 },
+    up = { char = "↑", x = 0, y = -1, r = -math.pi / 2, align = 'y' },
+    down = { char = "↓", x = 0, y = 1, r = math.pi / 2, align = 'y' },
+    left = { char = "←", x = -1, y = 0, r = math.pi, align = 'x' },
+    right = { char = "→", x = 1, y = 0, r = 0, align = 'x' }
 }
 
 function GameMap._createMatrixValue(width, height, value)
@@ -82,6 +82,10 @@ function GameMap:pathOnTile(x, y)
     local t = self.tiledata[x][y]
     local r = t.road and (not t.turret) and true
     return r
+end
+
+function GameMap:getDirection(x, y)
+    return self.directiondata[x][y]
 end
 
 function GameMap:calcPath(dest)

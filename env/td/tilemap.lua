@@ -70,8 +70,8 @@ function TileMap:makeTiles(tileNameMapping)
 
             local e = newEntityParent(self.rootEntity)
             local transform = createTransform(e)
-            transform.x = x - 0.5
-            transform.y = y - 0.5
+            transform.x = x
+            transform.y = y
             local drawable = createDrawable(e)
             drawable.mesh = self.res.mesh
             drawable.material = newMaterialTexture("sprites.txt")
