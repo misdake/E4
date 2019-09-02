@@ -36,7 +36,11 @@ end
 
 TileMap = {}
 
-function TileMap.newFromFile(filename, parent)
+function TileMap:new(filename, parent)
+    local r = {}
+    setmetatable(r, self)
+    self.__index = self
+
     --load map from file
     local map = Map.newFromFile(filename)
 
@@ -49,7 +53,6 @@ function TileMap.newFromFile(filename, parent)
     drawable.visible = false
 
     --construct tilemap object
-    local r = {}
     r.rootEntity = root
     r.map = map
     r.res = {
@@ -59,34 +62,34 @@ function TileMap.newFromFile(filename, parent)
     return r
 end
 
-function TileMap.makeTiles(tileMap, tileNameMapping)
-    tileMap.mapEntities = {}
-    for x = 1, tileMap.map.width do
-        tileMap.mapEntities[x] = {}
-        for y = 1, tileMap.map.height do
+function TileMap:makeTiles(tileNameMapping)
+    self.mapEntities = {}
+    for x = 1, self.map.width do
+        self.mapEntities[x] = {}
+        for y = 1, self.map.height do
 
-            local e = newEntityParent(tileMap.rootEntity)
+            local e = newEntityParent(self.rootEntity)
             local transform = createTransform(e)
             transform.x = x - 0.5
             transform.y = y - 0.5
             local drawable = createDrawable(e)
-            drawable.mesh = tileMap.res.mesh
+            drawable.mesh = self.res.mesh
             drawable.material = newMaterialTexture("sprites.txt")
-            setMaterialTextureTile(drawable.material, tileNameMapping[tileMap.map.matrix[x][y]])
+            setMaterialTextureTile(drawable.material, tileNameMapping[self.map.matrix[x][y]])
 
-            tileMap.mapEntities[x][y] = e
+            self.mapEntities[x][y] = e
         end
     end
 end
 
-function TileMap.unload(tileMap)
-    if (tileMap.mapEntities) then
-        for y = 1, tileMap.map.height do
-            for x = 1, tileMap.map.width do
-                deleteEntity(tileMap.mapEntities[x][y])
+function TileMap:unload()
+    if (self.mapEntities) then
+        for y = 1, self.map.height do
+            for x = 1, self.map.width do
+                deleteEntity(self.mapEntities[x][y])
             end
         end
     end
 
-    deleteEntity(tileMap.rootEntity)
+    deleteEntity(self.rootEntity)
 end

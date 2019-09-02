@@ -49,12 +49,11 @@ function GameMap._matrixFillFunc(map, width, height, func)
     end
 end
 
-function GameMap.init(tilemap, roadtiles, buildtiles)
+function GameMap:new(tilemap, roadtiles, buildtiles)
     --TODO add config file as parameter
 
     local width = tilemap.map.width
     local height = tilemap.map.height
-
     local tiledata = GameMap._createMatrixFunc(width, height, function(x, y)
         local tile = tilemap.map.matrix[x][y]
         local t = { road = false, build = false, turret = nil }
@@ -69,30 +68,32 @@ function GameMap.init(tilemap, roadtiles, buildtiles)
 
     local directiondata = GameMap._createMatrixValue(width, height, GameMap.PathDirections.unknown)
 
-    return {
-        width = width,
-        height = height,
-        tiledata = tiledata,
-        directiondata = directiondata
-    }
+    local r = {}
+    setmetatable(r, self)
+    self.__index = self
+    r.width = width
+    r.height = height
+    r.tiledata = tiledata
+    r.directiondata = directiondata
+    return r
 end
 
-function GameMap.pathOnTile(gamemap, x, y)
-    local t = gamemap.tiledata[x][y]
+function GameMap:pathOnTile(x, y)
+    local t = self.tiledata[x][y]
     local r = t.road and (not t.turret) and true
     return r
 end
 
-function GameMap.calcPath(gamemap, dest)
-    local width = gamemap.width
-    local height = gamemap.height
+function GameMap:calcPath(dest)
+    local width = self.width
+    local height = self.height
 
     local MAX_PATH = 9999
     local MAX_NONPATH = 99999
     local distance = GameMap._createMatrixFunc(width, height, function(x, y)
-        return GameMap.pathOnTile(gamemap, x, y) and MAX_PATH or MAX_NONPATH
+        return self:pathOnTile(x, y) and MAX_PATH or MAX_NONPATH
     end)
-    local direction = gamemap.directiondata
+    local direction = self.directiondata
 
     local queue = List:new()
 
@@ -120,7 +121,6 @@ function GameMap.calcPath(gamemap, dest)
         local x = curr.x
         local y = curr.y
         local value = distance[x][y] + 1
-        --print("curr:" .. x .. "," .. y .. " next=" .. value)
         if (2 <= x) then
             go(x - 1, y, value, GameMap.PathDirections.right)
         end
@@ -140,6 +140,7 @@ function GameMap.calcPath(gamemap, dest)
         direction[value.x][value.y] = value.dir
     end
 
+    --output path directions
     local out = ""
     GameMap._matrixFillFunc(direction, width, height, function(x, y)
         out = out .. direction[x][y].char .. " "

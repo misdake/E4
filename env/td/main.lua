@@ -15,18 +15,18 @@ function load()
     transform.sy = -1 / tileHeight
     transform.sz = 0.1
 
-    entity.tilemap = TileMap.newFromFile("map.txt", entity.index)
+    entity.tilemap = TileMap:new("map.txt", entity.index)
     local tileNameMapping = {}
     tileNameMapping["1"] = "terrain_1"
     tileNameMapping["2"] = "terrain_2"
     tileNameMapping["3"] = "terrain_3"
     tileNameMapping["4"] = "terrain_4"
-    TileMap.makeTiles(entity.tilemap, tileNameMapping)
+    entity.tilemap:makeTiles(tileNameMapping)
 
     local roadTiles = {}
     roadTiles["2"] = true
-    entity.gamemap = GameMap.init(entity.tilemap, roadTiles, {})
-    GameMap.calcPath(entity.gamemap, { { x = 10, y = 9, dir = GameMap.PathDirections.right } })
+    entity.gamemap = GameMap:new(entity.tilemap, roadTiles, {})
+    entity.gamemap:calcPath({ { x = 10, y = 9, dir = GameMap.PathDirections.right } })
 end
 
 function update()
