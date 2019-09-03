@@ -63,6 +63,7 @@ function TileMap:new(filename, parent)
 end
 
 function TileMap:makeTiles(tileNameMapping)
+    self.tileNameMapping = tileNameMapping
     self.mapEntities = {}
     for x = 1, self.map.width do
         self.mapEntities[x] = {}
@@ -82,6 +83,11 @@ function TileMap:makeTiles(tileNameMapping)
     end
 end
 
+function TileMap:setTile(x, y, tile)
+    local m = entities[self.mapEntities[x][y]].drawable.material
+    setMaterialTextureTile(m, tile)
+end
+
 function TileMap:unload()
     if (self.mapEntities) then
         for y = 1, self.map.height do
@@ -90,6 +96,9 @@ function TileMap:unload()
             end
         end
     end
+    self.mapEntities = nil
+    self.map = nil
+    self.res = nil
 
     deleteEntity(self.rootEntity)
 end

@@ -49,7 +49,7 @@ function GameMap._matrixFillFunc(map, width, height, func)
     end
 end
 
-function GameMap:new(tilemap, roadtiles, buildtiles)
+function GameMap:new(tilemap, roadtiles, buildtiles, dest)
     --TODO add config file as parameter
 
     local width = tilemap.map.width
@@ -75,6 +75,7 @@ function GameMap:new(tilemap, roadtiles, buildtiles)
     r.height = height
     r.tiledata = tiledata
     r.directiondata = directiondata
+    r.dest = dest
     return r
 end
 
@@ -88,7 +89,7 @@ function GameMap:getDirection(x, y)
     return self.directiondata[x][y]
 end
 
-function GameMap:calcPath(dest)
+function GameMap:calcPath()
     local width = self.width
     local height = self.height
 
@@ -98,11 +99,12 @@ function GameMap:calcPath(dest)
         return self:pathOnTile(x, y) and MAX_PATH or MAX_NONPATH
     end)
     local direction = self.directiondata
+    GameMap._matrixFillValue(direction, width, height, GameMap.PathDirections.unknown)
 
     local queue = List:new()
 
     --initialize destinations
-    for _, value in pairs(dest) do
+    for _, value in pairs(self.dest) do
         queue:pushright(value)
         distance[value.x][value.y] = 0
         direction[value.x][value.y] = GameMap.PathDirections.unknown
@@ -140,12 +142,20 @@ function GameMap:calcPath(dest)
     end
 
     --fill destination directions
-    for _, value in pairs(dest) do
+    for _, value in pairs(self.dest) do
         direction[value.x][value.y] = value.dir
     end
 
     --output path directions
     local out = ""
+    GameMap._matrixFillFunc(distance, width, height, function(x, y)
+        out = out .. math.fmod(distance[x][y], 10) .. " "
+        if (x == width) then
+            print(out)
+            out = ""
+        end
+        return distance[x][y]
+    end)
     GameMap._matrixFillFunc(direction, width, height, function(x, y)
         out = out .. direction[x][y].char .. " "
         if (x == width) then
@@ -154,4 +164,23 @@ function GameMap:calcPath(dest)
         end
         return direction[x][y]
     end)
+end
+
+function GameMap:getTile(x, y)
+    return self.tiledata[x][y]
+end
+
+function GameMap:setTile(x, y) --TODO set real turret here
+    local tile = self.tiledata[x][y]
+    if (not tile.road) then
+        game.tilemap:setTile(x, y, "terrain_2")
+        tile.road = true
+    else
+        game.tilemap:setTile(x, y, "terrain_4")
+        tile.road = false
+    end
+    self:calcPath()
+    for _, enemy in pairs(game.enemies) do
+        entities[enemy].rethink = true
+    end
 end

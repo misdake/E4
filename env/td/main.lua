@@ -29,8 +29,8 @@ function load()
 
     local roadTiles = {}
     roadTiles["2"] = true
-    game.gamemap = GameMap:new(game.tilemap, roadTiles, {})
-    game.gamemap:calcPath({ { x = 10, y = 9, dir = GameMap.PathDirections.right } })
+    game.gamemap = GameMap:new(game.tilemap, roadTiles, {}, { { x = 10, y = 9, dir = GameMap.PathDirections.right } })
+    game.gamemap:calcPath()
 
     local enemy = newEntityParent(entity.index)
     createScript(enemy, "enemy.lua")
@@ -39,11 +39,27 @@ function load()
         y = 2,
         targetX = 10,
         targetY = 9,
-        type = { name = "enemy_1", speed = 5 }
+        type = { name = "enemy_1", speed = 1 }
     }
+
+    game.enemies = {}
+    table.insert(game.enemies, enemy)
 
 end
 
 function update()
+    if (mouse1down()) then
+        local t = entity.transform
+        local mx = inputStateCurr.mouseX / screenWidth * 2 - 1
+        local my = 1 - inputStateCurr.mouseY / screenHeight * 2
+        local x = (mx - t.x) / t.sx
+        local y = (my - t.y) / t.sy
+        local tileX = math.floor(x + 0.5)
+        local tileY = math.floor(y + 0.5)
+        print("mx:" .. mx .. " my:" .. my)
+        print("x:" .. x .. " y:" .. y)
+        print("tx:" .. tileX .. " ty:" .. tileY)
 
+        game.gamemap:setTile(tileX, tileY)
+    end
 end

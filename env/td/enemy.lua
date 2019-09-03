@@ -21,6 +21,7 @@ function load()
     local spawnType = entity.spawn.type
 
     entity.timeleft = 0
+    entity.rethink = false
 
     local et = createTransform(entity.index)
     et.x = spawnX
@@ -66,6 +67,19 @@ end
 
 function update()
     local t = entity.transform
+
+    if (entity.rethink) then
+        if (entity.move) then
+            if (entity.move.dir == game.gamemap:getDirection(entity.move.fromX, entity.move.fromY)) then
+            else
+                calcMove()
+            end
+        else
+            calcMove()
+        end
+    end
+    entity.rethink = false
+
     if (entity.move == nil) then
         calcMove()
     end
@@ -74,8 +88,11 @@ function update()
         entity.move.progress = entity.move.progress + entity.timeleft * entity.spawn.type.speed
         entity.timeleft = 0
         if (entity.move.progress > 1) then
-            t.x = entity.move.toX
-            t.y = entity.move.toY
+            if (entity.move.dir.align == 'x') then
+                t.x = entity.move.toX
+            else
+                t.y = entity.move.toY
+            end
             entity.timeleft = (entity.move.progress - 1) / entity.spawn.type.speed
             entity.move = nil
             calcMove()
