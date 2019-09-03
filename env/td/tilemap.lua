@@ -48,7 +48,7 @@ function TileMap:new(filename, parent)
     local root = newEntityNameParent("tilemap_root", parent)
     local transform = createTransform(root)
     local drawable = createDrawable(root)
-    drawable.mesh = newMesh("builtin:plane")
+    drawable.mesh = newMesh("builtin:plane_inverty")
     drawable.material = newMaterialTexture("sprites.txt")
     drawable.visible = false
 

@@ -9,7 +9,7 @@ namespace E4 {
     public:
         Asset<Mesh> create(const std::string& meshName, AssetPool<Mesh>& pool);
 
-        Asset<Mesh> createPlane(AssetPool<Mesh>& pool);
+        Asset<Mesh> createPlane(AssetPool<Mesh>& pool, bool invertY);
     };
 
 }
