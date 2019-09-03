@@ -81,7 +81,7 @@ end
 
 function GameMap:pathOnTile(x, y)
     local t = self.tiledata[x][y]
-    local r = t.road and (not t.turret) and true
+    local r = t.road and (t.turret == nil) and true
     return r
 end
 
@@ -148,14 +148,6 @@ function GameMap:calcPath()
 
     --output path directions
     local out = ""
-    GameMap._matrixFillFunc(distance, width, height, function(x, y)
-        out = out .. math.fmod(distance[x][y], 10) .. " "
-        if (x == width) then
-            print(out)
-            out = ""
-        end
-        return distance[x][y]
-    end)
     GameMap._matrixFillFunc(direction, width, height, function(x, y)
         out = out .. direction[x][y].char .. " "
         if (x == width) then
@@ -172,12 +164,12 @@ end
 
 function GameMap:setTile(x, y) --TODO set real turret here
     local tile = self.tiledata[x][y]
-    if (not tile.road) then
+    if (tile.turret ~= nil) then
         game.tilemap:setTile(x, y, "terrain_2")
-        tile.road = true
+        tile.turret = nil
     else
         game.tilemap:setTile(x, y, "terrain_4")
-        tile.road = false
+        tile.turret = {}
     end
     self:calcPath()
     for _, enemy in pairs(game.enemies) do

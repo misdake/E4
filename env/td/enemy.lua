@@ -40,7 +40,8 @@ function calcMove()
     local fromY = math.floor(t.y + 0.5)
     local dir = game.gamemap:getDirection(fromX, fromY)
 
-    if (fromX == entity.spawn.targetX and fromY == entity.spawn.targetY) then
+    if (dir == GameMap.PathDirections.unknown or (fromX == entity.spawn.targetX and fromY == entity.spawn.targetY)) then
+        entity.timeleft = 0
         return
     end
 
