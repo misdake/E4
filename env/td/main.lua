@@ -45,6 +45,16 @@ function load()
     game.enemies = {}
     table.insert(game.enemies, enemy)
 
+    local turret = newEntityParent(entity.index)
+    createScript(turret, "turret.lua")
+    entities[turret].spawn = {
+        x = 5,
+        y = 5,
+        baseType = "base_1",
+        turretType = "turret_1"
+    }
+    game.turrets = {}
+    table.insert(game.turrets, turret)
 end
 
 function update()

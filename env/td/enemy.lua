@@ -29,7 +29,7 @@ function load()
     et.z = -1
     et.rz = 0
     local drawable = createDrawable(entity.index)
-    drawable.mesh = newMesh("builtin:plane_inverty")
+    drawable.mesh = game.tilemap.res.mesh
     drawable.material = newMaterialTexture("sprites.txt")
     setMaterialTextureTile(drawable.material, spawnType.name)
 end
