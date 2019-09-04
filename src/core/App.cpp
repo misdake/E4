@@ -5,12 +5,12 @@
 E4::App::App(uint16_t width, uint16_t height, const std::string& folder) :
     frameState(),
     window(frameState),
+    scene(),
     width(width),
     height(height),
     folder(folder),
     textures(folder),
-    scripts(folder),
-    scene() {
+    scripts(folder){
     memset(&frameState, 0, sizeof(frameState));
 }
 

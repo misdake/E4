@@ -189,8 +189,8 @@ void E4::ObjFileLoader::loadMtlFile(const std::string& folder, const std::string
                     Mtl& mtl = mtlFile.mtls.emplace_back();
                     lineInput >> mtl.name;
                     curr = &mtl;
-                    break;
                 }
+                break;
             }
             case 'N': {
                 if (w == "Ns") {
@@ -220,6 +220,7 @@ void E4::ObjFileLoader::loadMtlFile(const std::string& folder, const std::string
                 if (w == "illum") {
                     lineInput >> curr->illum;
                 }
+                break;
             }
         }
     }

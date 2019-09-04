@@ -1,6 +1,6 @@
 #include "DataType.h"
 
-const char* const E4::dataTypeName(E4::ShaderDataType type) {
+const char* E4::dataTypeName(E4::ShaderDataType type) {
     switch (type) {
         case E4::ShaderDataType::FLOAT: return "float";
         case E4::ShaderDataType::VEC2: return "vec2";

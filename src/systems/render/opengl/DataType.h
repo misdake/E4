@@ -15,7 +15,7 @@ namespace E4 {
         MAT4,
     };
 
-    const char* const dataTypeName(ShaderDataType type);
+    const char* dataTypeName(ShaderDataType type);
 
     union ShaderData {
 

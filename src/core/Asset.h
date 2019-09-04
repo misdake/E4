@@ -112,7 +112,7 @@ namespace E4 {
             }
         }
         void checkEnd(std::function<void(Asset<T>&)>&& garbageCallback) {
-            for (int i = 0; i < array.size(); i++) {
+            for (uint64_t i = 0; i < array.size(); i++) {
                 if (!bitmap[i]) {
                     Asset<T> asset(*this, i);
                     garbageCallback(asset);

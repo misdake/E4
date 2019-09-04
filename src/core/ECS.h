@@ -90,7 +90,7 @@ namespace E4 {
 
         uint32_t& getRef() { return e; }
         uint32_t getVal() { return e; }
-        const uint32_t getVal() const { return e; }
+        uint32_t getVal() const { return e; }
         bool _has() const { return e > 0; }
     };
 
