@@ -108,6 +108,13 @@ void E4::ScriptBridge::load(App& app, sol::state& lua, Ecs& ecs) {
         writeFile(app.folder, fileName, content);
     });
     lua.script(R"(
+        function errorhandler( err )
+            print("--------------")
+            print("ERROR:", err)
+            print(debug.traceback())
+            print("--------------")
+        end
+
         function mouse1down()
             return (not inputStatePrev.mouseButton1) and inputStateCurr.mouseButton1
         end
@@ -133,10 +140,10 @@ void E4::ScriptBridge::load(App& app, sol::state& lua, Ecs& ecs) {
             entity = entities[id]
         end
         function runLoad(index)
-            scripts[index].load()
+            xpcall(scripts[index].load, errorhandler)
         end
         function runUpdate(index)
-            scripts[index].update()
+            xpcall(scripts[index].update, errorhandler)
         end
     )", "ScriptBridge");
 

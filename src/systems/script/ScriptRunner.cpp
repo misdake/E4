@@ -13,7 +13,7 @@ E4::ScriptRunner::ScriptRunner() {
         sol::lib::math,
         sol::lib::bit32,
         sol::lib::table,
-//        sol::lib::debug,
+        sol::lib::debug,
         sol::lib::string
     );
     scriptIndex = 0;
