@@ -5,10 +5,10 @@ function load()
     local spawnBaseType = spawn.baseType
     local spawnTurretType = spawn.turretType
 
-    local transfrom = createTransform(entity.index)
-    transfrom.x = spawnX
-    transfrom.y = spawnY
-    transfrom.z = -2
+    local transform = createTransform(entity.index)
+    transform.x = spawnX
+    transform.y = spawnY
+    transform.z = -2
 
     local base = newEntityParent(entity.index)
     local bt = createTransform(base)
@@ -33,8 +33,27 @@ function load()
 
 end
 
-function findEnemy()
+function checkInRange(enemy)
+    local x1 = entity.transform.x
+    local y1 = entity.transform.y
+    local x2 = entities[enemy].transform.x
+    local y2 = entities[enemy].transform.y
+    local range = entity.spawn.range
+    local r2 = range * range;
+    local dx = x1 - x2
+    local dy = y1 - y2
+    local dd = dx * dx + dy * dy
+    return (dd <= r2)
+end
 
+function findEnemy()
+    local selected
+    for _, enemy in pairs(game.enemies) do
+        if (checkInRange(enemy)) then
+            selected = enemy
+        end
+    end
+    return selected
 end
 
 function fire(enemy)
@@ -42,7 +61,7 @@ function fire(enemy)
 end
 
 function lookat(x, y)
-    local angle = math.atan(y - entity.spawn.y, x - entity.spawn.y) + math.pi / 2
+    local angle = math.atan(y - entity.spawn.y, x - entity.spawn.x) + math.pi / 2
     local tt = entities[entity.children.turret].transform
     tt.x = math.sin(angle) * 0.17
     tt.y = -math.cos(angle) * 0.17
@@ -50,20 +69,21 @@ function lookat(x, y)
 end
 
 function update()
-    --lookat mouse position
-    --TODO extract this xy calculation
-    --local t = entities[game.rootIndex].transform
-    --local mx = inputStateCurr.mouseX / screenWidth * 2 - 1
-    --local my = 1 - inputStateCurr.mouseY / screenHeight * 2
-    --local x = (mx - t.x) / t.sx
-    --local y = (my - t.y) / t.sy
-    --lookat(x, y)
+    --check current enemy in range
+    if (entity.selectedEnemy ~= nil) then
+        if (not checkInRange(entity.selectedEnemy)) then
+            entity.selectedEnemy = nil
+        end
+    end
+
+    --find enemy if no current selected
+    if (entity.selectedEnemy == nil) then
+        entity.selectedEnemy = findEnemy()
+    end
 
     --lookat this enemy
-    local enemy
-    for _, e in pairs(game.enemies) do
-        enemy = e
+    if (entity.selectedEnemy ~= nil) then
+        local et = entities[entity.selectedEnemy].transform
+        lookat(et.x, et.y)
     end
-    local et = entities[enemy].transform
-    lookat(et.x, et.y)
 end

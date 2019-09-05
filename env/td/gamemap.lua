@@ -172,8 +172,19 @@ end
 function GameMap:addTurret(x, y)
     local tile = self.tiledata[x][y]
     if (tile.turret == nil and tile.build) then
-        game.tilemap:setTile(x, y, "terrain_4")
-        tile.turret = {}
+
+        local turret = newEntityParent(game.rootIndex)
+        createScript(turret, "turret.lua")
+        entities[turret].spawn = {
+            x = x,
+            y = y,
+            baseType = "base_1",
+            turretType = "turret_1",
+            range = 2
+        }
+        table.insert(game.turrets, turret)
+
+        tile.turret = turret
         self:refreshPath()
         return true
     end
