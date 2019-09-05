@@ -29,7 +29,9 @@ function load()
 
     local roadTiles = {}
     roadTiles["2"] = true
-    game.gamemap = GameMap:new(game.tilemap, roadTiles, {}, { { x = 10, y = 9, dir = GameMap.PathDirections.right } })
+    local buildTiles = {}
+    buildTiles["2"] = true
+    game.gamemap = GameMap:new(game.tilemap, roadTiles, buildTiles, { { x = 10, y = 9, dir = GameMap.PathDirections.right } })
     game.gamemap:calcPath()
 
     local enemy = newEntityParent(entity.index)
@@ -58,7 +60,9 @@ function load()
 end
 
 function update()
-    if (mouse1down()) then
+    local m1 = mouse1down()
+    local m3 = mouse3down()
+    if (m1 or m3) then
         local t = entity.transform
         local mx = inputStateCurr.mouseX / screenWidth * 2 - 1
         local my = 1 - inputStateCurr.mouseY / screenHeight * 2
@@ -66,10 +70,17 @@ function update()
         local y = (my - t.y) / t.sy
         local tileX = math.floor(x + 0.5)
         local tileY = math.floor(y + 0.5)
-        print("mx:" .. mx .. " my:" .. my)
-        print("x:" .. x .. " y:" .. y)
-        print("tx:" .. tileX .. " ty:" .. tileY)
+        --print("mx:" .. mx .. " my:" .. my)
+        --print("x:" .. x .. " y:" .. y)
+        --print("tx:" .. tileX .. " ty:" .. tileY)
 
-        game.gamemap:setTile(tileX, tileY)
+        if (tileX > 0 and tileX <= game.gamemap.width and tileY > 0 and tileY <= game.gamemap.height) then
+            if (m1) then
+                game.gamemap:addTurret(tileX, tileY)
+            end
+            if (m3) then
+                game.gamemap:removeTurret(tileX, tileY)
+            end
+        end
     end
 end

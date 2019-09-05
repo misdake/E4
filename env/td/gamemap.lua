@@ -162,17 +162,31 @@ function GameMap:getTile(x, y)
     return self.tiledata[x][y]
 end
 
-function GameMap:setTile(x, y) --TODO set real turret here
-    local tile = self.tiledata[x][y]
-    if (tile.turret ~= nil) then
-        game.tilemap:setTile(x, y, "terrain_2")
-        tile.turret = nil
-    else
-        game.tilemap:setTile(x, y, "terrain_4")
-        tile.turret = {}
-    end
+function GameMap:refreshPath()
     self:calcPath()
     for _, enemy in pairs(game.enemies) do
         entities[enemy].rethink = true
     end
+end
+
+function GameMap:addTurret(x, y)
+    local tile = self.tiledata[x][y]
+    if (tile.turret == nil and tile.build) then
+        game.tilemap:setTile(x, y, "terrain_4")
+        tile.turret = {}
+        self:refreshPath()
+        return true
+    end
+    return false
+end
+
+function GameMap:removeTurret(x, y)
+    local tile = self.tiledata[x][y]
+    if (tile.turret ~= nil) then
+        game.tilemap:setTile(x, y, "terrain_2")
+        tile.turret = nil
+        self:refreshPath()
+        return true
+    end
+    return false
 end
