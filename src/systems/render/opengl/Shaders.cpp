@@ -48,7 +48,9 @@ const char* ShaderTexture_VS = "void main() {\n"
 const char* ShaderTexture_PS = "out vec4 outputColor;\n"
                                "void main() {\n"
                                "   vec2 texcoord = (vTexcoord.xy + uTiling.xy) * uTiling.zw;\n"
-                               "   outputColor = texture(uTexture, texcoord);\n"
+                               "   vec4 tex = texture(uTexture, texcoord);\n"
+                               "   if (tex.a < 0.01) discard;\n"
+                               "   outputColor = tex;\n"
                                "}";
 
 E4::ShaderTexture::ShaderTexture(GlRenderer& renderer) : Shader(
