@@ -147,15 +147,15 @@ function GameMap:calcPath()
     end
 
     --output path directions
-    local out = ""
-    GameMap._matrixFillFunc(direction, width, height, function(x, y)
-        out = out .. direction[x][y].char .. " "
-        if (x == width) then
-            print(out)
-            out = ""
-        end
-        return direction[x][y]
-    end)
+    --local out = ""
+    --GameMap._matrixFillFunc(direction, width, height, function(x, y)
+    --    out = out .. direction[x][y].char .. " "
+    --    if (x == width) then
+    --        print(out)
+    --        out = ""
+    --    end
+    --    return direction[x][y]
+    --end)
 end
 
 function GameMap:getTile(x, y)
@@ -164,40 +164,9 @@ end
 
 function GameMap:refreshPath()
     self:calcPath()
-    for _, enemy in pairs(game.enemies) do
-        entities[enemy].rethink = true
+    for enemy, valid in pairs(game.enemies) do
+        if (valid) then
+            entities[enemy].rethink = true
+        end
     end
-end
-
-function GameMap:addTurret(x, y)
-    local tile = self.tiledata[x][y]
-    if (tile.turret == nil and tile.build) then
-
-        local turret = newEntityParent(game.rootIndex)
-        createScript(turret, "turret.lua")
-        entities[turret].spawn = {
-            x = x,
-            y = y,
-            baseType = "base_1",
-            turretType = "turret_1",
-            range = 2
-        }
-        table.insert(game.turrets, turret)
-
-        tile.turret = turret
-        self:refreshPath()
-        return true
-    end
-    return false
-end
-
-function GameMap:removeTurret(x, y)
-    local tile = self.tiledata[x][y]
-    if (tile.turret ~= nil) then
-        game.tilemap:setTile(x, y, "terrain_2")
-        tile.turret = nil
-        self:refreshPath()
-        return true
-    end
-    return false
 end

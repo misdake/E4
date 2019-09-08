@@ -34,6 +34,11 @@ function load()
     setMaterialTextureTile(drawable.material, spawnType.name)
 end
 
+function disposeEnemy(enemy)
+    deleteEntity(enemy)
+    game.enemies[enemy] = nil
+end
+
 function calcMove()
     local t = entity.transform
     local fromX = math.floor(t.x + 0.5)
@@ -41,6 +46,7 @@ function calcMove()
     local dir = game.gamemap:getDirection(fromX, fromY)
 
     if (dir == GameMap.PathDirections.unknown or (fromX == entity.spawn.targetX and fromY == entity.spawn.targetY)) then
+        entity.finished = true
         entity.timeleft = 0
         return
     end

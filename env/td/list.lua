@@ -18,6 +18,14 @@ function List:pushright(value)
     self.last = last
     self[last] = value
 end
+function List:getleft()
+    local first = self.first
+    if first > self.last then
+        error("self is empty")
+    end
+    local value = self[first]
+    return value
+end
 function List:popleft()
     local first = self.first
     if first > self.last then
@@ -26,6 +34,14 @@ function List:popleft()
     local value = self[first]
     self[first] = nil        -- to allow garbage collection
     self.first = first + 1
+    return value
+end
+function List:getright()
+    local last = self.last
+    if self.first > last then
+        error("self is empty")
+    end
+    local value = self[last]
     return value
 end
 function List:popright()

@@ -28,12 +28,27 @@ function load()
 
     entity.children = {
         base = base,
-        turret = turret
+        turret = turret,
+        bullet = nil,
     }
+end
 
+function disposeTurret(turret)
+    local children = entities[turret].children
+    if (children.base ~= nil) then
+        deleteEntity(children.base)
+    end
+    if (children.turret ~= nil) then
+        deleteEntity(children.turret)
+    end
+    if (children.bullet ~= nil) then
+        deleteEntity(children.bullet)
+    end
+    deleteEntity(turret)
 end
 
 function checkInRange(enemy)
+    --TODO check enemy health
     local x1 = entity.transform.x
     local y1 = entity.transform.y
     local x2 = entities[enemy].transform.x
@@ -48,16 +63,23 @@ end
 
 function findEnemy()
     local selected
-    for _, enemy in pairs(game.enemies) do
-        if (checkInRange(enemy)) then
-            selected = enemy
+    for enemy, valid in pairs(game.enemies) do
+        if (valid) then
+            if (checkInRange(enemy)) then
+                selected = enemy
+            end
         end
     end
     return selected
 end
 
 function fire(enemy)
-
+    --check cooldown
+    --enable bullet script, set enemy
+    --  (load: deal damage, add to enemy bullet list?)
+    --  (update: move towards enemy, check hit)
+    --fire animation?
+    --start reload
 end
 
 function lookat(x, y)
