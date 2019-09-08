@@ -2,6 +2,7 @@ function load()
     local spawn = entity.spawn
     local spawnX = spawn.x
     local spawnY = spawn.y
+    local reloadTime = spawn.reloadTime
     local spawnBaseType = spawn.baseType
     local spawnTurretType = spawn.turretType
 
@@ -31,8 +32,55 @@ function load()
         turret = turret,
         bullet = nil,
     }
+    entity.reloadTime = reloadTime
+    entity.reloadNext = 0
 
     lookatAngle(0)
+end
+
+function spawnBullet()
+    local spawnBulletType = entity.spawn.bulletType
+
+    local bullet = newEntityParent(game.rootIndex)
+    local lt = createTransform(bullet)
+    lt.z = -0.1
+    local ld = createDrawable(bullet)
+    ld.mesh = game.tilemap.res.mesh
+    ld.material = newMaterialTexture("sprites.txt")
+    setMaterialTextureTile(ld.material, spawnBulletType)
+
+    entity.children.bullet = bullet
+    lookatAngle_bullet()
+end
+
+function checkBullet()
+    if (entity.children.bullet == nil) then
+        entity.reloadNext = entity.reloadNext - dt
+        if (entity.reloadNext <= 0) then
+            entity.reloadNext = 0
+            spawnBullet()
+            --print("spawn bullet")
+        end
+    end
+
+    if (entity.children.bullet ~= nil) then
+        if (entity.reloadNext <= 0 and entity.selectedEnemy ~= nil) then
+            fireBullet(entity.selectedEnemy)
+            --print("fire bullet")
+        end
+    end
+end
+
+function fireBullet(enemy)
+    createScript(entity.children.bullet, "bullet.lua")
+    entities[entity.children.bullet].spawn = {
+        speed = 3,
+        hit = 1,
+        enemy = enemy,
+    }
+    --TODO decrease enemy logical hp
+    entity.children.bullet = nil
+    entity.reloadNext = entity.reloadTime
 end
 
 function disposeTurret(turret)
@@ -50,7 +98,10 @@ function disposeTurret(turret)
 end
 
 function checkInRange(enemy)
-    --TODO check enemy health
+    if (entities[enemy].transform == nil) then
+        return
+    end
+    --TODO check enemy logical hp
     local x1 = entity.transform.x
     local y1 = entity.transform.y
     local x2 = entities[enemy].transform.x
@@ -88,11 +139,21 @@ function lookat(x, y)
     local angle = math.atan(y - entity.spawn.y, x - entity.spawn.x) + math.pi / 2
     lookatAngle(angle)
 end
+function lookatAngle_bullet()
+    local angle = entity.angle
+    if (entity.children.bullet ~= nil) then
+        local lt = entities[entity.children.bullet].transform
+        lt.x = math.sin(angle) * 0.5 + entity.spawn.x
+        lt.y = -math.cos(angle) * 0.5 + entity.spawn.y
+    end
+end
 function lookatAngle(angle)
+    entity.angle = angle
     local tt = entities[entity.children.turret].transform
     tt.x = math.sin(angle) * 0.17
     tt.y = -math.cos(angle) * 0.17
     tt.rz = angle
+    lookatAngle_bullet()
 end
 
 function update()
@@ -119,4 +180,5 @@ function update()
         local et = entities[entity.selectedEnemy].transform
         lookat(et.x, et.y)
     end
+    checkBullet()
 end

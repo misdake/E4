@@ -1,4 +1,4 @@
-setLogFilter("X")
+setLogFilter("script load")
 
 loadScriptFile("tilemap.lua")
 loadScriptFile("gamemap.lua")
@@ -9,6 +9,7 @@ game = {
     gamemap = nil,
     enemies = nil,
     turrets = nil,
+    entitiesToDelete = {}
 }
 
 game.start = function()
@@ -75,7 +76,9 @@ game.addTurret = function(x, y)
             y = y,
             baseType = "base_1",
             turretType = "turret_1",
-            range = 3
+            bulletType = "bullet_1",
+            range = 3,
+            reloadTime = 1
         }
         game.turrets[turret] = true
 
@@ -160,6 +163,12 @@ function update()
             tileX = tileX,
             tileY = tileY
         }
+    end
+
+    --delete entities
+    for index, _ in pairs(game.entitiesToDelete) do
+        deleteEntity(index)
+        game.entitiesToDelete[index] = nil
     end
 
     --check enemy finish
