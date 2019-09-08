@@ -20,11 +20,11 @@ function enemyWillDie(enemy)
 end
 function fireAtEnemy(damage, enemy)
     entities[enemy].hp1 = entities[enemy].hp1 - damage
-    print("fire! hp1=" .. entities[enemy].hp1)
+    --print("fire! hp1=" .. entities[enemy].hp1)
 end
 function hitEnemy(damage, enemy)
     entities[enemy].hp2 = entities[enemy].hp2 - damage
-    print("hit! hp2=" .. entities[enemy].hp2)
+    --print("hit! hp2=" .. entities[enemy].hp2)
 end
 
 function load()
@@ -91,6 +91,10 @@ function calcMove()
 end
 
 function update()
+    if(game.finished) then
+        return
+    end
+
     local t = entity.transform
 
     if (entity.rethink) then

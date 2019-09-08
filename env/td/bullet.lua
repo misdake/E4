@@ -5,6 +5,10 @@ function load()
 end
 
 function update()
+    if(game.finished) then
+        return
+    end
+
     --if this bullet is done, wait for destruction
     if (entity.finished) then
         entity.drawable.visible = false

@@ -155,6 +155,10 @@ function lookatAngle(angle)
 end
 
 function update()
+    if(game.finished) then
+        return
+    end
+
     if (entity.selectedEnemy ~= nil) then
         if (not game.enemies[entity.selectedEnemy]) then
             entity.selectedEnemy = nil
