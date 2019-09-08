@@ -96,6 +96,12 @@ function lookatAngle(angle)
 end
 
 function update()
+    if (entity.selectedEnemy ~= nil) then
+        if (not game.enemies[entity.selectedEnemy]) then
+            entity.selectedEnemy = nil
+        end
+    end
+
     --check current enemy in range
     if (entity.selectedEnemy ~= nil) then
         if (not checkInRange(entity.selectedEnemy)) then
