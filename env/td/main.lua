@@ -1,4 +1,4 @@
-setLogFilter("file")
+setLogFilter("X")
 
 loadScriptFile("tilemap.lua")
 loadScriptFile("gamemap.lua")
@@ -41,6 +41,8 @@ game.addEnemy = function(x, y, tx, ty)
         type = { name = "enemy_1", speed = 1 }
     }
 
+    print("spawn " .. x .. "," .. y .. " index:" .. enemy)
+
     game.enemies[enemy] = true
 end
 
@@ -73,7 +75,7 @@ game.addTurret = function(x, y)
             y = y,
             baseType = "base_1",
             turretType = "turret_1",
-            range = 2
+            range = 3
         }
         game.turrets[turret] = true
 
@@ -176,7 +178,7 @@ function update()
         for enemy, valid in pairs(game.enemies) do
             if (valid) then
                 if (entities[enemy].dead) then
-                    disposeEnemy(enemy)
+                    game.removeEnemy(enemy)
                 else
                     enemyLeft = true
                 end

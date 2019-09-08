@@ -31,6 +31,8 @@ function load()
         turret = turret,
         bullet = nil,
     }
+
+    lookatAngle(0)
 end
 
 function disposeTurret(turret)
@@ -84,6 +86,9 @@ end
 
 function lookat(x, y)
     local angle = math.atan(y - entity.spawn.y, x - entity.spawn.x) + math.pi / 2
+    lookatAngle(angle)
+end
+function lookatAngle(angle)
     local tt = entities[entity.children.turret].transform
     tt.x = math.sin(angle) * 0.17
     tt.y = -math.cos(angle) * 0.17

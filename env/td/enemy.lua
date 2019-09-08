@@ -36,7 +36,6 @@ end
 
 function disposeEnemy(enemy)
     deleteEntity(enemy)
-    game.enemies[enemy] = nil
 end
 
 function calcMove()
@@ -45,8 +44,11 @@ function calcMove()
     local fromY = math.floor(t.y + 0.5)
     local dir = game.gamemap:getDirection(fromX, fromY)
 
-    if (dir == GameMap.PathDirections.unknown or (fromX == entity.spawn.targetX and fromY == entity.spawn.targetY)) then
+    local finished = fromX == entity.spawn.targetX and fromY == entity.spawn.targetY
+    if (finished) then
         entity.finished = true
+    end
+    if (dir == GameMap.PathDirections.unknown or finished) then
         entity.timeleft = 0
         return
     end
