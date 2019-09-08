@@ -17,32 +17,49 @@ game.start = function()
     game.score = 20
 
     game.queue = List:new()
-    game.queue:pushright({ time = 0, x = 1, y = 2, tx = 10, ty = 9 })
-    game.queue:pushright({ time = 1, x = 1, y = 2, tx = 10, ty = 9 })
+    for i = 1, 10 do
+        game.queue:pushright({ time = i, x = 1, y = 2, tx = 10, ty = 9, type = 1 })
+    end
+    for i = 11, 20 do
+        game.queue:pushright({ time = i, x = 1, y = 2, tx = 10, ty = 9, type = 2 })
+    end
 
     game.started = true
 end
 
-game.enemyFinished = function()
-    game.score = game.score - 1
+game.enemyFinished = function(enemy, damage)
+    game.score = game.score - damage
     print("score = " .. game.score)
-    if (game.score == 0) then
+    if (game.score <= 0) then
         game.dead = true
     end
 end
 
-game.addEnemy = function(x, y, tx, ty)
+game.addEnemy = function(x, y, tx, ty, type)
+
     local enemy = newEntityParent(game.rootIndex)
     createScript(enemy, "enemy.lua")
-    entities[enemy].spawn = {
-        x = x,
-        y = y,
-        targetX = tx,
-        targetY = ty,
-        type = { name = "enemy_1", speed = 1 }
-    }
-
-    print("spawn " .. x .. "," .. y .. " index:" .. enemy)
+    if (type == 1) then
+        entities[enemy].spawn = {
+            hp = 10,
+            damage = 2,
+            x = x,
+            y = y,
+            targetX = tx,
+            targetY = ty,
+            type = { name = "enemy_1", speed = 1 }
+        }
+    elseif (type == 2) then
+        entities[enemy].spawn = {
+            hp = 15,
+            damage = 4,
+            x = x,
+            y = y,
+            targetX = tx,
+            targetY = ty,
+            type = { name = "enemy_2", speed = 2 }
+        }
+    end
 
     game.enemies[enemy] = true
 end
@@ -175,7 +192,7 @@ function update()
     for enemy, valid in pairs(game.enemies) do
         if (valid) then
             if (entities[enemy].finished) then
-                game.enemyFinished()
+                game.enemyFinished(enemy, entities[enemy].spawn.damage)
                 entities[enemy].dead = true
             end
         end
@@ -183,14 +200,15 @@ function update()
 
     --check enemy dead
     local enemyLeft = not game.queue:isEmpty()
-    if (not enemyLeft) then
-        for enemy, valid in pairs(game.enemies) do
-            if (valid) then
-                if (entities[enemy].dead) then
-                    game.removeEnemy(enemy)
-                else
-                    enemyLeft = true
-                end
+    for enemy, valid in pairs(game.enemies) do
+        if (valid) then
+            if (entities[enemy].hp2 <= 0) then
+                entities[enemy].dead = true
+            end
+            if (entities[enemy].dead) then
+                game.removeEnemy(enemy)
+            else
+                enemyLeft = true
             end
         end
     end
@@ -210,7 +228,7 @@ function update()
         local next = game.queue:getleft()
         if (game.time >= next.time) then
             game.queue:popleft()
-            game.addEnemy(next.x, next.y, next.tx, next.ty)
+            game.addEnemy(next.x, next.y, next.tx, next.ty, next.type)
         end
     end
 
@@ -226,11 +244,5 @@ function update()
                 game.removeTurret(tileX, tileY)
             end
         end
-    end
-
-    if (m2) then
-        local tileX = game.mouse.tileX
-        local tileY = game.mouse.tileY
-        game.addEnemy(tileX, tileY, 10, 9)
     end
 end

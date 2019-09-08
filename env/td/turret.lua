@@ -43,7 +43,7 @@ function spawnBullet()
 
     local bullet = newEntityParent(game.rootIndex)
     local lt = createTransform(bullet)
-    lt.z = -0.1
+    lt.z = -1.8
     local ld = createDrawable(bullet)
     ld.mesh = game.tilemap.res.mesh
     ld.material = newMaterialTexture("sprites.txt")
@@ -73,12 +73,15 @@ end
 
 function fireBullet(enemy)
     createScript(entity.children.bullet, "bullet.lua")
-    entities[entity.children.bullet].spawn = {
-        speed = 3,
-        hit = 1,
+    local spawn = {
+        speed = 5,
+        damage = 1,
         enemy = enemy,
     }
-    --TODO decrease enemy logical hp
+    entities[entity.children.bullet].spawn = spawn
+
+    fireAtEnemy(spawn.damage, spawn.enemy)
+
     entity.children.bullet = nil
     entity.reloadNext = entity.reloadTime
 end
@@ -99,9 +102,13 @@ end
 
 function checkInRange(enemy)
     if (entities[enemy].transform == nil) then
-        return
+        return false
     end
-    --TODO check enemy logical hp
+
+    if (enemyWillDie(enemy)) then
+        return false
+    end
+
     local x1 = entity.transform.x
     local y1 = entity.transform.y
     local x2 = entities[enemy].transform.x
@@ -124,15 +131,6 @@ function findEnemy()
         end
     end
     return selected
-end
-
-function fire(enemy)
-    --check cooldown
-    --enable bullet script, set enemy
-    --  (load: deal damage, add to enemy bullet list?)
-    --  (update: move towards enemy, check hit)
-    --fire animation?
-    --start reload
 end
 
 function lookat(x, y)

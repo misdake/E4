@@ -15,10 +15,26 @@ function tprint (tbl, indent)
     end
 end
 
+function enemyWillDie(enemy)
+    return entities[enemy].hp1 <= 0
+end
+function fireAtEnemy(damage, enemy)
+    entities[enemy].hp1 = entities[enemy].hp1 - damage
+    print("fire! hp1=" .. entities[enemy].hp1)
+end
+function hitEnemy(damage, enemy)
+    entities[enemy].hp2 = entities[enemy].hp2 - damage
+    print("hit! hp2=" .. entities[enemy].hp2)
+end
+
 function load()
     local spawnX = entity.spawn.x
     local spawnY = entity.spawn.y
     local spawnType = entity.spawn.type
+
+    entity.damage = entity.spawn.damage
+    entity.hp1 = entity.spawn.hp
+    entity.hp2 = entity.spawn.hp
 
     entity.timeleft = 0
     entity.rethink = false

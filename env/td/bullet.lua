@@ -1,7 +1,7 @@
 function load()
     entity.enemy = entity.spawn.enemy
     entity.speed = entity.spawn.speed
-    entity.hit = entity.spawn.hit
+    entity.damage = entity.spawn.damage
 end
 
 function update()
@@ -28,7 +28,7 @@ function update()
     local d = math.sqrt(dx * dx + dy * dy)
     if (d < length) then
         entity.finished = true
-        --run hit entity.spawn.hit
+        hitEnemy(entity.damage, entity.enemy)
     else
         from.x = from.x - dx * length / d
         from.y = from.y - dy * length / d
