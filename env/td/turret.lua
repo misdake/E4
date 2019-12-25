@@ -43,8 +43,9 @@ function spawnBullet()
 
     local bullet = newEntityParent(game.rootIndex)
     local lt = createTransform(bullet)
-    lt.z = -1.8
+    lt.z = -2.2
     local ld = createDrawable(bullet)
+    ld.visible = false
     ld.mesh = game.tilemap.res.mesh
     ld.material = newMaterialTexture("sprites.txt")
     setMaterialTextureTile(ld.material, spawnBulletType)
@@ -74,11 +75,12 @@ end
 function fireBullet(enemy)
     createScript(entity.children.bullet, "bullet.lua")
     local spawn = {
-        speed = 5,
+        speed = 6,
         damage = 1,
         enemy = enemy,
     }
     entities[entity.children.bullet].spawn = spawn
+    entities[entity.children.bullet].drawable.visible = true
 
     fireAtEnemy(spawn.damage, spawn.enemy)
 
