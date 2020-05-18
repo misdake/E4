@@ -2,6 +2,7 @@ setLogFilter("script load")
 
 loadScriptFile("tilemap.lua")
 loadScriptFile("gamemap.lua")
+loadScriptFile("utils.lua")
 
 game = {
     rootIndex = 0,

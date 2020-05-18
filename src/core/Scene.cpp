@@ -208,7 +208,7 @@ void E4::Scene::removeEnv(E4::Entity& entity) {
 
 E4::Asset<E4::Material> E4::Scene::newMaterialTexture(const std::string& textureName) {
     Log::debug("scene: newMaterialTexture %s", textureName.c_str());
-    Asset <Material> material = app->materials.alloc();
+    Asset<Material> material = app->materials.alloc();
     material->tiling.set(0, 0, 1, 1);
     material->texture = app->textures.get(textureName);
     material->shader = &app->renderer.shaderTexture;
@@ -216,14 +216,14 @@ E4::Asset<E4::Material> E4::Scene::newMaterialTexture(const std::string& texture
 }
 E4::Asset<E4::Material> E4::Scene::newMaterialColor(const std::string& color) {
     Log::debug("scene: newMaterialColor %s", color.c_str());
-    Asset <Material> material = app->materials.alloc();
+    Asset<Material> material = app->materials.alloc();
     material->ambient.color.set(color);
     material->shader = &app->renderer.shaderBasic;
     return material;
 }
 E4::Asset<E4::Material> E4::Scene::newMaterialLight(const std::string& ambient, const std::string& diffuse) {
     Log::debug("scene: newMaterialLight %s %s", ambient.c_str(), diffuse.c_str());
-    Asset <Material> material = app->materials.alloc();
+    Asset<Material> material = app->materials.alloc();
     material->ambient.color.set(ambient);
     material->diffuse.color.set(diffuse);
     material->specular.color.set(diffuse); //TODO
